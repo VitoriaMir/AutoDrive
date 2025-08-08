@@ -216,7 +216,7 @@ document.getElementById("logout-btn").addEventListener("click", () => {
   if (confirm("Tem certeza que deseja sair do sistema?")) {
     showNotification("Encerrando sessão...", "warning");
     setTimeout(() => {
-      window.location.href = '/logout';
+      window.location.href = "/logout";
     }, 1500);
   }
 });
