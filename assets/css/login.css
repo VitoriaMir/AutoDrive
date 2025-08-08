@@ -159,6 +159,7 @@ body {
 
 .input-group {
   margin-bottom: 25px;
+  position: relative;
 }
 
 .input-wrapper {
@@ -409,9 +410,12 @@ body {
 .error-message {
   color: #e74c3c;
   font-size: 0.85rem;
-  margin-top: 5px;
+  margin-top: 8px;
+  margin-left: 2px;
   opacity: 0;
   transition: opacity 0.3s ease;
+  display: block;
+  line-height: 1.4;
 }
 
 .error-message.show {

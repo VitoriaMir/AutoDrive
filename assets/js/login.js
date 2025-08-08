@@ -122,15 +122,16 @@ function isValidEmail(email) {
 // Função para mostrar erros
 function showError(field, message) {
   const inputWrapper = document.querySelector(`#${field}`).parentNode;
+  const inputGroup = inputWrapper.parentNode;
   const errorElement =
-    inputWrapper.querySelector(".error-message") || createErrorElement();
+    inputGroup.querySelector(".error-message") || createErrorElement();
 
   inputWrapper.classList.add("error");
   errorElement.textContent = message;
   errorElement.classList.add("show");
 
-  if (!inputWrapper.querySelector(".error-message")) {
-    inputWrapper.appendChild(errorElement);
+  if (!inputGroup.querySelector(".error-message")) {
+    inputGroup.appendChild(errorElement);
   }
 }
 
