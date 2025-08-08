@@ -6703,6 +6703,45 @@
         </div>
     </div>
 
+    <!-- Modal de Logout Elegante -->
+    <div id="logoutModal" class="logout-modal">
+        <div class="logout-modal-content">
+            <div class="logout-modal-header">
+                <div class="logout-modal-icon">
+                    <i class="fas fa-sign-out-alt"></i>
+                </div>
+                <h3 class="logout-modal-title">Confirmar Saída</h3>
+                <p class="logout-modal-subtitle">Você está prestes a sair do sistema</p>
+            </div>
+            <div class="logout-modal-body">
+                <p class="logout-modal-message">
+                    Tem certeza que deseja encerrar sua sessão?
+                </p>
+
+                <div class="logout-modal-user-info">
+                    <div class="logout-user-avatar">
+                        <span id="logoutUserInitials">U</span>
+                    </div>
+                    <div class="logout-user-details">
+                        <div class="logout-user-name" id="logoutUserName">{{ user_name }}</div>
+                        <div class="logout-user-email" id="logoutUserEmail">{{ user_email }}</div>
+                    </div>
+                </div>
+
+                <div class="logout-modal-actions">
+                    <button class="logout-btn-cancel" id="logoutCancel">
+                        <i class="fas fa-times"></i>
+                        Cancelar
+                    </button>
+                    <button class="logout-btn-confirm" id="logoutConfirm">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Sair
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <script>
         // Configuração do usuário atual
@@ -6841,6 +6880,75 @@
                 console.error('Erro ao carregar usuários:', error);
             }
         }
+
+        // ===== MODAL DE LOGOUT ELEGANTE =====
+
+        function showLogoutModal() {
+            const modal = document.getElementById('logoutModal');
+            const userName = window.currentUser.name || 'Usuário';
+            const userEmail = window.currentUser.email || '';
+
+            // Atualizar informações do usuário no modal
+            document.getElementById('logoutUserName').textContent = userName;
+            document.getElementById('logoutUserEmail').textContent = userEmail;
+
+            // Criar iniciais do nome
+            const initials = userName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+            document.getElementById('logoutUserInitials').textContent = initials;
+
+            // Mostrar modal
+            modal.classList.add('show');
+        }
+
+        function hideLogoutModal() {
+            const modal = document.getElementById('logoutModal');
+            modal.classList.remove('show');
+        }
+
+        function performLogout() {
+            const confirmBtn = document.getElementById('logoutConfirm');
+
+            // Mostrar loading
+            confirmBtn.classList.add('loading');
+            confirmBtn.innerHTML = '<span>Saindo...</span>';
+
+            // Simular delay e redirecionar
+            setTimeout(() => {
+                window.location.href = '/logout';
+            }, 1500);
+        }
+
+        // Event listeners para o modal
+        document.addEventListener('DOMContentLoaded', function () {
+            const modal = document.getElementById('logoutModal');
+            const cancelBtn = document.getElementById('logoutCancel');
+            const confirmBtn = document.getElementById('logoutConfirm');
+
+            // Cancelar logout
+            cancelBtn.addEventListener('click', hideLogoutModal);
+
+            // Confirmar logout
+            confirmBtn.addEventListener('click', performLogout);
+
+            // Fechar modal clicando fora
+            modal.addEventListener('click', function (e) {
+                if (e.target === modal) {
+                    hideLogoutModal();
+                }
+            });
+
+            // Fechar modal com ESC
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && modal.classList.contains('show')) {
+                    hideLogoutModal();
+                }
+            });
+        });
+
+        // Substituir a função confirmLogout existente
+        window.confirmLogout = function () {
+            showLogoutModal();
+        };
     </script>
     <script src="/assets/js/dashboard.js"></script>
 </body>

@@ -213,11 +213,17 @@ document.addEventListener("click", (e) => {
 
 // Logout button
 document.getElementById("logout-btn").addEventListener("click", () => {
-  if (confirm("Tem certeza que deseja sair do sistema?")) {
-    showNotification("Encerrando sessão...", "warning");
-    setTimeout(() => {
-      window.location.href = "/logout";
-    }, 1500);
+  // Usar modal elegante em vez do confirm nativo
+  if (typeof showLogoutModal === "function") {
+    showLogoutModal();
+  } else {
+    // Fallback para confirm nativo se o modal não estiver disponível
+    if (confirm("Tem certeza que deseja sair do sistema?")) {
+      showNotification("Encerrando sessão...", "warning");
+      setTimeout(() => {
+        window.location.href = "/logout";
+      }, 1500);
+    }
   }
 });
 
@@ -7629,12 +7635,17 @@ function openHelp() {
 }
 
 function confirmLogout() {
-  if (confirm("Tem certeza que deseja sair do sistema?")) {
-    showNotification("Saindo do sistema...", "warning");
-    // Aqui você pode implementar a lógica de logout
-    setTimeout(() => {
-      window.location.href = "/logout";
-    }, 1500);
+  // Usar modal elegante em vez do confirm nativo
+  if (typeof showLogoutModal === "function") {
+    showLogoutModal();
+  } else {
+    // Fallback para confirm nativo se o modal não estiver disponível
+    if (confirm("Tem certeza que deseja sair do sistema?")) {
+      showNotification("Saindo do sistema...", "warning");
+      setTimeout(() => {
+        window.location.href = "/logout";
+      }, 1500);
+    }
   }
 }
 
