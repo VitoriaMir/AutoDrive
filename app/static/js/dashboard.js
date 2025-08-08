@@ -214,11 +214,10 @@ document.addEventListener("click", (e) => {
 // Logout button
 document.getElementById("logout-btn").addEventListener("click", () => {
   if (confirm("Tem certeza que deseja sair do sistema?")) {
-    showNotification("Sessão encerrada com sucesso!", "success");
+    showNotification("Encerrando sessão...", "warning");
     setTimeout(() => {
-      alert("Você foi desconectado do sistema");
-      // window.location.href = '/login';
-    }, 1000);
+      window.location.href = '/logout';
+    }, 1500);
   }
 });
 

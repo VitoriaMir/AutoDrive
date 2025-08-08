@@ -71,9 +71,9 @@ async function handleLogin(event) {
       // Sucesso no login
       showSuccessMessage();
 
-      // Redirecionar após um breve delay (substitua pela sua URL)
+      // Redirecionar após um breve delay
       setTimeout(() => {
-        window.location.href = "/dashboard.html";
+        window.location.href = "/dashboard";
       }, 1500);
     } else {
       throw new Error("Credenciais inválidas");
@@ -190,22 +190,31 @@ function showSuccessMessage() {
     "linear-gradient(135deg, #27ae60 0%, #2ecc71 100%)";
 }
 
-// Função para autenticar usuário (substitua pela sua lógica)
+// Função para autenticar usuário
 async function authenticateUser(email, password) {
-  // Simular delay de rede
-  await new Promise((resolve) => setTimeout(resolve, 1500));
+  try {
+    const response = await fetch("/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+      }),
+    });
 
-  // Aqui você deve implementar sua lógica de autenticação
-  // Por enquanto, vamos simular alguns usuários válidos
-  const validUsers = [
-    { email: "admin@autodrive.com", password: "admin123" },
-    { email: "user@autodrive.com", password: "user123" },
-    { email: "demo@autodrive.com", password: "demo123" },
-  ];
+    const data = await response.json();
 
-  return validUsers.some(
-    (user) => user.email === email && user.password === password
-  );
+    if (response.ok && data.success) {
+      return true;
+    } else {
+      throw new Error(data.message || "Credenciais inválidas");
+    }
+  } catch (error) {
+    console.error("Erro na autenticação:", error);
+    throw error;
+  }
 }
 
 // Função para salvar credenciais no localStorage (se suportado)
