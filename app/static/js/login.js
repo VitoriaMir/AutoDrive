@@ -57,10 +57,10 @@ async function handleLogin(event) {
   showLoadingState(loginBtn);
 
   try {
-    // Simular chamada de API (substitua pela sua lógica de autenticação)
-    const loginSuccess = await authenticateUser(email, password);
+    // Autenticar usuário
+    const result = await authenticateUser(email, password);
 
-    if (loginSuccess) {
+    if (result.success) {
       // Salvar credenciais se "lembrar de mim" estiver marcado
       if (remember) {
         saveCredentials(email);
@@ -68,15 +68,25 @@ async function handleLogin(event) {
         clearSavedCredentials();
       }
 
+      // Mostrar mensagem personalizada baseada no role
+      let welcomeMessage = "Login realizado com sucesso!";
+      if (result.role === "admin") {
+        welcomeMessage = "Bem-vindo, Administrador!";
+      } else if (result.role === "instructor") {
+        welcomeMessage = "Bem-vindo, Instrutor!";
+      } else {
+        welcomeMessage = "Bem-vindo ao AutoDrive!";
+      }
+
       // Sucesso no login
-      showSuccessMessage();
+      showSuccessMessage(welcomeMessage);
 
       // Redirecionar após um breve delay
       setTimeout(() => {
         window.location.href = "/dashboard";
       }, 1500);
     } else {
-      throw new Error("Credenciais inválidas");
+      throw new Error(result.message || "Credenciais inválidas");
     }
   } catch (error) {
     showError(
@@ -207,7 +217,7 @@ async function authenticateUser(email, password) {
     const data = await response.json();
 
     if (response.ok && data.success) {
-      return true;
+      return data; // Retorna o objeto completo com role
     } else {
       throw new Error(data.message || "Credenciais inválidas");
     }

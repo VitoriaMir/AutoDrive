@@ -6704,6 +6704,144 @@
     </div>
 
 
+    <script>
+        // Configuração do usuário atual
+        window.currentUser = {
+            role: "{{ user_role }}",
+            name: "{{ user_name }}",
+            email: "{{ user_email }}"
+        };
+
+        // Controlar acesso baseado no role
+        document.addEventListener('DOMContentLoaded', function () {
+            const userRole = window.currentUser.role;
+
+            // Esconder seções baseadas no role
+            if (userRole !== 'admin') {
+                // Esconder funcionalidades de admin
+                hideAdminFeatures();
+            }
+
+            if (userRole === 'user') {
+                // Mostrar apenas funcionalidades básicas para usuários
+                showUserFeatures();
+            }
+
+            // Atualizar informações do usuário no header
+            updateUserInfo();
+        });
+
+        function hideAdminFeatures() {
+            // Esconder itens do menu que são apenas para admin
+            const adminMenuItems = [
+                '[data-section="instructors"]',
+                '[data-section="vehicles"]',
+                '[data-section="reports"]',
+                '[data-section="settings"]',
+                '.admin-only'
+            ];
+
+            adminMenuItems.forEach(selector => {
+                const elements = document.querySelectorAll(selector);
+                elements.forEach(el => {
+                    if (el) {
+                        el.style.display = 'none';
+                    }
+                });
+            });
+        }
+
+        function showUserFeatures() {
+            // Manter apenas funcionalidades básicas visíveis
+            const userMenuItems = [
+                '[data-section="dashboard"]',
+                '[data-section="students"]' // usuário pode ver apenas seus próprios dados
+            ];
+
+            // Lógica adicional para usuários limitados pode ser adicionada aqui
+        }
+
+        function updateUserInfo() {
+            // Atualizar nome do usuário no dashboard
+            const userNameElements = document.querySelectorAll('.user-name, .profile-user-name');
+            userNameElements.forEach(el => {
+                if (el && window.currentUser.name) {
+                    el.textContent = window.currentUser.name;
+                }
+            });
+
+            // Atualizar email do usuário
+            const userEmailElements = document.querySelectorAll('.user-email, .profile-user-email');
+            userEmailElements.forEach(el => {
+                if (el && window.currentUser.email) {
+                    el.textContent = window.currentUser.email;
+                }
+            });
+
+            // Atualizar role do usuário
+            const userRoleElements = document.querySelectorAll('.user-role, .profile-user-role');
+            userRoleElements.forEach(el => {
+                if (el && window.currentUser.role) {
+                    let roleText = window.currentUser.role;
+                    if (roleText === 'admin') roleText = 'Administrador';
+                    else if (roleText === 'instructor') roleText = 'Instrutor';
+                    else if (roleText === 'user') roleText = 'Usuário';
+
+                    el.textContent = roleText;
+                }
+            });
+        }
+
+        // Função para criar novo usuário (apenas admins)
+        async function createNewUser(userData) {
+            if (window.currentUser.role !== 'admin') {
+                alert('Acesso negado. Apenas administradores podem criar usuários.');
+                return;
+            }
+
+            try {
+                const response = await fetch('/admin/create-user', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(userData)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert('Usuário criado com sucesso!');
+                    // Atualizar lista de usuários ou fazer outras ações
+                } else {
+                    alert('Erro: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Erro ao criar usuário:', error);
+                alert('Erro ao criar usuário');
+            }
+        }
+
+        // Função para listar usuários (apenas admins)
+        async function loadUsers() {
+            if (window.currentUser.role !== 'admin') {
+                console.log('Acesso negado para listagem de usuários');
+                return;
+            }
+
+            try {
+                const response = await fetch('/admin/users');
+                const result = await response.json();
+
+                if (result.success) {
+                    console.log('Usuários carregados:', result.users);
+                    // Processar lista de usuários
+                }
+            } catch (error) {
+                console.error('Erro ao carregar usuários:', error);
+            }
+        }
+    </script>
     <script src="/assets/js/dashboard.js"></script>
 </body>
 
