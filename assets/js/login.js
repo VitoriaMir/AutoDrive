@@ -278,9 +278,13 @@ function forgotPassword() {
 
 // Função para mostrar informações sobre registro
 function showRegisterInfo() {
-  alert(
-    "Para criar uma nova conta, entre em contato com o administrador do sistema.\n\nEmail: admin@autodrive.com\nTelefone: (11) 99999-9999"
-  );
+  const modal = document.getElementById("adminContactModal");
+  modal.classList.add("show");
+
+  // Focar no primeiro campo do formulário
+  setTimeout(() => {
+    document.getElementById("senderName").focus();
+  }, 300);
 }
 
 // Adicionar event listeners para teclas de atalho
@@ -320,3 +324,160 @@ function addVisualEffects() {
 
 // Inicializar efeitos visuais
 setTimeout(addVisualEffects, 100);
+
+// ===== MODAL FUNCTIONALITY =====
+
+// Fechar modal
+function closeModal() {
+  const modal = document.getElementById("adminContactModal");
+  modal.classList.remove("show");
+
+  // Limpar formulário
+  setTimeout(() => {
+    document.getElementById("adminContactForm").reset();
+    clearModalMessages();
+  }, 300);
+}
+
+// Limpar mensagens do modal
+function clearModalMessages() {
+  const existingMessages = document.querySelectorAll(
+    ".success-message, .error-message"
+  );
+  existingMessages.forEach((msg) => msg.remove());
+}
+
+// Mostrar mensagem de sucesso no modal
+function showModalSuccess(message) {
+  clearModalMessages();
+  const form = document.querySelector(".admin-contact-form");
+  const successDiv = document.createElement("div");
+  successDiv.className = "success-message";
+  successDiv.innerHTML = `<i class="fas fa-check-circle"></i>${message}`;
+  form.insertBefore(successDiv, form.firstChild);
+}
+
+// Mostrar mensagem de erro no modal
+function showModalError(message) {
+  clearModalMessages();
+  const form = document.querySelector(".admin-contact-form");
+  const errorDiv = document.createElement("div");
+  errorDiv.className = "error-message";
+  errorDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i>${message}`;
+  form.insertBefore(errorDiv, form.firstChild);
+}
+
+// Validar formulário de contato
+function validateContactForm(formData) {
+  const errors = [];
+
+  if (!formData.senderName.trim()) {
+    errors.push("Nome é obrigatório");
+  }
+
+  if (!formData.senderEmail.trim()) {
+    errors.push("Email é obrigatório");
+  } else if (!isValidEmail(formData.senderEmail)) {
+    errors.push("Email inválido");
+  }
+
+  if (!formData.subject) {
+    errors.push("Assunto é obrigatório");
+  }
+
+  if (!formData.message.trim()) {
+    errors.push("Mensagem é obrigatória");
+  } else if (formData.message.trim().length < 10) {
+    errors.push("Mensagem deve ter pelo menos 10 caracteres");
+  }
+
+  return errors;
+}
+
+// Simular envio da mensagem (substitua pela sua lógica de envio)
+async function sendContactMessage(formData) {
+  // Simular delay de envio
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+
+  // Simular sucesso (99% das vezes)
+  if (Math.random() > 0.01) {
+    return {
+      success: true,
+      message:
+        "Mensagem enviada com sucesso! O administrador entrará em contato em até 24 horas.",
+    };
+  } else {
+    throw new Error(
+      "Erro temporário no servidor. Tente novamente em alguns minutos."
+    );
+  }
+}
+
+// Lidar com envio do formulário de contato
+async function handleContactSubmit(event) {
+  event.preventDefault();
+
+  const form = event.target;
+  const formData = new FormData(form);
+  const data = Object.fromEntries(formData.entries());
+  const submitBtn = form.querySelector(".btn-send");
+
+  // Validar formulário
+  const errors = validateContactForm(data);
+  if (errors.length > 0) {
+    showModalError(errors.join("<br>"));
+    return;
+  }
+
+  // Mostrar estado de carregamento
+  submitBtn.classList.add("loading");
+  submitBtn.disabled = true;
+  clearModalMessages();
+
+  try {
+    const result = await sendContactMessage(data);
+
+    if (result.success) {
+      showModalSuccess(result.message);
+      form.reset();
+
+      // Fechar modal após 3 segundos
+      setTimeout(closeModal, 3000);
+    }
+  } catch (error) {
+    showModalError(error.message);
+  } finally {
+    // Remover estado de carregamento
+    submitBtn.classList.remove("loading");
+    submitBtn.disabled = false;
+  }
+}
+
+// Inicializar event listeners do modal
+document.addEventListener("DOMContentLoaded", function () {
+  const modal = document.getElementById("adminContactModal");
+  const closeBtn = document.getElementById("closeModal");
+  const cancelBtn = document.getElementById("cancelBtn");
+  const contactForm = document.getElementById("adminContactForm");
+
+  // Fechar modal
+  closeBtn.addEventListener("click", closeModal);
+  cancelBtn.addEventListener("click", closeModal);
+
+  // Fechar modal clicando fora dele
+  modal.addEventListener("click", function (e) {
+    if (e.target === modal) {
+      closeModal();
+    }
+  });
+
+  // Fechar modal com Escape
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && modal.classList.contains("show")) {
+      closeModal();
+    }
+  });
+
+  // Envio do formulário
+  contactForm.addEventListener("submit", handleContactSubmit);
+});
