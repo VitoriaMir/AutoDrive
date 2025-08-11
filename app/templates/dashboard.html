@@ -5750,6 +5750,7 @@
             </div>
             {% endif %}
             <!-- Reports Actions -->
+            {% if user_role != 'instructor' %}
             <div class="context-section">
                 <div class="context-section-title">
                     <i class="fas fa-file-alt"></i>
@@ -5775,6 +5776,7 @@
                     </div>
                 </div>
             </div>
+            {% endif %}
         </div>
     </div>
     <!-- Notifications Panel -->
