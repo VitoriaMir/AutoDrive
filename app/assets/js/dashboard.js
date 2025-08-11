@@ -173,6 +173,11 @@ const sectionTitles = {
 let lessonsChart = null;
 let studentsChart = null;
 let financeChart = null;
+let studentsPerformanceChart = null;
+let instructorsChart = null;
+let vehiclesChart = null;
+let scheduleChart = null;
+let examsChart = null;
 
 // Function to show a specific section
 function showSection(sectionId) {
@@ -205,9 +210,25 @@ function showSection(sectionId) {
   }
 
   // Initialize section-specific charts
-  if (sectionId === "finance" && !financeChart) {
-    setTimeout(() => initFinanceChart(), 100);
-  }
+  setTimeout(() => {
+    if (sectionId === "dashboard") {
+      // Initialize dashboard charts if not already initialized
+      if (!lessonsChart) initLessonsChart();
+      if (!studentsChart) initStudentsChart();
+    } else if (sectionId === "students") {
+      if (!studentsPerformanceChart) initStudentsPerformanceChart();
+    } else if (sectionId === "instructors") {
+      if (!instructorsChart) initInstructorsChart();
+    } else if (sectionId === "vehicles") {
+      if (!vehiclesChart) initVehiclesChart();
+    } else if (sectionId === "schedule") {
+      if (!scheduleChart) initScheduleChart();
+    } else if (sectionId === "exams") {
+      if (!examsChart) initExamsChart();
+    } else if (sectionId === "finance") {
+      if (!financeChart) initFinanceChart();
+    }
+  }, 100);
 }
 
 // Set up menu item click handlers
@@ -480,6 +501,11 @@ function initCharts() {
     initLessonsChart();
     initStudentsChart();
     initStudentsPerformanceChart();
+    initInstructorsChart();
+    initVehiclesChart();
+    initScheduleChart();
+    initExamsChart();
+    initFinanceChart();
   }, 200);
 }
 
@@ -651,7 +677,7 @@ function initStudentsChart() {
       document.getElementById("students-period-filter")?.value || "6";
     const data = studentsData[currentPeriod];
 
-    window.studentsChart = new Chart(studentsCtx.getContext("2d"), {
+    studentsChart = new Chart(studentsCtx.getContext("2d"), {
       type: "line",
       data: {
         labels: data.labels,
@@ -2478,7 +2504,7 @@ function initExamsChart() {
   const currentPeriod = 6;
   const data = examsData[currentPeriod];
 
-  const examsChart = new Chart(examsCtx.getContext("2d"), {
+  examsChart = new Chart(examsCtx.getContext("2d"), {
     type: "line",
     data: {
       labels: data.labels,
@@ -3851,7 +3877,7 @@ function initStudentsPerformanceChart() {
     document.getElementById("students-period-filter")?.value || "6";
   const data = performanceData[currentPeriod];
 
-  new Chart(ctx, {
+  studentsPerformanceChart = new Chart(ctx, {
     type: "line",
     data: {
       labels: data.labels,
@@ -4649,7 +4675,7 @@ function initInstructorsChart() {
     document.getElementById("instructors-period-filter")?.value || "6";
   const data = instructorsData[currentPeriod];
 
-  window.instructorsChart = new Chart(ctx, {
+  instructorsChart = new Chart(ctx, {
     type: "line",
     data: {
       labels: data.labels,
@@ -5427,7 +5453,7 @@ function initVehiclesChart() {
     document.getElementById("vehicles-filter")?.value || "all";
   const data = vehiclesData[currentFilter];
 
-  window.vehiclesChart = new Chart(ctx, {
+  vehiclesChart = new Chart(ctx, {
     type: "line",
     data: {
       labels: data.labels,
@@ -6119,7 +6145,7 @@ function initScheduleChart() {
   const ctx = document.getElementById("schedule-chart");
   if (!ctx) return;
 
-  new Chart(ctx, {
+  scheduleChart = new Chart(ctx, {
     type: "bar",
     data: {
       labels: ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
