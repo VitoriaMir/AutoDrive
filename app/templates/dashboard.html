@@ -104,10 +104,21 @@
                     <i class="fas fa-plus"></i>
                 </button>
                 <div class="user-profile" id="user-profile">
-                    <div class="user-avatar">AD</div>
+                    <div class="user-avatar">{{ user_name[0] }}{{ user_name.split()[1][0] if user_name.split()|length >
+                        1 else user_name[1] if user_name|length > 1 else '' }}</div>
                     <div class="user-info">
-                        <div class="user-name">Admin</div>
-                        <div class="user-role">Administrador</div>
+                        <div class="user-name">{{ user_name }}</div>
+                        <div class="user-role">
+                            {% if user_role == 'admin' %}
+                            Administrador
+                            {% elif user_role == 'user' %}
+                            Usuário
+                            {% elif user_role == 'instructor' %}
+                            Instrutor
+                            {% else %}
+                            {{ user_role.title() }}
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -118,11 +129,29 @@
         <div class="user-profile-panel" id="user-profile-panel">
             <div class="profile-panel-header">
                 <div class="profile-panel-user">
-                    <div class="profile-avatar-large">AD</div>
+                    <div class="profile-avatar-large">{{ user_name[0] }}{{ user_name.split()[1][0] if
+                        user_name.split()|length > 1 else user_name[1] if user_name|length > 1 else '' }}</div>
                     <div class="profile-user-details">
-                        <div class="profile-user-name">Admin</div>
-                        <div class="profile-user-email">admin@autoescolaressaca.com</div>
-                        <div class="profile-user-role">Administrador</div>
+                        <div class="profile-user-name">{{ user_name }}</div>
+                        <div class="profile-user-email">{{ user_email }}</div>
+                        <div class="profile-user-role">
+                            {% if user_role == 'admin' %}
+                            <span class="role-badge admin">
+                                <i class="fas fa-crown"></i>
+                                Administrador
+                            </span>
+                            {% elif user_role == 'user' %}
+                            <span class="role-badge user">
+                                <i class="fas fa-user"></i>
+                                Usuário
+                            </span>
+                            {% elif user_role == 'instructor' %}
+                            <span class="role-badge instructor">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                                Instrutor
+                            </span>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
                 <button aria-label="Fechar painel" class="profile-panel-close" id="close-user-panel">
@@ -130,6 +159,57 @@
                 </button>
             </div>
             <div class="profile-panel-content">
+                <!-- Quick Stats for User -->
+                <div class="profile-quick-stats">
+                    <div class="quick-stat">
+                        <div class="stat-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-number">
+                                {% if user_role == 'instructor' %}
+                                12
+                                {% else %}
+                                5
+                                {% endif %}
+                            </div>
+                            <div class="stat-label">
+                                {% if user_role == 'instructor' %}
+                                Aulas Hoje
+                                {% else %}
+                                Atividades
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% if user_role != 'instructor' %}
+                    <div class="quick-stat">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-number">142</div>
+                            <div class="stat-label">Alunos Ativos</div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="quick-stat">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-number">
+                                {% if user_role == 'instructor' %}
+                                8h30
+                                {% else %}
+                                4h15
+                                {% endif %}
+                            </div>
+                            <div class="stat-label">Hoje</div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="profile-settings-list">
                     <div class="profile-setting-item" onclick="openUserSettings()">
                         <div class="setting-icon">
@@ -143,6 +223,58 @@
                             <i class="fas fa-chevron-right"></i>
                         </div>
                     </div>
+                    {% if user_role == 'instructor' %}
+                    <div class="profile-setting-item" onclick="openInstructorSchedule()">
+                        <div class="setting-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <div class="setting-content">
+                            <div class="setting-title">Minha Agenda</div>
+                            <div class="setting-description">Ver e gerenciar horários de aulas</div>
+                        </div>
+                        <div class="setting-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                    <div class="profile-setting-item" onclick="openInstructorProfile()">
+                        <div class="setting-icon">
+                            <i class="fas fa-id-card"></i>
+                        </div>
+                        <div class="setting-content">
+                            <div class="setting-title">Perfil Profissional</div>
+                            <div class="setting-description">Especialidades e certificações</div>
+                        </div>
+                        <div class="setting-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if user_role == 'admin' %}
+                    <div class="profile-setting-item" onclick="openSystemSettings()">
+                        <div class="setting-icon">
+                            <i class="fas fa-cogs"></i>
+                        </div>
+                        <div class="setting-content">
+                            <div class="setting-title">Configurações do Sistema</div>
+                            <div class="setting-description">Gerenciar configurações avançadas</div>
+                        </div>
+                        <div class="setting-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                    <div class="profile-setting-item" onclick="openUserManagement()">
+                        <div class="setting-icon">
+                            <i class="fas fa-users-cog"></i>
+                        </div>
+                        <div class="setting-content">
+                            <div class="setting-title">Gerenciar Usuários</div>
+                            <div class="setting-description">Adicionar e editar usuários</div>
+                        </div>
+                        <div class="setting-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                    {% endif %}
                     <div class="profile-setting-item" onclick="openSecuritySettings()">
                         <div class="setting-icon">
                             <i class="fas fa-shield-alt"></i>
@@ -179,6 +311,7 @@
                             <i class="fas fa-chevron-right"></i>
                         </div>
                     </div>
+                    {% if user_role != 'instructor' %}
                     <div class="profile-setting-item" onclick="openBackupSettings()">
                         <div class="setting-icon">
                             <i class="fas fa-cloud-download-alt"></i>
@@ -191,6 +324,7 @@
                             <i class="fas fa-chevron-right"></i>
                         </div>
                     </div>
+                    {% endif %}
                     <div class="profile-setting-item" onclick="openHelp()">
                         <div class="setting-icon">
                             <i class="fas fa-question-circle"></i>
