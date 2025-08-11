@@ -8,6 +8,146 @@ const contextMenu = document.getElementById("context-menu");
 const notificationsBtn = document.getElementById("notifications-btn");
 const notificationsPanel = document.getElementById("notifications-panel");
 
+// Função para mostrar notificações
+function showNotification(message, type = "info", duration = 3000) {
+  // Criar elemento de notificação
+  const notification = document.createElement("div");
+  notification.className = `notification ${type}`;
+  notification.innerHTML = `
+        <div class="notification-content">
+            <div class="notification-icon">
+                <i class="fas ${
+                  type === "success"
+                    ? "fa-check-circle"
+                    : type === "error"
+                    ? "fa-exclamation-circle"
+                    : type === "warning"
+                    ? "fa-exclamation-triangle"
+                    : "fa-info-circle"
+                }"></i>
+            </div>
+            <div class="notification-message">${message}</div>
+            <button class="notification-close" onclick="closeNotification(this)">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    `;
+
+  // Adicionar estilos se não existirem
+  if (!document.querySelector("#notification-styles")) {
+    const styles = document.createElement("style");
+    styles.id = "notification-styles";
+    styles.textContent = `
+            .notification {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 10000;
+                min-width: 300px;
+                max-width: 500px;
+                background: var(--card-bg);
+                border: 1px solid var(--border-color);
+                border-radius: 12px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+                backdrop-filter: blur(10px);
+                transform: translateX(100%);
+                transition: all 0.3s ease;
+                margin-bottom: 10px;
+            }
+            
+            .notification.show {
+                transform: translateX(0);
+            }
+            
+            .notification.success {
+                border-left: 4px solid var(--success);
+            }
+            
+            .notification.error {
+                border-left: 4px solid var(--danger);
+            }
+            
+            .notification.warning {
+                border-left: 4px solid var(--warning);
+            }
+            
+            .notification.info {
+                border-left: 4px solid var(--info);
+            }
+            
+            .notification-content {
+                display: flex;
+                align-items: center;
+                padding: 16px;
+                gap: 12px;
+            }
+            
+            .notification-icon {
+                color: var(--primary);
+                font-size: 1.2rem;
+            }
+            
+            .notification.success .notification-icon {
+                color: var(--success);
+            }
+            
+            .notification.error .notification-icon {
+                color: var(--danger);
+            }
+            
+            .notification.warning .notification-icon {
+                color: var(--warning);
+            }
+            
+            .notification-message {
+                flex: 1;
+                color: var(--text-primary);
+                font-size: 0.9rem;
+                line-height: 1.4;
+            }
+            
+            .notification-close {
+                background: none;
+                border: none;
+                color: var(--text-secondary);
+                cursor: pointer;
+                padding: 4px;
+                border-radius: 4px;
+                transition: all 0.2s ease;
+            }
+            
+            .notification-close:hover {
+                background: var(--glass);
+                color: var(--text-primary);
+            }
+        `;
+    document.head.appendChild(styles);
+  }
+
+  // Adicionar ao DOM
+  document.body.appendChild(notification);
+
+  // Animar entrada
+  setTimeout(() => {
+    notification.classList.add("show");
+  }, 100);
+
+  // Auto remover
+  setTimeout(() => {
+    closeNotification(notification.querySelector(".notification-close"));
+  }, duration);
+}
+
+function closeNotification(button) {
+  const notification = button.closest(".notification");
+  notification.classList.remove("show");
+  setTimeout(() => {
+    if (notification.parentNode) {
+      notification.parentNode.removeChild(notification);
+    }
+  }, 300);
+}
+
 // Menu Navigation
 const menuItems = document.querySelectorAll(".menu-item");
 const contentSections = document.querySelectorAll(".content-section");
@@ -205,9 +345,20 @@ function closeModal(modalId) {
 
 // Close modal when clicking outside
 document.addEventListener("click", (e) => {
-  if (e.target.classList.contains("modal")) {
-    e.target.classList.remove("show");
-    document.body.style.overflow = "auto";
+  if (
+    e.target.classList.contains("modal") ||
+    e.target.classList.contains("modal-overlay")
+  ) {
+    const modal = e.target.closest(".modal, .modal-overlay");
+    if (modal) {
+      modal.classList.remove("show");
+      document.body.style.overflow = "auto";
+      // Limpar formulário se existir
+      const form = modal.querySelector("form");
+      if (form) {
+        form.reset();
+      }
+    }
   }
 });
 
@@ -8813,3 +8964,797 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 console.log("AutoDrive Dashboard v2.1.0 - Sistema carregado com sucesso!");
+
+// ===== MODAL FUNCTIONS =====
+
+// ===== FUNÇÕES PARA MODAL DE AGENDAMENTO =====
+
+// Função para abrir modal de agendamento
+function openScheduleLessonModal() {
+  const modal = document.getElementById("scheduleLessonModal");
+  if (modal) {
+    modal.classList.add("show");
+    document.body.style.overflow = "hidden";
+  }
+
+  // Definir data mínima como hoje
+  const today = new Date().toISOString().split("T")[0];
+  const lessonDateInput = document.getElementById("lessonDate");
+  if (lessonDateInput) {
+    lessonDateInput.min = today;
+  }
+
+  // Carregar dados iniciais
+  loadInstructors();
+  loadVehicles();
+  loadStudents();
+}
+
+// Função para mostrar/esconder campo de veículo
+function toggleVehicleField() {
+  const lessonType = document.getElementById("lessonType").value;
+  const vehicleField = document.getElementById("vehicleField");
+  const vehicleSelect = document.getElementById("lessonVehicle");
+
+  if (lessonType === "practical") {
+    vehicleField.style.display = "block";
+    vehicleSelect.required = true;
+    document.getElementById("lessonLocation").value = "Pista/Ruas";
+  } else {
+    vehicleField.style.display = "none";
+    vehicleSelect.required = false;
+    vehicleSelect.value = "";
+    document.getElementById("lessonLocation").value = "Sala de Aula";
+  }
+}
+
+// Carregar lista de instrutores
+async function loadInstructors() {
+  try {
+    const response = await fetch("/api/instructors");
+    const data = await response.json();
+
+    if (data.success) {
+      const select = document.getElementById("lessonInstructor");
+      select.innerHTML = '<option value="">Selecione o instrutor</option>';
+
+      data.instructors.forEach((instructor) => {
+        const option = document.createElement("option");
+        option.value = instructor.id;
+        option.textContent = instructor.name;
+        option.dataset.specialty = instructor.specialty;
+        select.appendChild(option);
+      });
+    }
+  } catch (error) {
+    console.error("Erro ao carregar instrutores:", error);
+  }
+}
+
+// Carregar lista de veículos
+async function loadVehicles() {
+  try {
+    const response = await fetch("/api/vehicles");
+    const data = await response.json();
+
+    if (data.success) {
+      const select = document.getElementById("lessonVehicle");
+      select.innerHTML = '<option value="">Selecione o veículo</option>';
+
+      data.vehicles.forEach((vehicle) => {
+        const option = document.createElement("option");
+        option.value = `${vehicle.id} (${vehicle.model})`;
+        option.textContent = `${vehicle.id} - ${vehicle.model} (Cat. ${vehicle.category})`;
+        option.dataset.category = vehicle.category;
+        select.appendChild(option);
+      });
+    }
+  } catch (error) {
+    console.error("Erro ao carregar veículos:", error);
+  }
+}
+
+// Carregar lista de alunos (mockado - em produção buscar do backend)
+function loadStudents() {
+  const select = document.getElementById("lessonStudent");
+  select.innerHTML = '<option value="">Selecione o aluno</option>';
+
+  // Dados mockados de alunos
+  const students = [
+    { id: "user@autodrive.com", name: "João Silva" },
+    { id: "demo@autodrive.com", name: "Maria Santos" },
+    { id: "student1@autodrive.com", name: "Pedro Oliveira" },
+    { id: "student2@autodrive.com", name: "Ana Paula" },
+  ];
+
+  students.forEach((student) => {
+    const option = document.createElement("option");
+    option.value = student.id;
+    option.textContent = student.name;
+    select.appendChild(option);
+  });
+}
+
+// Atualizar horários disponíveis
+async function updateAvailableTimes() {
+  const date = document.getElementById("lessonDate").value;
+  const instructorId = document.getElementById("lessonInstructor").value;
+
+  if (!date) return;
+
+  try {
+    const params = new URLSearchParams({ date });
+    if (instructorId) params.append("instructor_id", instructorId);
+
+    const response = await fetch(`/api/schedule-availability?${params}`);
+    const data = await response.json();
+
+    const select = document.getElementById("lessonTime");
+    select.innerHTML = '<option value="">Selecione um horário</option>';
+
+    if (data.success) {
+      data.available_times.forEach((time) => {
+        const option = document.createElement("option");
+        option.value = time;
+        option.textContent = time;
+        select.appendChild(option);
+      });
+    }
+  } catch (error) {
+    console.error("Erro ao carregar horários:", error);
+  }
+}
+
+// Submeter formulário de agendamento
+async function submitLessonSchedule() {
+  const form = document.getElementById("scheduleLessonForm");
+  const formData = new FormData(form);
+
+  // Validar campos obrigatórios
+  if (!form.checkValidity()) {
+    form.reportValidity();
+    return;
+  }
+
+  // Preparar dados
+  const lessonData = {
+    student_id: formData.get("student_id"),
+    student_name:
+      document.getElementById("lessonStudent").selectedOptions[0].textContent,
+    instructor_id: formData.get("instructor_id"),
+    instructor_name:
+      document.getElementById("lessonInstructor").selectedOptions[0]
+        .textContent,
+    date: formData.get("date"),
+    start_time: formData.get("start_time"),
+    end_time: calculateEndTime(formData.get("start_time")),
+    type: formData.get("type"),
+    category: formData.get("category"),
+    vehicle: formData.get("vehicle"),
+    location:
+      formData.get("location") ||
+      (formData.get("type") === "practical" ? "Pista/Ruas" : "Sala de Aula"),
+    notes: formData.get("notes"),
+  };
+
+  try {
+    const response = await fetch("/api/lessons", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(lessonData),
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      showNotification("Aula agendada com sucesso!", "success");
+      closeModal("scheduleLessonModal");
+      // Recarregar lista de aulas se estiver na seção schedule
+      if (
+        document.getElementById("schedule-content").classList.contains("active")
+      ) {
+        loadLessons();
+      }
+    } else {
+      showNotification(result.message || "Erro ao agendar aula", "error");
+    }
+  } catch (error) {
+    console.error("Erro ao agendar aula:", error);
+    showNotification("Erro ao conectar com o servidor", "error");
+  }
+}
+
+// Calcular horário de término (1 hora depois)
+function calculateEndTime(startTime) {
+  if (!startTime) return "";
+
+  const [hours, minutes] = startTime.split(":").map(Number);
+  const endHours = hours + 1;
+
+  return `${endHours.toString().padStart(2, "0")}:${minutes
+    .toString()
+    .padStart(2, "0")}`;
+}
+
+// ===== FUNÇÕES PARA MODAL DE INSTRUTOR =====
+
+// Função para submeter novo instrutor
+async function submitInstructor() {
+  const form = document.getElementById("addInstructorForm");
+  const formData = new FormData(form);
+
+  // Validar campos obrigatórios
+  if (!form.checkValidity()) {
+    form.reportValidity();
+    return;
+  }
+
+  // Preparar dados
+  const instructorData = {
+    name: formData.get("name"),
+    email: formData.get("email"),
+    phone: formData.get("phone"),
+    cpf: formData.get("cpf"),
+    specialty: formData.get("specialty"),
+    license: formData.get("license"),
+    address: formData.get("address"),
+    notes: formData.get("notes"),
+  };
+
+  try {
+    const response = await fetch("/api/instructors", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(instructorData),
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      showNotification("Instrutor cadastrado com sucesso!", "success");
+      closeModal("addInstructorModal");
+      form.reset();
+      // Recarregar lista de instrutores se estiver na seção
+      if (
+        document
+          .getElementById("instructors-content")
+          .classList.contains("active")
+      ) {
+        // Aqui você pode adicionar uma função para recarregar a lista
+      }
+    } else {
+      showNotification(
+        result.message || "Erro ao cadastrar instrutor",
+        "error"
+      );
+    }
+  } catch (error) {
+    console.error("Erro ao cadastrar instrutor:", error);
+    showNotification("Erro ao conectar com o servidor", "error");
+  }
+}
+
+// ===== FUNÇÕES PARA MODAL DE VEÍCULO =====
+
+// Função para submeter novo veículo
+async function submitVehicle() {
+  const form = document.getElementById("addVehicleForm");
+  const formData = new FormData(form);
+
+  // Validar campos obrigatórios
+  if (!form.checkValidity()) {
+    form.reportValidity();
+    return;
+  }
+
+  // Preparar dados
+  const vehicleData = {
+    plate: formData.get("plate"),
+    model: formData.get("model"),
+    brand: formData.get("brand"),
+    year: parseInt(formData.get("year")),
+    category: formData.get("category"),
+    color: formData.get("color"),
+    fuel: formData.get("fuel"),
+    transmission: formData.get("transmission"),
+    notes: formData.get("notes"),
+  };
+
+  try {
+    const response = await fetch("/api/vehicles", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(vehicleData),
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      showNotification("Veículo cadastrado com sucesso!", "success");
+      closeModal("addVehicleModal");
+      form.reset();
+      // Recarregar lista de veículos se estiver na seção
+      if (
+        document.getElementById("vehicles-content").classList.contains("active")
+      ) {
+        // Aqui você pode adicionar uma função para recarregar a lista
+      }
+    } else {
+      showNotification(result.message || "Erro ao cadastrar veículo", "error");
+    }
+  } catch (error) {
+    console.error("Erro ao cadastrar veículo:", error);
+    showNotification("Erro ao conectar com o servidor", "error");
+  }
+}
+
+// ===== FUNÇÕES PARA MODAL DE ALUNO =====
+
+// Função para submeter novo aluno
+async function submitStudent() {
+  const form = document.getElementById("addStudentForm");
+  const formData = new FormData(form);
+
+  // Validar campos obrigatórios
+  if (!form.checkValidity()) {
+    form.reportValidity();
+    return;
+  }
+
+  // Preparar dados
+  const studentData = {
+    name: formData.get("name"),
+    email: formData.get("email"),
+    phone: formData.get("phone"),
+    cpf: formData.get("cpf"),
+    birth_date: formData.get("birth_date"),
+    category: formData.get("category"),
+    address: formData.get("address"),
+    notes: formData.get("notes"),
+  };
+
+  try {
+    const response = await fetch("/api/students", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(studentData),
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      showNotification("Aluno cadastrado com sucesso!", "success");
+      closeModal("addStudentModal");
+      form.reset();
+      // Recarregar lista de alunos se estiver na seção
+      if (
+        document.getElementById("students-content").classList.contains("active")
+      ) {
+        // Aqui você pode adicionar uma função para recarregar a lista
+      }
+    } else {
+      showNotification(result.message || "Erro ao cadastrar aluno", "error");
+    }
+  } catch (error) {
+    console.error("Erro ao cadastrar aluno:", error);
+    showNotification("Erro ao conectar com o servidor", "error");
+  }
+}
+
+// ===== FUNÇÕES PARA MODAL DE PAGAMENTO =====
+
+// Função para submeter novo pagamento
+async function submitPayment() {
+  const form = document.getElementById("addPaymentForm");
+  const formData = new FormData(form);
+
+  // Validar campos obrigatórios
+  if (!form.checkValidity()) {
+    form.reportValidity();
+    return;
+  }
+
+  // Preparar dados
+  const paymentData = {
+    student_id: formData.get("student_id"),
+    student_name:
+      document.getElementById("paymentStudent").selectedOptions[0].textContent,
+    amount: parseFloat(formData.get("amount")),
+    payment_date: formData.get("payment_date"),
+    payment_method: formData.get("payment_method"),
+    category: formData.get("category"),
+    installments: parseInt(formData.get("installments")) || 1,
+    description: formData.get("description"),
+    notes: formData.get("notes"),
+  };
+
+  try {
+    const response = await fetch("/api/payments", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(paymentData),
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      showNotification("Pagamento registrado com sucesso!", "success");
+      closeModal("paymentModal");
+      form.reset();
+      // Recarregar lista de pagamentos se estiver na seção
+      if (
+        document.getElementById("finance-content").classList.contains("active")
+      ) {
+        // Aqui você pode adicionar uma função para recarregar a lista
+      }
+    } else {
+      showNotification(
+        result.message || "Erro ao registrar pagamento",
+        "error"
+      );
+    }
+  } catch (error) {
+    console.error("Erro ao registrar pagamento:", error);
+    showNotification("Erro ao conectar com o servidor", "error");
+  }
+}
+
+// ===== FUNÇÕES AUXILIARES =====
+
+// Função genérica para fechar modal
+function closeModal(modalId) {
+  const modal = document.getElementById(modalId);
+  if (modal) {
+    modal.classList.remove("show");
+    document.body.style.overflow = "auto";
+    // Limpar formulário se existir
+    const form = modal.querySelector("form");
+    if (form) {
+      form.reset();
+    }
+  }
+}
+
+// ===== FUNÇÕES ESPECÍFICAS PARA ABERTURA DE MODAIS =====
+
+// Função para abrir modal de estudante
+function openStudentModal() {
+  const modal = document.getElementById("addStudentModal");
+  if (modal) {
+    modal.classList.add("show");
+    document.body.style.overflow = "hidden";
+  }
+
+  // Configurar data de nascimento máxima (16 anos atrás mínimo)
+  const studentBirthDateInput = document.getElementById("studentBirthDate");
+  if (studentBirthDateInput) {
+    const maxDate = new Date();
+    maxDate.setFullYear(maxDate.getFullYear() - 16);
+    studentBirthDateInput.max = maxDate.toISOString().split("T")[0];
+  }
+}
+
+// Função para abrir modal de instrutor
+function openInstructorModal() {
+  const modal = document.getElementById("addInstructorModal");
+  if (modal) {
+    modal.classList.add("show");
+    document.body.style.overflow = "hidden";
+  }
+}
+
+// Função para abrir modal de veículo
+function openVehicleModal() {
+  const modal = document.getElementById("addVehicleModal");
+  if (modal) {
+    modal.classList.add("show");
+    document.body.style.overflow = "hidden";
+  }
+}
+
+// Função para abrir modal de pagamento
+function openPaymentModal() {
+  const modal = document.getElementById("paymentModal");
+  if (modal) {
+    modal.classList.add("show");
+    document.body.style.overflow = "hidden";
+  }
+
+  // Configurar data padrão como hoje
+  const today = new Date().toISOString().split("T")[0];
+  const paymentDateInput = document.getElementById("paymentDate");
+  if (paymentDateInput) {
+    paymentDateInput.value = today;
+  }
+}
+
+// ===== LESSON MANAGEMENT FUNCTIONS =====
+
+// Função para carregar e exibir aulas
+async function loadLessons() {
+  try {
+    const response = await fetch("/api/lessons");
+    const data = await response.json();
+
+    if (data.success) {
+      displayLessons(data.lessons);
+    }
+  } catch (error) {
+    console.error("Erro ao carregar aulas:", error);
+  }
+}
+
+// Função para exibir aulas na interface
+function displayLessons(lessons) {
+  const container = document.querySelector(".lessons-list");
+  if (!container) return;
+
+  // Limpar lista atual
+  container.innerHTML = "";
+
+  if (lessons.length === 0) {
+    container.innerHTML = `
+      <div class="no-lessons">
+        <i class="fas fa-calendar-times"></i>
+        <p>Nenhuma aula encontrada</p>
+        <button class="btn btn-primary" onclick="openScheduleLessonModal()">
+          Agendar Primeira Aula
+        </button>
+      </div>
+    `;
+    return;
+  }
+
+  lessons.forEach((lesson) => {
+    const lessonElement = createLessonElement(lesson);
+    container.appendChild(lessonElement);
+  });
+}
+
+// Criar elemento HTML para uma aula
+function createLessonElement(lesson) {
+  const div = document.createElement("div");
+  div.className = `lesson-item ${lesson.status} ${lesson.type}`;
+
+  const statusText = {
+    scheduled: "Agendada",
+    "in-progress": "Em Andamento",
+    completed: "Concluída",
+    cancelled: "Cancelada",
+  };
+
+  const typeIcon = lesson.type === "practical" ? "fas fa-car" : "fas fa-book";
+
+  div.innerHTML = `
+    <div class="lesson-time-block">
+      <div class="lesson-time">${lesson.start_time}</div>
+      <div class="lesson-duration">1h</div>
+      <div class="lesson-date">${formatDate(lesson.date)}</div>
+    </div>
+    <div class="lesson-type-indicator ${lesson.type}">
+      <i class="${typeIcon}"></i>
+    </div>
+    <div class="lesson-details">
+      <div class="lesson-main-info">
+        <div class="lesson-student-name">
+          <strong>${lesson.student_name}</strong>
+          <span class="lesson-category">Categoria ${lesson.category}</span>
+        </div>
+        <div class="lesson-instructor-info">
+          <i class="fas fa-chalkboard-teacher"></i>
+          <span>${lesson.instructor_name}</span>
+        </div>
+      </div>
+      <div class="lesson-additional-info">
+        ${
+          lesson.vehicle
+            ? `
+        <span class="lesson-vehicle">
+          <i class="fas fa-car"></i>
+          ${lesson.vehicle}
+        </span>
+        `
+            : `
+        <span class="lesson-topic">
+          <i class="fas fa-book-open"></i>
+          Aula Teórica
+        </span>
+        `
+        }
+        <span class="lesson-location">
+          <i class="fas fa-map-marker-alt"></i>
+          ${lesson.location}
+        </span>
+      </div>
+    </div>
+    <div class="lesson-status-badge">
+      <span class="status-badge status-${lesson.status}">${
+    statusText[lesson.status]
+  }</span>
+    </div>
+    <div class="lesson-actions">
+      ${
+        lesson.status === "scheduled"
+          ? `
+      <button aria-label="Iniciar aula" class="btn-icon" onclick="startLesson(${lesson.id})">
+        <i class="fas fa-play"></i>
+      </button>
+      <button aria-label="Editar" class="btn-icon" onclick="editLesson(${lesson.id})">
+        <i class="fas fa-edit"></i>
+      </button>
+      <button aria-label="Cancelar" class="btn-icon" onclick="cancelLesson(${lesson.id})">
+        <i class="fas fa-times"></i>
+      </button>
+      `
+          : ""
+      }
+      <button aria-label="Ver detalhes" class="btn-icon" onclick="viewLessonDetails(${
+        lesson.id
+      })">
+        <i class="fas fa-eye"></i>
+      </button>
+    </div>
+  `;
+
+  return div;
+}
+
+// Formatear data para exibição
+function formatDate(dateString) {
+  const date = new Date(dateString + "T00:00:00");
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const lessonDate = new Date(date);
+  lessonDate.setHours(0, 0, 0, 0);
+
+  if (lessonDate.getTime() === today.getTime()) {
+    return "Hoje";
+  }
+
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  if (lessonDate.getTime() === tomorrow.getTime()) {
+    return "Amanhã";
+  }
+
+  return date.toLocaleDateString("pt-BR");
+}
+
+// Função para cancelar aula
+async function cancelLesson(lessonId) {
+  if (!confirm("Tem certeza que deseja cancelar esta aula?")) {
+    return;
+  }
+
+  try {
+    const response = await fetch(`/api/lessons/${lessonId}`, {
+      method: "DELETE",
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      showNotification("Aula cancelada com sucesso!", "success");
+      loadLessons();
+    } else {
+      showNotification(result.message || "Erro ao cancelar aula", "error");
+    }
+  } catch (error) {
+    console.error("Erro ao cancelar aula:", error);
+    showNotification("Erro ao conectar com o servidor", "error");
+  }
+}
+
+// ===== INPUT MASKS =====
+
+// Máscaras para campos de entrada
+document.addEventListener("DOMContentLoaded", function () {
+  // Máscara para CPF
+  const cpfInput = document.getElementById("instructorCPF");
+  if (cpfInput) {
+    cpfInput.addEventListener("input", function (e) {
+      let value = e.target.value.replace(/\D/g, "");
+      value = value.replace(/(\d{3})(\d)/, "$1.$2");
+      value = value.replace(/(\d{3})(\d)/, "$1.$2");
+      value = value.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+      e.target.value = value;
+    });
+  }
+
+  // Máscara para telefone
+  const phoneInput = document.getElementById("instructorPhone");
+  if (phoneInput) {
+    phoneInput.addEventListener("input", function (e) {
+      let value = e.target.value.replace(/\D/g, "");
+      value = value.replace(/(\d{2})(\d)/, "($1) $2");
+      value = value.replace(/(\d{5})(\d)/, "$1-$2");
+      e.target.value = value;
+    });
+  }
+
+  // Máscara para placa de veículo
+  const plateInput = document.getElementById("vehiclePlate");
+  if (plateInput) {
+    plateInput.addEventListener("input", function (e) {
+      let value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "");
+      if (value.length > 3) {
+        value = value.replace(/(\w{3})(\w)/, "$1-$2");
+      }
+      e.target.value = value;
+    });
+  }
+
+  // Máscaras para o modal de aluno
+  const studentCpfInput = document.getElementById("studentCPF");
+  if (studentCpfInput) {
+    studentCpfInput.addEventListener("input", function (e) {
+      let value = e.target.value.replace(/\D/g, "");
+      value = value.replace(/(\d{3})(\d)/, "$1.$2");
+      value = value.replace(/(\d{3})(\d)/, "$1.$2");
+      value = value.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+      e.target.value = value;
+    });
+  }
+
+  const studentPhoneInput = document.getElementById("studentPhone");
+  if (studentPhoneInput) {
+    studentPhoneInput.addEventListener("input", function (e) {
+      let value = e.target.value.replace(/\D/g, "");
+      value = value.replace(/(\d{2})(\d)/, "($1) $2");
+      value = value.replace(/(\d{5})(\d)/, "$1-$2");
+      e.target.value = value;
+    });
+  }
+
+  // Configurar data mínima para campos de data
+  const today = new Date().toISOString().split("T")[0];
+  const paymentDateInput = document.getElementById("paymentDate");
+  if (paymentDateInput) {
+    paymentDateInput.value = today;
+  }
+
+  // Configurar data de nascimento máxima (18 anos atrás)
+  const studentBirthDateInput = document.getElementById("studentBirthDate");
+  if (studentBirthDateInput) {
+    const maxDate = new Date();
+    maxDate.setFullYear(maxDate.getFullYear() - 16); // Mínimo 16 anos
+    studentBirthDateInput.max = maxDate.toISOString().split("T")[0];
+  }
+
+  // Observer para detectar quando a seção schedule está ativa
+  const observer = new MutationObserver(function (mutations) {
+    mutations.forEach(function (mutation) {
+      if (
+        mutation.type === "attributes" &&
+        mutation.attributeName === "class"
+      ) {
+        const scheduleContent = document.getElementById("schedule-content");
+        if (scheduleContent && scheduleContent.classList.contains("active")) {
+          loadLessons();
+        }
+      }
+    });
+  });
+
+  const scheduleContent = document.getElementById("schedule-content");
+  if (scheduleContent) {
+    observer.observe(scheduleContent, { attributes: true });
+
+    // Carregar aulas se já estiver ativo
+    if (scheduleContent.classList.contains("active")) {
+      loadLessons();
+    }
+  }
+});

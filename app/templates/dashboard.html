@@ -2891,6 +2891,10 @@
                                 <option value="in-progress">Em Andamento</option>
                                 <option value="completed">Concluídas</option>
                             </select>
+                            <button class="btn btn-primary" onclick="openScheduleLessonModal()">
+                                <i class="fas fa-plus"></i>
+                                Nova Aula
+                            </button>
                             <button class="btn btn-secondary" onclick="viewAllLessons()">
                                 Ver Todas
                             </button>
@@ -5587,7 +5591,7 @@
                     <i class="fas fa-graduation-cap"></i>
                     <span>Alunos</span>
                 </div>
-                <div class="context-item" onclick="openModal('addStudentModal')">
+                <div class="context-item" onclick="openStudentModal()">
                     <div class="context-icon student">
                         <i class="fas fa-user-plus"></i>
                     </div>
@@ -5613,7 +5617,7 @@
                     <i class="fas fa-calendar-alt"></i>
                     <span>Agenda</span>
                 </div>
-                <div class="context-item" onclick="openModal('scheduleModal')">
+                <div class="context-item" onclick="openScheduleLessonModal()">
                     <div class="context-icon schedule">
                         <i class="fas fa-calendar-plus"></i>
                     </div>
@@ -5639,7 +5643,7 @@
                     <i class="fas fa-chalkboard-teacher"></i>
                     <span>Instrutores</span>
                 </div>
-                <div class="context-item" onclick="openModal('addInstructorModal')">
+                <div class="context-item" onclick="openInstructorModal()">
                     <div class="context-icon instructor">
                         <i class="fas fa-user-tie"></i>
                     </div>
@@ -5664,7 +5668,7 @@
                     <i class="fas fa-car"></i>
                     <span>Frota</span>
                 </div>
-                <div class="context-item" onclick="openModal('addVehicleModal')">
+                <div class="context-item" onclick="openVehicleModal()">
                     <div class="context-icon vehicle">
                         <i class="fas fa-car-side"></i>
                     </div>
@@ -5689,7 +5693,7 @@
                     <i class="fas fa-dollar-sign"></i>
                     <span>Financeiro</span>
                 </div>
-                <div class="context-item" onclick="openModal('paymentModal')">
+                <div class="context-item" onclick="openPaymentModal()">
                     <div class="context-icon financial">
                         <i class="fas fa-credit-card"></i>
                     </div>
@@ -5788,165 +5792,223 @@
         </div> <!-- Close notifications-list -->
     </div> <!-- Close notifications-panel -->
     <!-- Modals -->
-    <!-- Add Student Modal -->
-    <div class="modal" id="addStudentModal">
-        <div class="modal-content">
+    <!-- Modal de Novo Aluno -->
+    <div class="modal-overlay" id="addStudentModal">
+        <div class="modal-content add-student-modal">
             <div class="modal-header">
-                <h3 class="modal-title">Adicionar Novo Aluno</h3>
-                <button aria-label="Fechar" class="modal-close" onclick="closeModal('addStudentModal')">
+                <h3>
+                    <i class="fas fa-user-plus"></i>
+                    Adicionar Novo Aluno
+                </h3>
+                <button class="modal-close" onclick="closeModal('addStudentModal')">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <form id="addStudentForm">
-                <div class="form-group">
-                    <label class="form-label">Nome Completo</label>
-                    <input class="form-input" required="" type="text" />
-                </div>
-                <div class="form-group">
-                    <label class="form-label">CPF</label>
-                    <input class="form-input" placeholder="000.000.000-00" required="" type="text" />
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Email</label>
-                    <input class="form-input" required="" type="email" />
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Telefone</label>
-                    <input class="form-input" placeholder="(00) 00000-0000" required="" type="tel" />
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Categoria</label>
-                    <select class="form-input" required="">
-                        <option value="">Selecione...</option>
-                        <option value="A">A - Motocicleta</option>
-                        <option value="B">B - Automóvel</option>
-                        <option value="AB">AB - Ambos</option>
-                    </select>
-                </div>
-                <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
-                    <button class="btn btn-secondary" onclick="closeModal('addStudentModal')" type="button">
-                        Cancelar
-                    </button>
-                    <button class="btn btn-primary" type="submit">
-                        <i class="fas fa-save"></i>
-                        Salvar
-                    </button>
-                </div>
-            </form>
+            <div class="modal-body">
+                <form id="addStudentForm" class="add-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="studentName">
+                                <i class="fas fa-user"></i>
+                                Nome Completo
+                            </label>
+                            <input type="text" id="studentName" name="name" required
+                                placeholder="Nome completo do aluno">
+                        </div>
+                        <div class="form-group">
+                            <label for="studentEmail">
+                                <i class="fas fa-envelope"></i>
+                                Email
+                            </label>
+                            <input type="email" id="studentEmail" name="email" required placeholder="email@exemplo.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="studentPhone">
+                                <i class="fas fa-phone"></i>
+                                Telefone
+                            </label>
+                            <input type="tel" id="studentPhone" name="phone" required placeholder="(11) 99999-9999">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="studentCPF">
+                                <i class="fas fa-id-card"></i>
+                                CPF
+                            </label>
+                            <input type="text" id="studentCPF" name="cpf" required placeholder="000.000.000-00">
+                        </div>
+                        <div class="form-group">
+                            <label for="studentBirthDate">
+                                <i class="fas fa-calendar-alt"></i>
+                                Data de Nascimento
+                            </label>
+                            <input type="date" id="studentBirthDate" name="birth_date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentCategory">
+                                <i class="fas fa-certificate"></i>
+                                Categoria Pretendida
+                            </label>
+                            <select id="studentCategory" name="category" required>
+                                <option value="">Selecione a categoria</option>
+                                <option value="A">Categoria A (Motocicleta)</option>
+                                <option value="B">Categoria B (Automóvel)</option>
+                                <option value="AB">Categoria AB (Ambos)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="studentAddress">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Endereço
+                        </label>
+                        <input type="text" id="studentAddress" name="address" placeholder="Endereço completo">
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="studentNotes">
+                            <i class="fas fa-sticky-note"></i>
+                            Observações
+                        </label>
+                        <textarea id="studentNotes" name="notes" rows="2"
+                            placeholder="Observações sobre o aluno..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('addStudentModal')">
+                    Cancelar
+                </button>
+                <button type="button" class="btn btn-primary" onclick="submitStudent()">
+                    <i class="fas fa-save"></i>
+                    Salvar Aluno
+                </button>
+            </div>
         </div>
     </div>
-    <!-- Schedule Modal -->
-    <div class="modal" id="scheduleModal">
-        <div class="modal-content">
+    <!-- Modal de Registrar Pagamento -->
+    <div class="modal-overlay" id="paymentModal">
+        <div class="modal-content add-payment-modal">
             <div class="modal-header">
-                <h3 class="modal-title">Agendar Nova Aula</h3>
-                <button aria-label="Fechar" class="modal-close" onclick="closeModal('scheduleModal')">
+                <h3>
+                    <i class="fas fa-credit-card"></i>
+                    Registrar Pagamento
+                </h3>
+                <button class="modal-close" onclick="closeModal('paymentModal')">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <form id="scheduleForm">
-                <div class="form-group">
-                    <label class="form-label">Aluno</label>
-                    <select class="form-input" required="">
-                        <option value="">Selecione o aluno...</option>
-                        <option value="1">João Silva</option>
-                        <option value="2">Maria Oliveira</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Instrutor</label>
-                    <select class="form-input" required="">
-                        <option value="">Selecione o instrutor...</option>
-                        <option value="1">Carlos Mendes</option>
-                        <option value="2">Ana Costa</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Data</label>
-                    <input class="form-input" required="" type="date" />
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Horário</label>
-                    <input class="form-input" required="" type="time" />
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Tipo de Aula</label>
-                    <select class="form-input" required="">
-                        <option value="">Selecione...</option>
-                        <option value="teorica">Teórica</option>
-                        <option value="pratica">Prática</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Veículo (apenas para aulas práticas)</label>
-                    <select class="form-input">
-                        <option value="">Selecione o veículo...</option>
-                        <option value="1">ABC-1234 - Volkswagen Gol</option>
-                        <option value="2">DEF-5678 - Hyundai HB20</option>
-                    </select>
-                </div>
-                <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
-                    <button class="btn btn-secondary" onclick="closeModal('scheduleModal')" type="button">
-                        Cancelar
-                    </button>
-                    <button class="btn btn-primary" type="submit">
-                        <i class="fas fa-calendar-plus"></i>
-                        Agendar
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-    <!-- Payment Modal -->
-    <div class="modal" id="paymentModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Registrar Pagamento</h3>
-                <button aria-label="Fechar" class="modal-close" onclick="closeModal('paymentModal')">
-                    <i class="fas fa-times"></i>
+            <div class="modal-body">
+                <form id="addPaymentForm" class="add-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="paymentStudent">
+                                <i class="fas fa-user-graduate"></i>
+                                Aluno
+                            </label>
+                            <select id="paymentStudent" name="student_id" required>
+                                <option value="">Selecione o aluno</option>
+                                <option value="user@autodrive.com">João Silva</option>
+                                <option value="demo@autodrive.com">Maria Oliveira</option>
+                                <option value="student1@autodrive.com">Pedro Santos</option>
+                                <option value="student2@autodrive.com">Ana Paula</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="paymentAmount">
+                                <i class="fas fa-dollar-sign"></i>
+                                Valor (R$)
+                            </label>
+                            <input type="number" id="paymentAmount" name="amount" required min="0" step="0.01"
+                                placeholder="0,00">
+                        </div>
+                        <div class="form-group">
+                            <label for="paymentDate">
+                                <i class="fas fa-calendar-alt"></i>
+                                Data do Pagamento
+                            </label>
+                            <input type="date" id="paymentDate" name="payment_date" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="paymentMethod">
+                                <i class="fas fa-money-check-alt"></i>
+                                Método de Pagamento
+                            </label>
+                            <select id="paymentMethod" name="payment_method" required>
+                                <option value="">Selecione o método</option>
+                                <option value="dinheiro">Dinheiro</option>
+                                <option value="pix">PIX</option>
+                                <option value="cartao_debito">Cartão de Débito</option>
+                                <option value="cartao_credito">Cartão de Crédito</option>
+                                <option value="transferencia">Transferência Bancária</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="paymentCategory">
+                                <i class="fas fa-tags"></i>
+                                Categoria
+                            </label>
+                            <select id="paymentCategory" name="category" required>
+                                <option value="">Selecione a categoria</option>
+                                <option value="mensalidade">Mensalidade</option>
+                                <option value="aulas_praticas">Aulas Práticas</option>
+                                <option value="aulas_teoricas">Aulas Teóricas</option>
+                                <option value="exame_medico">Exame Médico</option>
+                                <option value="exame_psicotecnico">Exame Psicotécnico</option>
+                                <option value="taxa_prova">Taxa de Prova</option>
+                                <option value="outros">Outros</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="paymentInstallments">
+                                <i class="fas fa-list-ol"></i>
+                                Parcelas
+                            </label>
+                            <select id="paymentInstallments" name="installments">
+                                <option value="1">À vista</option>
+                                <option value="2">2x</option>
+                                <option value="3">3x</option>
+                                <option value="4">4x</option>
+                                <option value="5">5x</option>
+                                <option value="6">6x</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="paymentDescription">
+                            <i class="fas fa-file-alt"></i>
+                            Descrição
+                        </label>
+                        <input type="text" id="paymentDescription" name="description" required
+                            placeholder="Ex: Pagamento de aulas práticas - Mês 05/2025">
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="paymentNotes">
+                            <i class="fas fa-sticky-note"></i>
+                            Observações
+                        </label>
+                        <textarea id="paymentNotes" name="notes" rows="2"
+                            placeholder="Observações sobre o pagamento..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('paymentModal')">
+                    Cancelar
+                </button>
+                <button type="button" class="btn btn-primary" onclick="submitPayment()">
+                    <i class="fas fa-money-check"></i>
+                    Registrar Pagamento
                 </button>
             </div>
-            <form id="paymentForm">
-                <div class="form-group">
-                    <label class="form-label">Aluno</label>
-                    <select class="form-input" required="">
-                        <option value="">Selecione o aluno...</option>
-                        <option value="1">João Silva</option>
-                        <option value="2">Maria Oliveira</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Descrição</label>
-                    <input class="form-input" placeholder="Ex: Pagamento de aulas práticas" required="" type="text" />
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Valor</label>
-                    <input class="form-input" min="0" placeholder="0,00" required="" step="0.01" type="number" />
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Método de Pagamento</label>
-                    <select class="form-input" required="">
-                        <option value="">Selecione...</option>
-                        <option value="dinheiro">Dinheiro</option>
-                        <option value="cartao">Cartão</option>
-                        <option value="pix">PIX</option>
-                        <option value="transferencia">Transferência</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Data do Pagamento</label>
-                    <input class="form-input" required="" type="date" />
-                </div>
-                <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
-                    <button class="btn btn-secondary" onclick="closeModal('paymentModal')" type="button">
-                        Cancelar
-                    </button>
-                    <button class="btn btn-primary" type="submit">
-                        <i class="fas fa-money-check"></i>
-                        Registrar
-                    </button>
-                </div>
-            </form>
         </div>
     </div>
     <!-- View All Students Modal -->
@@ -5997,8 +6059,8 @@
                         <i class="fas fa-download"></i>
                         Exportar Lista
                     </button>
-                    <button class="btn btn-primary"
-                        onclick="openModal('addStudentModal'); closeModal('viewAllStudentsModal')" type="button">
+                    <button class="btn btn-primary" onclick="openStudentModal(); closeModal('viewAllStudentsModal')"
+                        type="button">
                         <i class="fas fa-plus"></i>
                         Adicionar Aluno
                     </button>
@@ -6055,7 +6117,7 @@
                         Exportar Lista
                     </button>
                     <button class="btn btn-primary"
-                        onclick="openModal('addInstructorModal'); closeModal('viewAllInstructorsModal')" type="button">
+                        onclick="openInstructorModal(); closeModal('viewAllInstructorsModal')" type="button">
                         <i class="fas fa-plus"></i>
                         Adicionar Instrutor
                     </button>
@@ -6107,8 +6169,8 @@
                         <i class="fas fa-download"></i>
                         Exportar Lista
                     </button>
-                    <button class="btn btn-primary"
-                        onclick="openModal('addVehicleModal'); closeModal('viewAllVehiclesModal')" type="button">
+                    <button class="btn btn-primary" onclick="openVehicleModal(); closeModal('viewAllVehiclesModal')"
+                        type="button">
                         <i class="fas fa-plus"></i>
                         Adicionar Veículo
                     </button>
@@ -6268,8 +6330,8 @@
                         <i class="fas fa-download"></i>
                         Exportar Lista
                     </button>
-                    <button class="btn btn-primary"
-                        onclick="openModal('paymentModal'); closeModal('viewAllTransactionsModal')" type="button">
+                    <button class="btn btn-primary" onclick="openPaymentModal(); closeModal('viewAllTransactionsModal')"
+                        type="button">
                         <i class="fas fa-plus"></i>
                         Nova Transação
                     </button>
@@ -6766,6 +6828,11 @@
                 showUserFeatures();
             }
 
+            if (userRole === 'instructor') {
+                // Mostrar apenas funcionalidades para instrutores
+                showInstructorFeatures();
+            }
+
             // Atualizar informações do usuário no header
             updateUserInfo();
         });
@@ -6798,6 +6865,50 @@
             ];
 
             // Lógica adicional para usuários limitados pode ser adicionada aqui
+        }
+
+        function showInstructorFeatures() {
+            // Esconder todos os itens que não são para instrutores
+            const allMenuItems = document.querySelectorAll('.menu-item[data-section]');
+            allMenuItems.forEach(item => {
+                item.style.display = 'none';
+            });
+
+            // Mostrar apenas itens relevantes para instrutores
+            const instructorMenuItems = [
+                '[data-section="dashboard"]',    // Dashboard principal
+                '[data-section="students"]',     // Gerenciar alunos
+                '[data-section="schedule"]',     // Agenda/Cronograma
+                '[data-section="exams"]',        // Exames
+                '[data-section="finance"]'       // Financeiro (pode ver pagamentos de aulas)
+            ];
+
+            instructorMenuItems.forEach(selector => {
+                const elements = document.querySelectorAll(selector);
+                elements.forEach(el => {
+                    if (el) {
+                        el.style.display = 'flex'; // ou 'block' dependendo do CSS original
+                    }
+                });
+            });
+
+            // Esconder seções administrativas específicas
+            const hideForInstructor = [
+                '[data-section="instructors"]',  // Não pode gerenciar outros instrutores
+                '[data-section="vehicles"]',     // Não gerencia frota
+                '[data-section="reports"]',      // Relatórios são para admin
+                '[data-section="settings"]',     // Configurações são para admin
+                '.admin-only'
+            ];
+
+            hideForInstructor.forEach(selector => {
+                const elements = document.querySelectorAll(selector);
+                elements.forEach(el => {
+                    if (el) {
+                        el.style.display = 'none';
+                    }
+                });
+            });
         }
 
         function updateUserInfo() {
@@ -6950,7 +7061,358 @@
             showLogoutModal();
         };
     </script>
-    <script src="/assets/js/dashboard.js"></script>
+
+    <!-- Modal de Agendamento de Aula -->
+    <div class="modal-overlay" id="scheduleLessonModal">
+        <div class="modal-content schedule-lesson-modal">
+            <div class="modal-header">
+                <h3>
+                    <i class="fas fa-calendar-plus"></i>
+                    Agendar Nova Aula
+                </h3>
+                <button class="modal-close" onclick="closeModal('scheduleLessonModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="scheduleLessonForm" class="schedule-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="lessonDate">
+                                <i class="fas fa-calendar"></i>
+                                Data da Aula
+                            </label>
+                            <input type="date" id="lessonDate" name="date" required min=""
+                                onchange="updateAvailableTimes()">
+                        </div>
+                        <div class="form-group">
+                            <label for="lessonTime">
+                                <i class="fas fa-clock"></i>
+                                Horário
+                            </label>
+                            <select id="lessonTime" name="start_time" required>
+                                <option value="">Selecione um horário</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="lessonType">
+                                <i class="fas fa-graduation-cap"></i>
+                                Tipo de Aula
+                            </label>
+                            <select id="lessonType" name="type" required onchange="toggleVehicleField()">
+                                <option value="">Selecione o tipo</option>
+                                <option value="theoretical">Teórica</option>
+                                <option value="practical">Prática</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="lessonCategory">
+                                <i class="fas fa-certificate"></i>
+                                Categoria
+                            </label>
+                            <select id="lessonCategory" name="category" required>
+                                <option value="">Selecione a categoria</option>
+                                <option value="A">Categoria A</option>
+                                <option value="B">Categoria B</option>
+                                <option value="C">Categoria C</option>
+                                <option value="D">Categoria D</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="lessonStudent">
+                                <i class="fas fa-user-graduate"></i>
+                                Aluno
+                            </label>
+                            <select id="lessonStudent" name="student_id" required>
+                                <option value="">Selecione o aluno</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="lessonInstructor">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                                Instrutor
+                            </label>
+                            <select id="lessonInstructor" name="instructor_id" required
+                                onchange="updateAvailableTimes()">
+                                <option value="">Selecione o instrutor</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group vehicle-field" id="vehicleField" style="display: none;">
+                        <label for="lessonVehicle">
+                            <i class="fas fa-car"></i>
+                            Veículo
+                        </label>
+                        <select id="lessonVehicle" name="vehicle">
+                            <option value="">Selecione o veículo</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lessonLocation">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Local
+                        </label>
+                        <input type="text" id="lessonLocation" name="location" placeholder="Local da aula">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lessonNotes">
+                            <i class="fas fa-sticky-note"></i>
+                            Observações
+                        </label>
+                        <textarea id="lessonNotes" name="notes" rows="3"
+                            placeholder="Observações sobre a aula..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('scheduleLessonModal')">
+                    Cancelar
+                </button>
+                <button type="button" class="btn btn-primary" onclick="submitLessonSchedule()">
+                    <i class="fas fa-save"></i>
+                    Agendar Aula
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Novo Instrutor -->
+    <div class="modal-overlay" id="addInstructorModal">
+        <div class="modal-content add-instructor-modal">
+            <div class="modal-header">
+                <h3>
+                    <i class="fas fa-user-tie"></i>
+                    Adicionar Novo Instrutor
+                </h3>
+                <button class="modal-close" onclick="closeModal('addInstructorModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addInstructorForm" class="add-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="instructorName">
+                                <i class="fas fa-user"></i>
+                                Nome Completo
+                            </label>
+                            <input type="text" id="instructorName" name="name" required
+                                placeholder="Nome completo do instrutor">
+                        </div>
+                        <div class="form-group">
+                            <label for="instructorEmail">
+                                <i class="fas fa-envelope"></i>
+                                Email
+                            </label>
+                            <input type="email" id="instructorEmail" name="email" required
+                                placeholder="email@autodrive.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="instructorPhone">
+                                <i class="fas fa-phone"></i>
+                                Telefone
+                            </label>
+                            <input type="tel" id="instructorPhone" name="phone" required placeholder="(11) 99999-9999">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="instructorCPF">
+                                <i class="fas fa-id-card"></i>
+                                CPF
+                            </label>
+                            <input type="text" id="instructorCPF" name="cpf" required placeholder="000.000.000-00">
+                        </div>
+                        <div class="form-group">
+                            <label for="instructorSpecialty">
+                                <i class="fas fa-certificate"></i>
+                                Especialidade
+                            </label>
+                            <select id="instructorSpecialty" name="specialty" required>
+                                <option value="">Selecione a especialidade</option>
+                                <option value="theoretical">Apenas Teóricas</option>
+                                <option value="practical">Apenas Práticas</option>
+                                <option value="both">Teóricas e Práticas</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="instructorLicense">
+                                <i class="fas fa-id-badge"></i>
+                                CNH
+                            </label>
+                            <input type="text" id="instructorLicense" name="license" required
+                                placeholder="Número da CNH">
+                        </div>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="instructorAddress">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Endereço
+                        </label>
+                        <input type="text" id="instructorAddress" name="address" placeholder="Endereço completo">
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="instructorNotes">
+                            <i class="fas fa-sticky-note"></i>
+                            Observações
+                        </label>
+                        <textarea id="instructorNotes" name="notes" rows="2"
+                            placeholder="Observações sobre o instrutor..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('addInstructorModal')">
+                    Cancelar
+                </button>
+                <button type="button" class="btn btn-primary" onclick="submitInstructor()">
+                    <i class="fas fa-save"></i>
+                    Salvar Instrutor
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Novo Veículo -->
+    <div class="modal-overlay" id="addVehicleModal">
+        <div class="modal-content add-vehicle-modal">
+            <div class="modal-header">
+                <h3>
+                    <i class="fas fa-car-side"></i>
+                    Adicionar Novo Veículo
+                </h3>
+                <button class="modal-close" onclick="closeModal('addVehicleModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addVehicleForm" class="add-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="vehiclePlate">
+                                <i class="fas fa-car"></i>
+                                Placa
+                            </label>
+                            <input type="text" id="vehiclePlate" name="plate" required placeholder="ABC-1234"
+                                maxlength="8">
+                        </div>
+                        <div class="form-group">
+                            <label for="vehicleModel">
+                                <i class="fas fa-car-alt"></i>
+                                Modelo
+                            </label>
+                            <input type="text" id="vehicleModel" name="model" required
+                                placeholder="Ex: Gol, HB20, Civic">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="vehicleBrand">
+                                <i class="fas fa-industry"></i>
+                                Marca
+                            </label>
+                            <input type="text" id="vehicleBrand" name="brand" required
+                                placeholder="Ex: Volkswagen, Hyundai, Honda">
+                        </div>
+                        <div class="form-group">
+                            <label for="vehicleYear">
+                                <i class="fas fa-calendar"></i>
+                                Ano
+                            </label>
+                            <input type="number" id="vehicleYear" name="year" required placeholder="2023" min="1990"
+                                max="2030">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="vehicleCategory">
+                                <i class="fas fa-certificate"></i>
+                                Categoria
+                            </label>
+                            <select id="vehicleCategory" name="category" required>
+                                <option value="">Selecione a categoria</option>
+                                <option value="A">Categoria A (Motocicleta)</option>
+                                <option value="B">Categoria B (Carro)</option>
+                                <option value="C">Categoria C (Caminhão)</option>
+                                <option value="D">Categoria D (Ônibus)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="vehicleColor">
+                                <i class="fas fa-palette"></i>
+                                Cor
+                            </label>
+                            <input type="text" id="vehicleColor" name="color" required
+                                placeholder="Ex: Branco, Prata, Preto">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="vehicleFuel">
+                                <i class="fas fa-gas-pump"></i>
+                                Combustível
+                            </label>
+                            <select id="vehicleFuel" name="fuel" required>
+                                <option value="">Selecione o combustível</option>
+                                <option value="gasoline">Gasolina</option>
+                                <option value="ethanol">Etanol</option>
+                                <option value="flex">Flex</option>
+                                <option value="diesel">Diesel</option>
+                                <option value="electric">Elétrico</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="vehicleTransmission">
+                                <i class="fas fa-cogs"></i>
+                                Transmissão
+                            </label>
+                            <select id="vehicleTransmission" name="transmission" required>
+                                <option value="">Selecione a transmissão</option>
+                                <option value="manual">Manual</option>
+                                <option value="automatic">Automática</option>
+                                <option value="cvt">CVT</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="vehicleNotes">
+                            <i class="fas fa-sticky-note"></i>
+                            Observações
+                        </label>
+                        <textarea id="vehicleNotes" name="notes" rows="3"
+                            placeholder="Observações sobre o veículo..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('addVehicleModal')">
+                    Cancelar
+                </button>
+                <button type="button" class="btn btn-primary" onclick="submitVehicle()">
+                    <i class="fas fa-save"></i>
+                    Salvar Veículo
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/dashboard.js"></script>
 </body>
 
 </html>
