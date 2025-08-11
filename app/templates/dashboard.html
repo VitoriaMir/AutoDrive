@@ -58,10 +58,12 @@
                 <i class="fas fa-file-alt"></i>
                 <div class="menu-text">Exames</div>
             </div>
+            {% if user_role != 'instructor' %}
             <div class="menu-item" data-section="finance" data-tooltip="Financeiro">
                 <i class="fas fa-chart-line"></i>
                 <div class="menu-text">Financeiro</div>
             </div>
+            {% endif %}
             <div class="menu-title">Sistema</div>
             <div class="menu-item" data-section="reports" data-tooltip="Relatórios">
                 <i class="fas fa-file-pdf"></i>
@@ -220,6 +222,7 @@
         <section class="content-section active" id="dashboard-content">
             <!-- Stats Cards -->
             <div class="stats-grid">
+                {% if user_role != 'instructor' %}
                 <div class="stat-card fade-in">
                     <div class="stat-icon revenue">
                         <i class="fas fa-dollar-sign"></i>
@@ -233,6 +236,7 @@
                         </div>
                     </div>
                 </div>
+                {% endif %}
                 <div class="stat-card fade-in delay-1">
                     <div class="stat-icon orders">
                         <i class="fas fa-calendar-check"></i>
@@ -383,6 +387,7 @@
                                     </div>
                                 </div>
                             </div>
+                            {% if user_role != 'instructor' %}
                             <div class="metric-item">
                                 <div class="metric-icon revenue">
                                     <i class="fas fa-dollar-sign"></i>
@@ -399,6 +404,7 @@
                                     </div>
                                 </div>
                             </div>
+                            {% endif %}
                             <div class="metric-item">
                                 <div class="metric-icon instructors">
                                     <i class="fas fa-users"></i>
@@ -496,6 +502,7 @@
                                     <div class="activity-time">Há 1 hora</div>
                                 </div>
                             </div>
+                            {% if user_role != 'instructor' %}
                             <div class="activity-item">
                                 <div class="activity-icon">
                                     <i class="fas fa-file-invoice-dollar"></i>
@@ -506,6 +513,7 @@
                                     <div class="activity-time">Há 3 horas</div>
                                 </div>
                             </div>
+                            {% endif %}
                             <div class="activity-item">
                                 <div class="activity-icon">
                                     <i class="fas fa-check-circle"></i>
@@ -858,6 +866,7 @@
                             </div>
                         </div>
                     </div>
+                    {% if user_role != 'instructor' %}
                     <div class="student-card payment-card">
                         <div class="student-card-header">
                             <div class="student-card-icon payment">
@@ -895,6 +904,7 @@
                             </div>
                         </div>
                     </div>
+                    {% endif %}
                     <div class="student-card performance-card">
                         <div class="student-card-header">
                             <div class="student-card-icon performance">
@@ -1173,7 +1183,7 @@
                     <div class="students-list">
                         <div class="student-item active">
                             <div class="student-avatar">
-                                <img alt="João Silva" src="/static/img/avatar-placeholder.svg" />
+                                <img alt="João Silva" src="/assets/images/avatar-placeholder.svg" />
                                 <div class="student-status active"></div>
                             </div>
                             <div class="student-details">
@@ -1207,14 +1217,16 @@
                                 <button aria-label="Ver aulas" class="btn-icon" onclick="viewStudentLessons(1)">
                                     <i class="fas fa-calendar"></i>
                                 </button>
+                                {% if user_role != 'instructor' %}
                                 <button aria-label="Ver pagamentos" class="btn-icon" onclick="viewStudentPayments(1)">
                                     <i class="fas fa-credit-card"></i>
                                 </button>
+                                {% endif %}
                             </div>
                         </div>
                         <div class="student-item pending">
                             <div class="student-avatar">
-                                <img alt="Maria Oliveira" src="/static/img/avatar-placeholder.svg" />
+                                <img alt="Maria Oliveira" src="/assets/images/avatar-placeholder.svg" />
                                 <div class="student-status pending"></div>
                             </div>
                             <div class="student-details">
@@ -1256,7 +1268,7 @@
                         </div>
                         <div class="student-item graduated">
                             <div class="student-avatar">
-                                <img alt="Pedro Santos" src="/static/img/avatar-placeholder.svg" />
+                                <img alt="Pedro Santos" src="/assets/images/avatar-placeholder.svg" />
                                 <div class="student-status graduated"></div>
                             </div>
                             <div class="student-details">
@@ -1296,7 +1308,7 @@
                         </div>
                         <div class="student-item active">
                             <div class="student-avatar">
-                                <img alt="Ana Costa" src="/static/img/avatar-placeholder.svg" />
+                                <img alt="Ana Costa" src="/assets/images/avatar-placeholder.svg" />
                                 <div class="student-status active"></div>
                             </div>
                             <div class="student-details">
@@ -1330,9 +1342,11 @@
                                 <button aria-label="Agendar exame" class="btn-icon" onclick="scheduleExam(4)">
                                     <i class="fas fa-clipboard-check"></i>
                                 </button>
+                                {% if user_role != 'instructor' %}
                                 <button aria-label="Ver pagamentos" class="btn-icon" onclick="viewStudentPayments(4)">
                                     <i class="fas fa-credit-card"></i>
                                 </button>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -3653,6 +3667,7 @@
             </div>
         </section>
         <!-- Finance Content -->
+        {% if user_role != 'instructor' %}
         <section class="content-section" id="finance-content">
             <div class="section-content">
                 <!-- Financial Overview Cards -->
@@ -3874,6 +3889,7 @@
                             </div>
                         </div>
                     </div>
+                    {% if user_role != 'instructor' %}
                     <div class="chart-card payment-methods-chart">
                         <div class="card-header">
                             <div class="card-title">
@@ -3939,6 +3955,7 @@
                             </button>
                         </div>
                     </div>
+                    {% endif %}
                 </div>
                 <!-- Recent Transactions -->
                 <div class="finance-transactions">
@@ -3960,6 +3977,7 @@
                         </div>
                     </div>
                     <div class="transactions-list">
+                        {% if user_role != 'instructor' %}
                         <div class="transaction-item received">
                             <div class="transaction-icon">
                                 <i class="fas fa-arrow-down"></i>
@@ -3988,6 +4006,8 @@
                                 </button>
                             </div>
                         </div>
+                        {% endif %}
+                        {% if user_role != 'instructor' %}
                         <div class="transaction-item pending">
                             <div class="transaction-icon">
                                 <i class="fas fa-clock"></i>
@@ -4016,6 +4036,7 @@
                                 </button>
                             </div>
                         </div>
+                        {% endif %}
                         <div class="transaction-item overdue">
                             <div class="transaction-icon">
                                 <i class="fas fa-exclamation-triangle"></i>
@@ -4289,6 +4310,7 @@
                                 </button>
                             </div>
                         </div>
+                        {% if user_role != 'instructor' %}
                         <div class="transaction-item expense">
                             <div class="transaction-icon">
                                 <i class="fas fa-arrow-up"></i>
@@ -4314,6 +4336,7 @@
                                 </button>
                             </div>
                         </div>
+                        {% endif %}
                         <div class="transaction-item received">
                             <div class="transaction-icon">
                                 <i class="fas fa-arrow-down"></i>
@@ -4399,6 +4422,7 @@
                 </div>
             </div>
         </section>
+        {% endif %}
         <!-- Reports Content -->
         <section class="content-section" id="reports-content">
             <div class="section-content">
@@ -4418,10 +4442,12 @@
                             <div class="report-value">24</div>
                             <div class="report-subtitle">Relatórios este mês</div>
                             <div class="report-stats">
+                                {% if user_role != 'instructor' %}
                                 <div class="stat-item">
                                     <span class="stat-label">Financeiros</span>
                                     <span class="stat-value">8</span>
                                 </div>
+                                {% endif %}
                                 <div class="stat-item">
                                     <span class="stat-label">Operacionais</span>
                                     <span class="stat-value">16</span>
@@ -4480,10 +4506,12 @@
                             <div class="report-value">6</div>
                             <div class="report-subtitle">Agendamentos ativos</div>
                             <div class="automation-list">
+                                {% if user_role != 'instructor' %}
                                 <div class="automation-item">
                                     <span class="automation-name">Financeiro Mensal</span>
                                     <span class="automation-schedule">Todo dia 1°</span>
                                 </div>
+                                {% endif %}
                                 <div class="automation-item">
                                     <span class="automation-name">Performance Semanal</span>
                                     <span class="automation-schedule">Às segundas</span>
@@ -4537,7 +4565,9 @@
                         <div class="templates-filters">
                             <select class="filter-select">
                                 <option value="all">Todos os Tipos</option>
+                                {% if user_role != 'instructor' %}
                                 <option value="financial">Financeiros</option>
+                                {% endif %}
                                 <option value="operational">Operacionais</option>
                                 <option value="students">Alunos</option>
                                 <option value="instructors">Instrutores</option>
@@ -4549,6 +4579,7 @@
                         </div>
                     </div>
                     <div class="templates-grid">
+                        {% if user_role != 'instructor' %}
                         <div class="template-card financial active">
                             <div class="template-icon">
                                 <i class="fas fa-chart-pie"></i>
@@ -4582,6 +4613,7 @@
                                 </button>
                             </div>
                         </div>
+                        {% endif %}
                         <div class="template-card students">
                             <div class="template-icon">
                                 <i class="fas fa-graduation-cap"></i>
@@ -4700,6 +4732,7 @@
                         </div>
                     </div>
                     <div class="reports-list">
+                        {% if user_role != 'instructor' %}
                         <div class="report-item completed financial">
                             <div class="report-status-indicator">
                                 <i class="fas fa-check-circle"></i>
@@ -4746,6 +4779,7 @@
                                 </button>
                             </div>
                         </div>
+                        {% endif %}
                         <div class="report-item in-progress students">
                             <div class="report-status-indicator processing">
                                 <i class="fas fa-spinner fa-spin"></i>
@@ -5102,7 +5136,7 @@
                         <div class="users-list">
                             <div class="user-item admin active">
                                 <div class="user-avatar">
-                                    <img alt="Avatar" src="/static/img/avatar-placeholder.svg" />
+                                    <img alt="Avatar" src="/assets/images/avatar-placeholder.svg" />
                                     <div class="user-status-indicator active"></div>
                                 </div>
                                 <div class="user-info">
@@ -5132,7 +5166,7 @@
                             </div>
                             <div class="user-item instructor active">
                                 <div class="user-avatar">
-                                    <img alt="Avatar" src="/static/img/avatar-placeholder.svg" />
+                                    <img alt="Avatar" src="/assets/images/avatar-placeholder.svg" />
                                     <div class="user-status-indicator active"></div>
                                 </div>
                                 <div class="user-info">
@@ -5163,7 +5197,7 @@
                             </div>
                             <div class="user-item staff inactive">
                                 <div class="user-avatar">
-                                    <img alt="Avatar" src="/static/img/avatar-placeholder.svg" />
+                                    <img alt="Avatar" src="/assets/images/avatar-placeholder.svg" />
                                     <div class="user-status-indicator inactive"></div>
                                 </div>
                                 <div class="user-info">
@@ -5545,7 +5579,7 @@
                             </div>
                             <div class="setting-content">
                                 <div class="logo-preview">
-                                    <img alt="Logo atual" class="current-logo" src="/static/img/logo.png" />
+                                    <img alt="Logo atual" class="current-logo" src="/assets/images/logo.png" />
                                 </div>
                                 <div class="logo-actions">
                                     <button class="btn btn-secondary" onclick="uploadLogo()">
@@ -5688,6 +5722,7 @@
                 </div>
             </div>
             <!-- Financial Actions -->
+            {% if user_role != 'instructor' %}
             <div class="context-section">
                 <div class="context-section-title">
                     <i class="fas fa-dollar-sign"></i>
@@ -5713,6 +5748,7 @@
                     </div>
                 </div>
             </div>
+            {% endif %}
             <!-- Reports Actions -->
             <div class="context-section">
                 <div class="context-section-title">
@@ -5779,6 +5815,7 @@
                     <div class="notification-time">Há 2 horas</div>
                 </div>
             </div>
+            {% if user_role != 'instructor' %}
             <div class="notification-item">
                 <div class="notification-icon success">
                     <i class="fas fa-check-circle"></i>
@@ -5789,6 +5826,7 @@
                     <div class="notification-time">Há 1 dia</div>
                 </div>
             </div>
+            {% endif %}
         </div> <!-- Close notifications-list -->
     </div> <!-- Close notifications-panel -->
     <!-- Modals -->
@@ -5889,6 +5927,7 @@
             </div>
         </div>
     </div>
+    {% if user_role != 'instructor' %}
     <!-- Modal de Registrar Pagamento -->
     <div class="modal-overlay" id="paymentModal">
         <div class="modal-content add-payment-modal">
@@ -6011,6 +6050,7 @@
             </div>
         </div>
     </div>
+    {% endif %}
     <!-- View All Students Modal -->
     <div class="modal" id="viewAllStudentsModal">
         <div class="modal-content" style="max-width: 1400px; width: 95vw; height: 90vh;">
@@ -7199,7 +7239,7 @@
             </div>
             <div class="modal-body">
                 <form id="addInstructorForm" class="add-form">
-                    <div class="form-row">
+                    ddd <div class="form-row">
                         <div class="form-group">
                             <label for="instructorName">
                                 <i class="fas fa-user"></i>
@@ -7412,7 +7452,7 @@
         </div>
     </div>
 
-    <script src="/static/js/dashboard.js"></script>
+    <script src="/assets/js/dashboard.js"></script>
 </body>
 
 </html>

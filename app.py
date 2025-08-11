@@ -1,197 +1,129 @@
-from flask import Flask, render_template, send_from_directory, request, jsonify, session
+from fastapi import FastAPI, Request, HTTPException, Depends, status
+from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+from starlette.middleware.sessions import SessionMiddleware
+from pydantic import BaseModel
+from typing import Optional, List, Dict, Any
 import os
 
-app = Flask(
-    __name__,
-    template_folder="app/templates",
-    static_folder="app/static",
-    static_url_path="/static",
-)
+app = FastAPI(title="AutoDrive", description="Sistema de Autoescola")
 
-# Configurar chave secreta para sessões
-app.secret_key = "autodrive_secret_key_2025"
+# Configurar middleware de sessão
+app.add_middleware(SessionMiddleware, secret_key="autodrive_secret_key_2025")
 
+# Configurar arquivos estáticos e templates
+app.mount("/assets", StaticFiles(directory="app/assets"), name="assets")
+templates = Jinja2Templates(directory="app/templates")
 
-@app.route("/")
-def home():
-    return render_template("index.html")
+# ===== MODELOS PYDANTIC =====
 
 
-@app.route("/dashboard")
-def dashboard():
-    # Verificar se usuário está logado
-    if "user_id" not in session:
-        return render_template("login.html")
-
-    # Pegar informações do usuário da sessão
-    user_role = session.get("user_role", "user")
-    user_name = session.get("user_name", "Usuário")
-    user_email = session.get("user_id", "")
-
-    # Renderizar dashboard baseado no role
-    return render_template(
-        "dashboard.html",
-        user_role=user_role,
-        user_name=user_name,
-        user_email=user_email,
-    )
+class LoginRequest(BaseModel):
+    email: str
+    password: str
 
 
-@app.route("/login", methods=["GET", "POST"])
-def login():
-    if request.method == "POST":
-        # Processar dados do login
-        data = request.get_json()
-        email = data.get("email")
-        password = data.get("password")
-
-        # Usuários válidos (em produção, use banco de dados)
-        valid_users = [
-            {
-                "email": "admin@autodrive.com",
-                "password": "admin123",
-                "name": "Admin",
-                "role": "admin",
-            },
-            {
-                "email": "user@autodrive.com",
-                "password": "user123",
-                "name": "Usuário",
-                "role": "user",
-            },
-            {
-                "email": "demo@autodrive.com",
-                "password": "demo123",
-                "name": "Demo",
-                "role": "user",
-            },
-            {
-                "email": "instrutor@autodrive.com",
-                "password": "inst123",
-                "name": "Instrutor",
-                "role": "instructor",
-            },
-        ]
-
-        # Verificar credenciais
-        user = next(
-            (
-                u
-                for u in valid_users
-                if u["email"] == email and u["password"] == password
-            ),
-            None,
-        )
-
-        if user:
-            # Salvar na sessão
-            session["user_id"] = user["email"]
-            session["user_name"] = user["name"]
-            session["user_role"] = user["role"]
-            return jsonify(
-                {
-                    "success": True,
-                    "message": "Login realizado com sucesso!",
-                    "role": user["role"],
-                }
-            )
-        else:
-            return jsonify({"success": False, "message": "Credenciais inválidas"}), 401
-
-    # GET request - mostrar página de login
-    return render_template("login.html")
+class CreateUserRequest(BaseModel):
+    email: str
+    password: str
+    name: str
+    role: str = "user"
 
 
-@app.route("/logout")
-def logout():
-    # Limpar sessão
-    session.clear()
-    # Redirecionar para a página de login com uma mensagem
-    return render_template("login.html")
+class LessonRequest(BaseModel):
+    student_id: str
+    instructor_id: str
+    date: str
+    start_time: str
+    end_time: str
+    type: str  # practical ou theoretical
+    vehicle: Optional[str] = None
+    category: str = "B"
+    location: str = "Autoescola"
+    notes: str = ""
+    student_name: Optional[str] = ""
+    instructor_name: Optional[str] = ""
 
 
-@app.route("/admin/create-user", methods=["POST"])
-def create_user():
-    # Verificar se usuário é admin
-    if session.get("user_role") != "admin":
-        return (
-            jsonify(
-                {
-                    "success": False,
-                    "message": "Acesso negado. Apenas administradores podem criar usuários.",
-                }
-            ),
-            403,
-        )
-
-    data = request.get_json()
-    email = data.get("email")
-    password = data.get("password")
-    name = data.get("name")
-    role = data.get("role", "user")
-
-    # Validações básicas
-    if not all([email, password, name]):
-        return (
-            jsonify({"success": False, "message": "Todos os campos são obrigatórios."}),
-            400,
-        )
-
-    # Simular criação de usuário (em produção, salvar no banco de dados)
-    # Por enquanto, apenas retornar sucesso
-    return jsonify(
-        {
-            "success": True,
-            "message": f"Usuário {name} criado com sucesso!",
-            "user": {"email": email, "name": name, "role": role},
-        }
-    )
+class InstructorRequest(BaseModel):
+    name: str
+    email: str
+    phone: str
+    cpf: str
+    specialty: str
+    license: str
+    address: Optional[str] = ""
+    notes: Optional[str] = ""
 
 
-@app.route("/admin/users", methods=["GET"])
-def list_users():
-    # Verificar se usuário é admin
-    if session.get("user_role") != "admin":
-        return jsonify({"success": False, "message": "Acesso negado."}), 403
-
-    # Simular lista de usuários (em produção, buscar do banco de dados)
-    users = [
-        {
-            "id": 1,
-            "email": "admin@autodrive.com",
-            "name": "Admin",
-            "role": "admin",
-            "status": "ativo",
-        },
-        {
-            "id": 2,
-            "email": "user@autodrive.com",
-            "name": "Usuário",
-            "role": "user",
-            "status": "ativo",
-        },
-        {
-            "id": 3,
-            "email": "demo@autodrive.com",
-            "name": "Demo",
-            "role": "user",
-            "status": "ativo",
-        },
-        {
-            "id": 4,
-            "email": "instrutor@autodrive.com",
-            "name": "Instrutor",
-            "role": "instructor",
-            "status": "ativo",
-        },
-    ]
-
-    return jsonify({"success": True, "users": users})
+class VehicleRequest(BaseModel):
+    plate: str
+    model: str
+    brand: str
+    year: int
+    category: str
+    color: str
+    fuel: str
+    transmission: str
+    notes: Optional[str] = ""
 
 
-# ===== SISTEMA DE AGENDAMENTO DE AULAS =====
+class StudentRequest(BaseModel):
+    name: str
+    cpf: str
+    phone: str
+    email: str
+    address: str
+    birth_date: str
+    category: str
+    enrollment_date: Optional[str] = ""
+    emergency_contact: Optional[str] = ""
+    observations: Optional[str] = ""
 
-# Dados mockados para demonstração (em produção, usar banco de dados)
+
+class PaymentRequest(BaseModel):
+    student_name: str
+    amount: float
+    payment_method: str
+    payment_date: str
+    due_date: Optional[str] = ""
+    description: Optional[str] = ""
+    installment: Optional[str] = "1/1"
+    notes: Optional[str] = ""
+
+
+# ===== DADOS MOCKADOS =====
+
+# Usuários válidos
+valid_users = [
+    {
+        "email": "admin@autodrive.com",
+        "password": "admin123",
+        "name": "Admin",
+        "role": "admin",
+    },
+    {
+        "email": "user@autodrive.com",
+        "password": "user123",
+        "name": "Usuário",
+        "role": "user",
+    },
+    {
+        "email": "demo@autodrive.com",
+        "password": "demo123",
+        "name": "Demo",
+        "role": "user",
+    },
+    {
+        "email": "instrutor@autodrive.com",
+        "password": "inst123",
+        "name": "Instrutor",
+        "role": "instructor",
+    },
+]
+
+# Dados mockados para demonstração
 lessons_data = [
     {
         "id": 1,
@@ -202,9 +134,9 @@ lessons_data = [
         "date": "2025-08-10",
         "start_time": "09:00",
         "end_time": "10:00",
-        "type": "practical",  # practical ou theoretical
+        "type": "practical",
         "vehicle": "ABC-1234 (Gol)",
-        "status": "scheduled",  # scheduled, completed, cancelled
+        "status": "scheduled",
         "category": "B",
         "location": "Autoescola",
         "notes": "",
@@ -305,127 +237,229 @@ payments_data = [
     },
 ]
 
+# ===== FUNÇÕES AUXILIARES =====
 
-@app.route("/api/lessons", methods=["GET"])
-def get_lessons():
-    """Obter todas as aulas ou filtrar por usuário"""
-    user_role = session.get("user_role")
-    user_id = session.get("user_id")
 
+def get_current_user(request: Request) -> Optional[Dict[str, Any]]:
+    """Obter usuário atual da sessão"""
+    user_id = request.session.get("user_id")
     if not user_id:
-        return jsonify({"success": False, "message": "Não autenticado"}), 401
+        return None
+
+    user = next((u for u in valid_users if u["email"] == user_id), None)
+    return user
+
+
+def require_auth(request: Request) -> Dict[str, Any]:
+    """Dependência que requer autenticação"""
+    user = get_current_user(request)
+    if not user:
+        raise HTTPException(status_code=401, detail="Não autenticado")
+    return user
+
+
+def require_admin(request: Request) -> Dict[str, Any]:
+    """Dependência que requer privilégios de admin"""
+    user = require_auth(request)
+    if user["role"] != "admin":
+        raise HTTPException(
+            status_code=403, detail="Acesso negado. Apenas administradores."
+        )
+    return user
+
+
+# ===== ROTAS DE PÁGINAS =====
+
+
+@app.get("/", response_class=HTMLResponse)
+async def home(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
+
+@app.get("/dashboard", response_class=HTMLResponse)
+async def dashboard(request: Request):
+    user = get_current_user(request)
+    if not user:
+        return RedirectResponse(url="/login", status_code=302)
+
+    return templates.TemplateResponse(
+        "dashboard.html",
+        {
+            "request": request,
+            "user_role": user["role"],
+            "user_name": user["name"],
+            "user_email": user["email"],
+        },
+    )
+
+
+@app.get("/login", response_class=HTMLResponse)
+async def login_page(request: Request):
+    return templates.TemplateResponse("login.html", {"request": request})
+
+
+@app.post("/login")
+async def login(request: Request, login_data: LoginRequest):
+    # Verificar credenciais
+    user = next(
+        (
+            u
+            for u in valid_users
+            if u["email"] == login_data.email and u["password"] == login_data.password
+        ),
+        None,
+    )
+
+    if user:
+        # Salvar na sessão
+        request.session["user_id"] = user["email"]
+        request.session["user_name"] = user["name"]
+        request.session["user_role"] = user["role"]
+        return {
+            "success": True,
+            "message": "Login realizado com sucesso!",
+            "role": user["role"],
+        }
+    else:
+        raise HTTPException(status_code=401, detail="Credenciais inválidas")
+
+
+@app.get("/logout")
+async def logout(request: Request):
+    request.session.clear()
+    return templates.TemplateResponse("login.html", {"request": request})
+
+
+# ===== ROTAS DE API =====
+
+
+@app.post("/admin/create-user")
+async def create_user(
+    request: Request,
+    user_data: CreateUserRequest,
+    current_user: Dict = Depends(require_admin),
+):
+    # Validações básicas
+    if any(u["email"] == user_data.email for u in valid_users):
+        raise HTTPException(status_code=409, detail="Email já existe")
+
+    # Simular criação de usuário
+    return {
+        "success": True,
+        "message": f"Usuário {user_data.name} criado com sucesso!",
+        "user": {
+            "email": user_data.email,
+            "name": user_data.name,
+            "role": user_data.role,
+        },
+    }
+
+
+@app.get("/admin/users")
+async def list_users(request: Request, current_user: Dict = Depends(require_admin)):
+    users = [
+        {
+            "id": i + 1,
+            "email": user["email"],
+            "name": user["name"],
+            "role": user["role"],
+            "status": "ativo",
+        }
+        for i, user in enumerate(valid_users)
+    ]
+    return {"success": True, "users": users}
+
+
+# ===== SISTEMA DE AGENDAMENTO DE AULAS =====
+
+
+@app.get("/api/lessons")
+async def get_lessons(request: Request, current_user: Dict = Depends(require_auth)):
+    user_role = current_user["role"]
+    user_id = current_user["email"]
 
     # Filtrar aulas baseado no role do usuário
     filtered_lessons = []
     for lesson in lessons_data:
         if user_role == "admin":
-            # Admin vê todas as aulas
             filtered_lessons.append(lesson)
         elif user_role == "instructor":
-            # Instrutor vê apenas suas aulas
             if lesson["instructor_id"] == user_id:
                 filtered_lessons.append(lesson)
         else:
-            # Aluno vê apenas suas aulas
             if lesson["student_id"] == user_id:
                 filtered_lessons.append(lesson)
 
-    return jsonify({"success": True, "lessons": filtered_lessons})
+    return {"success": True, "lessons": filtered_lessons}
 
 
-@app.route("/api/lessons", methods=["POST"])
-def create_lesson():
-    """Criar nova aula"""
-    if "user_id" not in session:
-        return jsonify({"success": False, "message": "Não autenticado"}), 401
-
-    data = request.get_json()
-
-    # Validações básicas
-    required_fields = [
-        "student_id",
-        "instructor_id",
-        "date",
-        "start_time",
-        "end_time",
-        "type",
-    ]
-    for field in required_fields:
-        if not data.get(field):
-            return (
-                jsonify({"success": False, "message": f"Campo {field} é obrigatório"}),
-                400,
-            )
-
+@app.post("/api/lessons")
+async def create_lesson(
+    request: Request,
+    lesson_data: LessonRequest,
+    current_user: Dict = Depends(require_auth),
+):
     # Verificar disponibilidade do instrutor
     for lesson in lessons_data:
         if (
-            lesson["instructor_id"] == data["instructor_id"]
-            and lesson["date"] == data["date"]
-            and lesson["start_time"] == data["start_time"]
+            lesson["instructor_id"] == lesson_data.instructor_id
+            and lesson["date"] == lesson_data.date
+            and lesson["start_time"] == lesson_data.start_time
             and lesson["status"] != "cancelled"
         ):
-            return (
-                jsonify(
-                    {
-                        "success": False,
-                        "message": "Instrutor não disponível neste horário",
-                    }
-                ),
-                409,
+            raise HTTPException(
+                status_code=409, detail="Instrutor não disponível neste horário"
             )
 
     # Criar nova aula
     new_lesson = {
         "id": len(lessons_data) + 1,
-        "student_id": data["student_id"],
-        "student_name": data.get("student_name", ""),
-        "instructor_id": data["instructor_id"],
-        "instructor_name": data.get("instructor_name", ""),
-        "date": data["date"],
-        "start_time": data["start_time"],
-        "end_time": data["end_time"],
-        "type": data["type"],
-        "vehicle": data.get("vehicle"),
+        "student_id": lesson_data.student_id,
+        "student_name": lesson_data.student_name,
+        "instructor_id": lesson_data.instructor_id,
+        "instructor_name": lesson_data.instructor_name,
+        "date": lesson_data.date,
+        "start_time": lesson_data.start_time,
+        "end_time": lesson_data.end_time,
+        "type": lesson_data.type,
+        "vehicle": lesson_data.vehicle,
         "status": "scheduled",
-        "category": data.get("category", "B"),
-        "location": data.get("location", "Autoescola"),
-        "notes": data.get("notes", ""),
+        "category": lesson_data.category,
+        "location": lesson_data.location,
+        "notes": lesson_data.notes,
     }
 
     lessons_data.append(new_lesson)
-    return jsonify(
-        {"success": True, "message": "Aula agendada com sucesso!", "lesson": new_lesson}
-    )
+    return {
+        "success": True,
+        "message": "Aula agendada com sucesso!",
+        "lesson": new_lesson,
+    }
 
 
-@app.route("/api/lessons/<int:lesson_id>", methods=["PUT"])
-def update_lesson(lesson_id):
-    """Atualizar aula existente"""
-    if "user_id" not in session:
-        return jsonify({"success": False, "message": "Não autenticado"}), 401
-
-    data = request.get_json()
-
+@app.put("/api/lessons/{lesson_id}")
+async def update_lesson(
+    request: Request,
+    lesson_id: int,
+    lesson_data: dict,
+    current_user: Dict = Depends(require_auth),
+):
     # Encontrar a aula
     lesson = next((l for l in lessons_data if l["id"] == lesson_id), None)
     if not lesson:
-        return jsonify({"success": False, "message": "Aula não encontrada"}), 404
+        raise HTTPException(status_code=404, detail="Aula não encontrada")
 
     # Verificar permissões
-    user_role = session.get("user_role")
-    user_id = session.get("user_id")
+    user_role = current_user["role"]
+    user_id = current_user["email"]
 
     if (
         user_role not in ["admin"]
         and lesson["instructor_id"] != user_id
         and lesson["student_id"] != user_id
     ):
-        return (
-            jsonify(
-                {"success": False, "message": "Sem permissão para editar esta aula"}
-            ),
-            403,
+        raise HTTPException(
+            status_code=403, detail="Sem permissão para editar esta aula"
         )
 
     # Atualizar campos
@@ -440,66 +474,126 @@ def update_lesson(lesson_id):
         "status",
     ]
     for field in updatable_fields:
-        if field in data:
-            lesson[field] = data[field]
+        if field in lesson_data:
+            lesson[field] = lesson_data[field]
 
-    return jsonify(
-        {"success": True, "message": "Aula atualizada com sucesso!", "lesson": lesson}
-    )
+    return {
+        "success": True,
+        "message": "Aula atualizada com sucesso!",
+        "lesson": lesson,
+    }
 
 
-@app.route("/api/lessons/<int:lesson_id>", methods=["DELETE"])
-def cancel_lesson(lesson_id):
-    """Cancelar aula"""
-    if "user_id" not in session:
-        return jsonify({"success": False, "message": "Não autenticado"}), 401
-
+@app.delete("/api/lessons/{lesson_id}")
+async def cancel_lesson(
+    request: Request, lesson_id: int, current_user: Dict = Depends(require_auth)
+):
     lesson = next((l for l in lessons_data if l["id"] == lesson_id), None)
     if not lesson:
-        return jsonify({"success": False, "message": "Aula não encontrada"}), 404
+        raise HTTPException(status_code=404, detail="Aula não encontrada")
 
     # Verificar permissões
-    user_role = session.get("user_role")
-    user_id = session.get("user_id")
+    user_role = current_user["role"]
+    user_id = current_user["email"]
 
     if (
         user_role not in ["admin"]
         and lesson["instructor_id"] != user_id
         and lesson["student_id"] != user_id
     ):
-        return (
-            jsonify(
-                {"success": False, "message": "Sem permissão para cancelar esta aula"}
-            ),
-            403,
+        raise HTTPException(
+            status_code=403, detail="Sem permissão para cancelar esta aula"
         )
 
     lesson["status"] = "cancelled"
-    return jsonify({"success": True, "message": "Aula cancelada com sucesso!"})
+    return {"success": True, "message": "Aula cancelada com sucesso!"}
 
 
-@app.route("/api/instructors", methods=["GET"])
-def get_instructors():
-    """Obter lista de instrutores disponíveis"""
-    return jsonify({"success": True, "instructors": instructors_data})
+@app.get("/api/instructors")
+async def get_instructors(request: Request, current_user: Dict = Depends(require_auth)):
+    return {"success": True, "instructors": instructors_data}
 
 
-@app.route("/api/vehicles", methods=["GET"])
-def get_vehicles():
-    """Obter lista de veículos disponíveis"""
+@app.post("/api/instructors")
+async def create_instructor(
+    request: Request,
+    instructor_data: InstructorRequest,
+    current_user: Dict = Depends(require_admin),
+):
+    # Verificar se email já existe
+    if any(
+        instructor["id"] == instructor_data.email for instructor in instructors_data
+    ):
+        raise HTTPException(status_code=409, detail="Email já cadastrado")
+
+    # Criar novo instrutor
+    new_instructor = {
+        "id": instructor_data.email,
+        "name": instructor_data.name,
+        "email": instructor_data.email,
+        "phone": instructor_data.phone,
+        "cpf": instructor_data.cpf,
+        "specialty": instructor_data.specialty,
+        "license": instructor_data.license,
+        "address": instructor_data.address,
+        "notes": instructor_data.notes,
+        "active": True,
+    }
+
+    instructors_data.append(new_instructor)
+    return {
+        "success": True,
+        "message": "Instrutor cadastrado com sucesso!",
+        "instructor": new_instructor,
+    }
+
+
+@app.get("/api/vehicles")
+async def get_vehicles(request: Request, current_user: Dict = Depends(require_auth)):
     available_vehicles = [v for v in vehicles_data if v["available"]]
-    return jsonify({"success": True, "vehicles": available_vehicles})
+    return {"success": True, "vehicles": available_vehicles}
 
 
-@app.route("/api/schedule-availability", methods=["GET"])
-def get_schedule_availability():
-    """Verificar disponibilidade de horários"""
-    date = request.args.get("date")
-    instructor_id = request.args.get("instructor_id")
+@app.post("/api/vehicles")
+async def create_vehicle(
+    request: Request,
+    vehicle_data: VehicleRequest,
+    current_user: Dict = Depends(require_admin),
+):
+    # Verificar se placa já existe
+    if any(vehicle["id"] == vehicle_data.plate for vehicle in vehicles_data):
+        raise HTTPException(status_code=409, detail="Placa já cadastrada")
 
-    if not date:
-        return jsonify({"success": False, "message": "Data é obrigatória"}), 400
+    # Criar novo veículo
+    new_vehicle = {
+        "id": vehicle_data.plate,
+        "plate": vehicle_data.plate,
+        "model": vehicle_data.model,
+        "brand": vehicle_data.brand,
+        "year": vehicle_data.year,
+        "category": vehicle_data.category,
+        "color": vehicle_data.color,
+        "fuel": vehicle_data.fuel,
+        "transmission": vehicle_data.transmission,
+        "notes": vehicle_data.notes,
+        "available": True,
+    }
 
+    vehicles_data.append(new_vehicle)
+    return {
+        "success": True,
+        "message": "Veículo cadastrado com sucesso!",
+        "vehicle": new_vehicle,
+    }
+
+
+@app.get("/api/schedule-availability")
+async def get_schedule_availability(
+    request: Request,
+    date: str,
+    instructor_id: Optional[str] = None,
+    current_user: Dict = Depends(require_auth),
+):
     # Horários disponíveis (8h às 18h)
     available_times = []
     for hour in range(8, 18):
@@ -517,236 +611,72 @@ def get_schedule_availability():
         if not occupied:
             available_times.append(time_slot)
 
-    return jsonify({"success": True, "available_times": available_times})
+    return {"success": True, "available_times": available_times}
 
 
-@app.route("/api/instructors", methods=["POST"])
-def create_instructor():
-    """Criar novo instrutor"""
-    if "user_id" not in session:
-        return jsonify({"success": False, "message": "Não autenticado"}), 401
-
-    # Verificar se usuário é admin
-    user_role = session.get("user_role")
-    if user_role != "admin":
-        return (
-            jsonify(
-                {
-                    "success": False,
-                    "message": "Apenas administradores podem cadastrar instrutores",
-                }
-            ),
-            403,
-        )
-
-    data = request.get_json()
-
-    # Validações básicas
-    required_fields = ["name", "email", "phone", "cpf", "specialty", "license"]
-    for field in required_fields:
-        if not data.get(field):
-            return (
-                jsonify({"success": False, "message": f"Campo {field} é obrigatório"}),
-                400,
-            )
-
-    # Verificar se email já existe
-    if any(instructor["id"] == data["email"] for instructor in instructors_data):
-        return jsonify({"success": False, "message": "Email já cadastrado"}), 409
-
-    # Criar novo instrutor
-    new_instructor = {
-        "id": data["email"],
-        "name": data["name"],
-        "email": data["email"],
-        "phone": data["phone"],
-        "cpf": data["cpf"],
-        "specialty": data["specialty"],
-        "license": data["license"],
-        "address": data.get("address", ""),
-        "notes": data.get("notes", ""),
-        "active": True,
-    }
-
-    instructors_data.append(new_instructor)
-    return jsonify(
-        {
-            "success": True,
-            "message": "Instrutor cadastrado com sucesso!",
-            "instructor": new_instructor,
-        }
-    )
-
-
-@app.route("/api/vehicles", methods=["POST"])
-def create_vehicle():
-    """Criar novo veículo"""
-    if "user_id" not in session:
-        return jsonify({"success": False, "message": "Não autenticado"}), 401
-
-    # Verificar se usuário é admin
-    user_role = session.get("user_role")
-    if user_role != "admin":
-        return (
-            jsonify(
-                {
-                    "success": False,
-                    "message": "Apenas administradores podem cadastrar veículos",
-                }
-            ),
-            403,
-        )
-
-    data = request.get_json()
-
-    # Validações básicas
-    required_fields = [
-        "plate",
-        "model",
-        "brand",
-        "year",
-        "category",
-        "color",
-        "fuel",
-        "transmission",
-    ]
-    for field in required_fields:
-        if not data.get(field):
-            return (
-                jsonify({"success": False, "message": f"Campo {field} é obrigatório"}),
-                400,
-            )
-
-    # Verificar se placa já existe
-    if any(vehicle["id"] == data["plate"] for vehicle in vehicles_data):
-        return jsonify({"success": False, "message": "Placa já cadastrada"}), 409
-
-    # Criar novo veículo
-    new_vehicle = {
-        "id": data["plate"],
-        "plate": data["plate"],
-        "model": data["model"],
-        "brand": data["brand"],
-        "year": data["year"],
-        "category": data["category"],
-        "color": data["color"],
-        "fuel": data["fuel"],
-        "transmission": data["transmission"],
-        "notes": data.get("notes", ""),
-        "available": True,
-    }
-
-    vehicles_data.append(new_vehicle)
-    return jsonify(
-        {
-            "success": True,
-            "message": "Veículo cadastrado com sucesso!",
-            "vehicle": new_vehicle,
-        }
-    )
-
-
-# Endpoint para criar estudante
-@app.route("/api/students", methods=["POST"])
-def create_student():
-    if "user_id" not in session:
-        return jsonify({"success": False, "message": "Não autorizado"}), 401
-
-    data = request.get_json()
-
-    # Validar campos obrigatórios
-    required_fields = [
-        "name",
-        "cpf",
-        "phone",
-        "email",
-        "address",
-        "birth_date",
-        "category",
-    ]
-    for field in required_fields:
-        if not data.get(field):
-            return (
-                jsonify({"success": False, "message": f"Campo {field} é obrigatório"}),
-                400,
-            )
-
+@app.post("/api/students")
+async def create_student(
+    request: Request,
+    student_data: StudentRequest,
+    current_user: Dict = Depends(require_auth),
+):
     # Verificar se CPF já existe
-    if any(student.get("cpf") == data["cpf"] for student in students_data):
-        return jsonify({"success": False, "message": "CPF já cadastrado"}), 409
+    if any(student.get("cpf") == student_data.cpf for student in students_data):
+        raise HTTPException(status_code=409, detail="CPF já cadastrado")
 
     # Criar novo estudante
     new_student = {
         "id": len(students_data) + 1,
-        "name": data["name"],
-        "cpf": data["cpf"],
-        "phone": data["phone"],
-        "email": data["email"],
-        "address": data["address"],
-        "birth_date": data["birth_date"],
-        "category": data["category"],
-        "enrollment_date": data.get("enrollment_date", ""),
-        "emergency_contact": data.get("emergency_contact", ""),
-        "observations": data.get("observations", ""),
+        "name": student_data.name,
+        "cpf": student_data.cpf,
+        "phone": student_data.phone,
+        "email": student_data.email,
+        "address": student_data.address,
+        "birth_date": student_data.birth_date,
+        "category": student_data.category,
+        "enrollment_date": student_data.enrollment_date,
+        "emergency_contact": student_data.emergency_contact,
+        "observations": student_data.observations,
         "status": "active",
     }
 
     students_data.append(new_student)
-    return jsonify(
-        {
-            "success": True,
-            "message": "Aluno cadastrado com sucesso!",
-            "student": new_student,
-        }
-    )
+    return {
+        "success": True,
+        "message": "Aluno cadastrado com sucesso!",
+        "student": new_student,
+    }
 
 
-# Endpoint para criar pagamento
-@app.route("/api/payments", methods=["POST"])
-def create_payment():
-    if "user_id" not in session:
-        return jsonify({"success": False, "message": "Não autorizado"}), 401
-
-    data = request.get_json()
-
-    # Validar campos obrigatórios
-    required_fields = ["student_name", "amount", "payment_method", "payment_date"]
-    for field in required_fields:
-        if not data.get(field):
-            return (
-                jsonify({"success": False, "message": f"Campo {field} é obrigatório"}),
-                400,
-            )
+@app.post("/api/payments")
+async def create_payment(
+    request: Request,
+    payment_data: PaymentRequest,
+    current_user: Dict = Depends(require_auth),
+):
+    # Verificar se usuário tem permissão para registrar pagamentos
+    if current_user["role"] == "instructor":
+        raise HTTPException(
+            status_code=403, detail="Instrutores não podem registrar pagamentos"
+        )
 
     # Criar novo pagamento
     new_payment = {
         "id": len(payments_data) + 1,
-        "student_name": data["student_name"],
-        "amount": float(data["amount"]),
-        "payment_method": data["payment_method"],
-        "payment_date": data["payment_date"],
-        "due_date": data.get("due_date", ""),
-        "description": data.get("description", ""),
-        "installment": data.get("installment", "1/1"),
-        "notes": data.get("notes", ""),
+        "student_name": payment_data.student_name,
+        "amount": payment_data.amount,
+        "payment_method": payment_data.payment_method,
+        "payment_date": payment_data.payment_date,
+        "due_date": payment_data.due_date,
+        "description": payment_data.description,
+        "installment": payment_data.installment,
+        "notes": payment_data.notes,
         "status": "paid",
     }
 
     payments_data.append(new_payment)
-    return jsonify(
-        {
-            "success": True,
-            "message": "Pagamento registrado com sucesso!",
-            "payment": new_payment,
-        }
-    )
-
-
-# Route para servir arquivos estáticos com o caminho correto
-@app.route("/assets/<path:filename>")
-def custom_static(filename):
-    return send_from_directory("app/static", filename)
-
-
-if __name__ == "__main__":
-    app.run(debug=True, host="127.0.0.1", port=5000)
+    return {
+        "success": True,
+        "message": "Pagamento registrado com sucesso!",
+        "payment": new_payment,
+    }
