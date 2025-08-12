@@ -9823,3 +9823,275 @@ document.addEventListener("DOMContentLoaded", function () {
     }, 100);
   });
 });
+
+// ===== CONTROLE DE ACESSO BASEADO NO ROLE =====
+
+// Configuração do usuário atual será definida pelo template
+// window.currentUser será definido no template HTML
+
+// Controlar acesso baseado no role
+document.addEventListener("DOMContentLoaded", function () {
+  // Verificar se currentUser está definido
+  if (typeof window.currentUser === "undefined") {
+    console.warn("window.currentUser não está definido");
+    return;
+  }
+
+  const userRole = window.currentUser.role;
+
+  // Esconder seções baseadas no role
+  if (userRole !== "admin") {
+    // Esconder funcionalidades de admin
+    hideAdminFeatures();
+  }
+
+  if (userRole === "user") {
+    // Mostrar apenas funcionalidades básicas para usuários
+    showUserFeatures();
+  }
+
+  if (userRole === "instructor") {
+    // Mostrar apenas funcionalidades para instrutores
+    showInstructorFeatures();
+  }
+
+  // Atualizar informações do usuário no header
+  updateUserInfo();
+});
+
+function hideAdminFeatures() {
+  // Esconder itens do menu que são apenas para admin
+  const adminMenuItems = [
+    '[data-section="instructors"]',
+    '[data-section="vehicles"]',
+    '[data-section="reports"]',
+    '[data-section="settings"]',
+    ".admin-only",
+  ];
+
+  adminMenuItems.forEach((selector) => {
+    const elements = document.querySelectorAll(selector);
+    elements.forEach((el) => {
+      if (el) {
+        el.style.display = "none";
+      }
+    });
+  });
+}
+
+function showUserFeatures() {
+  // Manter apenas funcionalidades básicas visíveis
+  const userMenuItems = [
+    '[data-section="dashboard"]',
+    '[data-section="students"]', // usuário pode ver apenas seus próprios dados
+  ];
+
+  // Lógica adicional para usuários limitados pode ser adicionada aqui
+}
+
+function showInstructorFeatures() {
+  // Esconder todos os itens que não são para instrutores
+  const allMenuItems = document.querySelectorAll(".menu-item[data-section]");
+  allMenuItems.forEach((item) => {
+    item.style.display = "none";
+  });
+
+  // Mostrar apenas itens relevantes para instrutores
+  const instructorMenuItems = [
+    '[data-section="dashboard"]', // Dashboard principal
+    '[data-section="students"]', // Gerenciar alunos
+    '[data-section="schedule"]', // Agenda/Cronograma
+    '[data-section="exams"]', // Exames
+    '[data-section="finance"]', // Financeiro (pode ver pagamentos de aulas)
+  ];
+
+  instructorMenuItems.forEach((selector) => {
+    const elements = document.querySelectorAll(selector);
+    elements.forEach((el) => {
+      if (el) {
+        el.style.display = "flex"; // ou 'block' dependendo do CSS original
+      }
+    });
+  });
+
+  // Esconder seções administrativas específicas
+  const hideForInstructor = [
+    '[data-section="instructors"]', // Não pode gerenciar outros instrutores
+    '[data-section="vehicles"]', // Não gerencia frota
+    '[data-section="reports"]', // Relatórios são para admin
+    '[data-section="settings"]', // Configurações são para admin
+    ".admin-only",
+  ];
+
+  hideForInstructor.forEach((selector) => {
+    const elements = document.querySelectorAll(selector);
+    elements.forEach((el) => {
+      if (el) {
+        el.style.display = "none";
+      }
+    });
+  });
+}
+
+function updateUserInfo() {
+  // Atualizar nome do usuário no dashboard
+  const userNameElements = document.querySelectorAll(
+    ".user-name, .profile-user-name"
+  );
+  userNameElements.forEach((el) => {
+    if (el && window.currentUser.name) {
+      el.textContent = window.currentUser.name;
+    }
+  });
+
+  // Atualizar email do usuário
+  const userEmailElements = document.querySelectorAll(
+    ".user-email, .profile-user-email"
+  );
+  userEmailElements.forEach((el) => {
+    if (el && window.currentUser.email) {
+      el.textContent = window.currentUser.email;
+    }
+  });
+
+  // Atualizar role do usuário
+  const userRoleElements = document.querySelectorAll(
+    ".user-role, .profile-user-role"
+  );
+  userRoleElements.forEach((el) => {
+    if (el && window.currentUser.role) {
+      let roleText = window.currentUser.role;
+      if (roleText === "admin") roleText = "Administrador";
+      else if (roleText === "instructor") roleText = "Instrutor";
+      else if (roleText === "user") roleText = "Usuário";
+
+      el.textContent = roleText;
+    }
+  });
+}
+
+// Função para criar novo usuário (apenas admins)
+async function createNewUser(userData) {
+  if (window.currentUser.role !== "admin") {
+    alert("Acesso negado. Apenas administradores podem criar usuários.");
+    return;
+  }
+
+  try {
+    const response = await fetch("/admin/create-user", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      alert("Usuário criado com sucesso!");
+      // Atualizar lista de usuários ou fazer outras ações
+    } else {
+      alert("Erro: " + result.message);
+    }
+  } catch (error) {
+    console.error("Erro ao criar usuário:", error);
+    alert("Erro ao criar usuário");
+  }
+}
+
+// Função para listar usuários (apenas admins)
+async function loadUsers() {
+  if (window.currentUser.role !== "admin") {
+    console.log("Acesso negado para listagem de usuários");
+    return;
+  }
+
+  try {
+    const response = await fetch("/admin/users");
+    const result = await response.json();
+
+    if (result.success) {
+      console.log("Usuários carregados:", result.users);
+      // Processar lista de usuários
+    }
+  } catch (error) {
+    console.error("Erro ao carregar usuários:", error);
+  }
+}
+
+// ===== MODAL DE LOGOUT ELEGANTE =====
+
+function showLogoutModal() {
+  const modal = document.getElementById("logoutModal");
+  const userName = window.currentUser.name || "Usuário";
+  const userEmail = window.currentUser.email || "";
+
+  // Atualizar informações do usuário no modal
+  document.getElementById("logoutUserName").textContent = userName;
+  document.getElementById("logoutUserEmail").textContent = userEmail;
+
+  // Criar iniciais do nome
+  const initials = userName
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+  document.getElementById("logoutUserInitials").textContent = initials;
+
+  // Mostrar modal
+  modal.classList.add("show");
+}
+
+function hideLogoutModal() {
+  const modal = document.getElementById("logoutModal");
+  modal.classList.remove("show");
+}
+
+function performLogout() {
+  const confirmBtn = document.getElementById("logoutConfirm");
+
+  // Mostrar loading
+  confirmBtn.classList.add("loading");
+  confirmBtn.innerHTML = "<span>Saindo...</span>";
+
+  // Simular delay e redirecionar
+  setTimeout(() => {
+    window.location.href = "/logout";
+  }, 1500);
+}
+
+// Event listeners adicionais para o modal de logout
+document.addEventListener("DOMContentLoaded", function () {
+  const modal = document.getElementById("logoutModal");
+  const cancelBtn = document.getElementById("logoutCancel");
+  const confirmBtn = document.getElementById("logoutConfirm");
+
+  if (modal && cancelBtn && confirmBtn) {
+    // Cancelar logout
+    cancelBtn.addEventListener("click", hideLogoutModal);
+
+    // Confirmar logout
+    confirmBtn.addEventListener("click", performLogout);
+
+    // Fechar modal clicando fora
+    modal.addEventListener("click", function (e) {
+      if (e.target === modal) {
+        hideLogoutModal();
+      }
+    });
+
+    // Fechar modal com ESC
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && modal.classList.contains("show")) {
+        hideLogoutModal();
+      }
+    });
+  }
+});
+
+// Substituir a função confirmLogout existente
+window.confirmLogout = function () {
+  showLogoutModal();
+};
