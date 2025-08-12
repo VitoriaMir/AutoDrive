@@ -179,6 +179,32 @@ let vehiclesChart = null;
 let scheduleChart = null;
 let examsChart = null;
 
+// Function to safely destroy a chart
+function destroyChart(chart) {
+  if (chart && typeof chart.destroy === "function") {
+    chart.destroy();
+  }
+  return null;
+}
+
+// Function to refresh all charts
+function refreshAllCharts() {
+  console.log("Refreshing all charts...");
+
+  // Destroy all existing charts
+  lessonsChart = destroyChart(lessonsChart);
+  studentsChart = destroyChart(studentsChart);
+  studentsPerformanceChart = destroyChart(studentsPerformanceChart);
+  instructorsChart = destroyChart(instructorsChart);
+  vehiclesChart = destroyChart(vehiclesChart);
+  scheduleChart = destroyChart(scheduleChart);
+  examsChart = destroyChart(examsChart);
+  financeChart = destroyChart(financeChart);
+
+  // Reinitialize all charts
+  setTimeout(initCharts, 100);
+}
+
 // Function to show a specific section
 function showSection(sectionId) {
   // Hide all sections
@@ -498,6 +524,7 @@ function initThemeToggle() {
 function initCharts() {
   // Add a slight delay to ensure DOM is fully rendered
   setTimeout(() => {
+    console.log("Initializing all charts...");
     initLessonsChart();
     initStudentsChart();
     initStudentsPerformanceChart();
@@ -506,13 +533,17 @@ function initCharts() {
     initScheduleChart();
     initExamsChart();
     initFinanceChart();
-  }, 200);
+    console.log("All charts initialized successfully");
+  }, 300);
 }
 
 // Initialize lessons chart
 function initLessonsChart() {
   const lessonsCtx = document.getElementById("lessons-chart");
   if (!lessonsCtx) return;
+
+  // Destroy existing chart
+  lessonsChart = destroyChart(lessonsChart);
 
   lessonsChart = new Chart(lessonsCtx.getContext("2d"), {
     type: "bar",
@@ -616,10 +647,7 @@ function initStudentsChart() {
 
   if (studentsCtx) {
     // Clear any existing chart
-    const existingChart = Chart.getChart(studentsCtx);
-    if (existingChart) {
-      existingChart.destroy();
-    }
+    studentsChart = destroyChart(studentsChart);
 
     const studentsData = {
       6: {
@@ -3824,10 +3852,7 @@ function initStudentsPerformanceChart() {
   if (!ctx) return;
 
   // Clear any existing chart
-  const existingChart = Chart.getChart(ctx);
-  if (existingChart) {
-    existingChart.destroy();
-  }
+  studentsPerformanceChart = destroyChart(studentsPerformanceChart);
 
   const performanceData = {
     6: {
@@ -9783,4 +9808,18 @@ document.addEventListener("DOMContentLoaded", function () {
       loadLessons();
     }
   }
+
+  // Add window resize handler for charts
+  window.addEventListener("resize", function () {
+    setTimeout(() => {
+      if (lessonsChart) lessonsChart.resize();
+      if (studentsChart) studentsChart.resize();
+      if (studentsPerformanceChart) studentsPerformanceChart.resize();
+      if (instructorsChart) instructorsChart.resize();
+      if (vehiclesChart) vehiclesChart.resize();
+      if (scheduleChart) scheduleChart.resize();
+      if (examsChart) examsChart.resize();
+      if (financeChart) financeChart.resize();
+    }, 100);
+  });
 });
