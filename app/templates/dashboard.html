@@ -6069,7 +6069,7 @@
     {% if user_role != 'instructor' %}
     <!-- Modal de Registrar Pagamento -->
     <div class="modal-overlay" id="paymentModal">
-        <div class="modal-content add-payment-modal">
+        <div class="modal-content schedule-lesson-modal">
             <div class="modal-header">
                 <h3>
                     <i class="fas fa-credit-card"></i>
@@ -6080,7 +6080,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="addPaymentForm" class="add-form">
+                <form id="addPaymentForm" class="schedule-form">
                     <div class="form-row">
                         <div class="form-group">
                             <label for="paymentStudent">
@@ -6103,6 +6103,9 @@
                             <input type="number" id="paymentAmount" name="amount" required min="0" step="0.01"
                                 placeholder="0,00">
                         </div>
+                    </div>
+
+                    <div class="form-row">
                         <div class="form-group">
                             <label for="paymentDate">
                                 <i class="fas fa-calendar-alt"></i>
@@ -6110,9 +6113,6 @@
                             </label>
                             <input type="date" id="paymentDate" name="payment_date" required>
                         </div>
-                    </div>
-
-                    <div class="form-row">
                         <div class="form-group">
                             <label for="paymentMethod">
                                 <i class="fas fa-money-check-alt"></i>
@@ -6127,6 +6127,9 @@
                                 <option value="transferencia">Transferência Bancária</option>
                             </select>
                         </div>
+                    </div>
+
+                    <div class="form-row">
                         <div class="form-group">
                             <label for="paymentCategory">
                                 <i class="fas fa-tags"></i>
@@ -6159,7 +6162,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group full-width">
+                    <div class="form-group">
                         <label for="paymentDescription">
                             <i class="fas fa-file-alt"></i>
                             Descrição
@@ -6168,12 +6171,12 @@
                             placeholder="Ex: Pagamento de aulas práticas - Mês 05/2025">
                     </div>
 
-                    <div class="form-group full-width">
+                    <div class="form-group">
                         <label for="paymentNotes">
                             <i class="fas fa-sticky-note"></i>
                             Observações
                         </label>
-                        <textarea id="paymentNotes" name="notes" rows="2"
+                        <textarea id="paymentNotes" name="notes" rows="3"
                             placeholder="Observações sobre o pagamento..."></textarea>
                     </div>
                 </form>
