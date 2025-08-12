@@ -2876,10 +2876,6 @@ body {
   background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
 }
 
-.category-fill.category-c-fill {
-  background: linear-gradient(90deg, #22c55e 0%, #16a34a 100%);
-}
-
 /* Students Metrics Detailed Styles - Enhanced */
 .students-metrics-detailed {
   margin-top: 32px;
@@ -7160,11 +7156,6 @@ body {
   color: #9c27b0;
 }
 
-.category-icon.category-c {
-  background: rgba(76, 175, 80, 0.2);
-  color: #4caf50;
-}
-
 .category-info {
   flex: 1;
   display: flex;
@@ -7222,10 +7213,6 @@ body {
 
 .category-fill.category-ab {
   background: linear-gradient(45deg, #9c27b0, #ce93d8);
-}
-
-.category-fill.category-c {
-  background: linear-gradient(45deg, #4caf50, #81c784);
 }
 
 .category-details {
@@ -7947,10 +7934,6 @@ body {
 
 .category-icon.category-a {
   background: linear-gradient(135deg, #f093fb, #f5576c);
-}
-
-.category-icon.category-c {
-  background: linear-gradient(135deg, #4facfe, #00f2fe);
 }
 
 .category-letter {

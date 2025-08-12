@@ -5818,13 +5818,6 @@ function exportVehicleCategories() {
       avgConsumption: 8.1,
       rating: 4.1,
     },
-    "Categoria C": {
-      vehicles: 0,
-      percentage: 0.0,
-      utilization: 0,
-      avgConsumption: 0,
-      rating: "N/A",
-    },
   };
 
   const csvContent =
