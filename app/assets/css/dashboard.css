@@ -13142,3 +13142,197 @@ body {
   color: #374151;
   padding: 8px;
 }
+
+/* Canvas e gráficos no tema claro */
+[data-theme="light"] canvas {
+  background: linear-gradient(135deg, #1e293b, #334155) !important;
+  border-radius: 8px;
+  border: 1px solid #475569;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .chart-container {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+}
+
+[data-theme="light"] .chart-container canvas {
+  background: linear-gradient(135deg, #1e293b, #334155) !important;
+  border-radius: 8px;
+}
+
+/* Containers específicos de gráficos */
+[data-theme="light"] .students-performance-chart .chart-container {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+}
+
+/* Schedule charts no tema claro */
+[data-theme="light"] .timeline-container {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+}
+
+[data-theme="light"] .timeline-hours {
+  background: #f1f5f9;
+  border-right: 2px solid #cbd5e1;
+}
+
+[data-theme="light"] .hour-slot {
+  color: #374151;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+[data-theme="light"] .lesson-block {
+  border: 1px solid #94a3b8;
+  backdrop-filter: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .lesson-block:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid #64748b;
+}
+
+[data-theme="light"] .lesson-block.practical {
+  background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+  border-left: 4px solid #059669;
+  box-shadow: 0 2px 8px rgba(5, 150, 105, 0.2);
+}
+
+[data-theme="light"] .lesson-block.theoretical {
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  border-left: 4px solid #2563eb;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
+}
+
+[data-theme="light"] .lesson-student {
+  color: #1f2937;
+  text-shadow: none;
+  font-weight: 600;
+}
+
+[data-theme="light"] .lesson-instructor {
+  color: #4b5563;
+  text-shadow: none;
+}
+
+[data-theme="light"] .lesson-time {
+  color: #1f2937;
+  text-shadow: none;
+  font-weight: 600;
+}
+
+[data-theme="light"] .stat-card-small {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+[data-theme="light"] .stat-card-small:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+[data-theme="light"] .stat-icon-small {
+  background: #e0e7ff;
+  color: #4f46e5;
+}
+
+[data-theme="light"] .date-selector {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  color: #374151;
+}
+
+/* Insight items no tema claro */
+[data-theme="light"] .insight-item {
+  background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .insight-item:hover {
+  background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
+  border-color: #94a3b8;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .insight-label {
+  color: #6b7280;
+}
+
+[data-theme="light"] .insight-value {
+  color: #1f2937;
+  font-weight: 700;
+}
+
+[data-theme="light"] .insight-icon {
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+}
+
+[data-theme="light"] .insight-icon.success {
+  background: #dcfce7;
+  color: #166534;
+  border-color: #86efac;
+}
+
+[data-theme="light"] .insight-icon.warning {
+  background: #fef3c7;
+  color: #92400e;
+  border-color: #fde68a;
+}
+
+[data-theme="light"] .insight-icon.info {
+  background: #dbeafe;
+  color: #1e40af;
+  border-color: #93c5fd;
+}
+
+[data-theme="light"] .insight-icon.danger {
+  background: #fee2e2;
+  color: #991b1b;
+  border-color: #fca5a5;
+}
+
+/* Insights específicos por seção */
+[data-theme="light"] .instructor-insights .insight-item,
+[data-theme="light"] .vehicle-insights .insight-item,
+[data-theme="light"] .student-insights .insight-item {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+}
+
+[data-theme="light"] .instructor-insights .insight-item:hover,
+[data-theme="light"] .vehicle-insights .insight-item:hover,
+[data-theme="light"] .student-insights .insight-item:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+}
+
+/* Metrics header no tema claro - apenas textos escuros */
+[data-theme="light"] .metrics-title {
+  color: #1f2937;
+  font-weight: 700;
+}
+
+[data-theme="light"] .metrics-title i {
+  color: #374151;
+}
+
+/* Metrics headers específicos - apenas textos escuros */
+[data-theme="light"] .instructors-metrics-detailed .metrics-header h4,
+[data-theme="light"] .vehicles-metrics-detailed .metrics-header h4,
+[data-theme="light"] .students-metrics-detailed .metrics-header h4,
+[data-theme="light"] .exams-metrics-detailed .metrics-header h4 {
+  color: #1f2937;
+  font-weight: 700;
+}
+
+/* Chart metrics section */
+[data-theme="light"] .chart-metrics-section {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+}
