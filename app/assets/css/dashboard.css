@@ -12395,3 +12395,267 @@ body {
     font-size: 1.2rem;
   }
 }
+
+/* ===== MODAL PADRONIZADO ===== */
+/* Estrutura base para todos os modais */
+.modal-overlay,
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.modal-overlay.show,
+.modal.show {
+  display: flex;
+  opacity: 1;
+}
+
+.modal-content {
+  background: var(--darker);
+  border-radius: 15px;
+  width: 90%;
+  max-height: 80vh;
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+  transform: translateY(20px) scale(0.95);
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-overlay.show .modal-content,
+.modal.show .modal-content {
+  transform: translateY(0) scale(1);
+}
+
+/* Header do modal */
+.modal-header {
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.modal-header h3 i {
+  color: var(--primary);
+  font-size: 20px;
+}
+
+/* Botão de fechar */
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--gray);
+  font-size: 20px;
+  cursor: pointer;
+  transition: var(--transition);
+  padding: 5px;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-close:hover {
+  color: var(--light);
+  background: var(--hover-bg);
+}
+
+/* Corpo do modal */
+.modal-body {
+  padding: 20px 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Footer do modal */
+.modal-footer {
+  padding: 16px 24px 20px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+/* Modais grandes (listas) */
+.modal-large .modal-content {
+  max-width: 1400px;
+  width: 95vw;
+  height: 90vh;
+  max-height: 90vh;
+}
+
+/* Controles de filtro/busca */
+.modal-controls {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.modal-controls .form-input {
+  background: var(--input-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: var(--text-color);
+  font-size: 14px;
+  transition: var(--transition);
+}
+
+.modal-controls .form-input:focus {
+  border-color: var(--primary);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+}
+
+.modal-search-input {
+  flex: 1;
+  min-width: 250px;
+}
+
+.modal-filter-select {
+  min-width: 150px;
+}
+
+/* Container de lista */
+.modal-list-container {
+  max-height: 500px;
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--card-bg);
+}
+
+/* Loading state */
+.modal-loading {
+  padding: 40px 20px;
+  text-align: center;
+  color: var(--gray);
+}
+
+.modal-loading i {
+  font-size: 32px;
+  color: var(--primary);
+  margin-bottom: 12px;
+}
+
+/* Ações do modal */
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .modal-content {
+    width: 95%;
+    max-height: 95vh;
+    margin: 10px;
+  }
+
+  .modal-large .modal-content {
+    width: 100%;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+
+  .modal-header,
+  .modal-body,
+  .modal-footer {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .modal-controls {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .modal-search-input,
+  .modal-filter-select {
+    width: 100%;
+    min-width: auto;
+  }
+}
+
+/* ===== MODAL DE LOGOUT ESPECÍFICO ===== */
+#logoutModal .modal-content {
+  max-width: 420px;
+}
+
+.logout-modal-message {
+  text-align: center;
+  margin-bottom: 20px;
+  color: var(--gray);
+  font-size: 14px;
+}
+
+.logout-modal-user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: var(--hover-bg);
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.logout-user-avatar {
+  width: 48px;
+  height: 48px;
+  background: var(--primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.logout-user-details {
+  flex: 1;
+}
+
+.logout-user-name {
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 4px;
+}
+
+.logout-user-email {
+  font-size: 13px;
+  color: var(--gray);
+}

@@ -10023,7 +10023,6 @@ async function loadUsers() {
 // ===== MODAL DE LOGOUT ELEGANTE =====
 
 function showLogoutModal() {
-  const modal = document.getElementById("logoutModal");
   const userName = window.currentUser.name || "Usuário";
   const userEmail = window.currentUser.email || "";
 
@@ -10040,13 +10039,12 @@ function showLogoutModal() {
     .slice(0, 2);
   document.getElementById("logoutUserInitials").textContent = initials;
 
-  // Mostrar modal
-  modal.classList.add("show");
+  // Mostrar modal usando função padronizada
+  openModal("logoutModal");
 }
 
 function hideLogoutModal() {
-  const modal = document.getElementById("logoutModal");
-  modal.classList.remove("show");
+  closeModal("logoutModal");
 }
 
 function performLogout() {
@@ -10095,3 +10093,110 @@ document.addEventListener("DOMContentLoaded", function () {
 window.confirmLogout = function () {
   showLogoutModal();
 };
+
+// ===== FUNÇÕES PADRONIZADAS PARA MODAIS =====
+
+/**
+ * Abre um modal com animação
+ * @param {string} modalId - ID do modal a ser aberto
+ */
+function openModal(modalId) {
+  const modal = document.getElementById(modalId);
+  if (modal) {
+    modal.classList.add("show");
+    document.body.style.overflow = "hidden"; // Prevenir scroll do body
+
+    // Adicionar event listener para fechar com ESC
+    const closeOnEsc = (e) => {
+      if (e.key === "Escape") {
+        closeModal(modalId);
+        document.removeEventListener("keydown", closeOnEsc);
+      }
+    };
+    document.addEventListener("keydown", closeOnEsc);
+
+    // Fechar ao clicar fora do modal
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        closeModal(modalId);
+      }
+    });
+  }
+}
+
+/**
+ * Fecha um modal com animação
+ * @param {string} modalId - ID do modal a ser fechado
+ */
+function closeModal(modalId) {
+  const modal = document.getElementById(modalId);
+  if (modal) {
+    modal.classList.remove("show");
+    document.body.style.overflow = ""; // Restaurar scroll do body
+  }
+}
+
+/**
+ * Alterna a visibilidade de um modal
+ * @param {string} modalId - ID do modal
+ */
+function toggleModal(modalId) {
+  const modal = document.getElementById(modalId);
+  if (modal) {
+    if (modal.classList.contains("show")) {
+      closeModal(modalId);
+    } else {
+      openModal(modalId);
+    }
+  }
+}
+
+/**
+ * Mostra loading em um container específico
+ * @param {string} containerId - ID do container
+ * @param {string} message - Mensagem de loading (opcional)
+ */
+function showModalLoading(containerId, message = "Carregando...") {
+  const container = document.getElementById(containerId);
+  if (container) {
+    container.innerHTML = `
+      <div class="modal-loading">
+        <i class="fas fa-spinner fa-spin"></i>
+        <p>${message}</p>
+      </div>
+    `;
+  }
+}
+
+/**
+ * Mostra erro em um container específico
+ * @param {string} containerId - ID do container
+ * @param {string} message - Mensagem de erro
+ */
+function showModalError(containerId, message = "Erro ao carregar dados") {
+  const container = document.getElementById(containerId);
+  if (container) {
+    container.innerHTML = `
+      <div class="modal-loading">
+        <i class="fas fa-exclamation-triangle" style="color: var(--warning);"></i>
+        <p style="color: var(--warning);">${message}</p>
+        <button class="btn btn-primary" onclick="location.reload()">
+          <i class="fas fa-refresh"></i>
+          Tentar Novamente
+        </button>
+      </div>
+    `;
+  }
+}
+
+// Funções específicas para modais existentes (compatibilidade)
+window.openStudentModal = () => openModal("addStudentModal");
+window.openInstructorModal = () => openModal("addInstructorModal");
+window.openVehicleModal = () => openModal("addVehicleModal");
+window.openScheduleLessonModal = () => openModal("scheduleLessonModal");
+window.openPaymentModal = () => openModal("paymentModal");
+
+// Funções para modais de visualização
+window.openModal = openModal;
+window.closeModal = closeModal;
+window.toggleModal = toggleModal;

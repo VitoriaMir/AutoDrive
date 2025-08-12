@@ -5968,7 +5968,7 @@
     <!-- Modals -->
     <!-- Modal de Novo Aluno -->
     <div class="modal-overlay" id="addStudentModal">
-        <div class="modal-content add-student-modal">
+        <div class="modal-content schedule-lesson-modal">
             <div class="modal-header">
                 <h3>
                     <i class="fas fa-user-plus"></i>
@@ -5979,7 +5979,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="addStudentForm" class="add-form">
+                <form id="addStudentForm" class="schedule-form">
                     <div class="form-row">
                         <div class="form-group">
                             <label for="studentName">
@@ -5996,6 +5996,9 @@
                             </label>
                             <input type="email" id="studentEmail" name="email" required placeholder="email@exemplo.com">
                         </div>
+                    </div>
+
+                    <div class="form-row">
                         <div class="form-group">
                             <label for="studentPhone">
                                 <i class="fas fa-phone"></i>
@@ -6003,9 +6006,6 @@
                             </label>
                             <input type="tel" id="studentPhone" name="phone" required placeholder="(11) 99999-9999">
                         </div>
-                    </div>
-
-                    <div class="form-row">
                         <div class="form-group">
                             <label for="studentCPF">
                                 <i class="fas fa-id-card"></i>
@@ -6013,6 +6013,9 @@
                             </label>
                             <input type="text" id="studentCPF" name="cpf" required placeholder="000.000.000-00">
                         </div>
+                    </div>
+
+                    <div class="form-row">
                         <div class="form-group">
                             <label for="studentBirthDate">
                                 <i class="fas fa-calendar-alt"></i>
@@ -6034,7 +6037,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group full-width">
+                    <div class="form-group">
                         <label for="studentAddress">
                             <i class="fas fa-map-marker-alt"></i>
                             Endereço
@@ -6042,12 +6045,12 @@
                         <input type="text" id="studentAddress" name="address" placeholder="Endereço completo">
                     </div>
 
-                    <div class="form-group full-width">
+                    <div class="form-group">
                         <label for="studentNotes">
                             <i class="fas fa-sticky-note"></i>
                             Observações
                         </label>
-                        <textarea id="studentNotes" name="notes" rows="2"
+                        <textarea id="studentNotes" name="notes" rows="3"
                             placeholder="Observações sobre o aluno..."></textarea>
                     </div>
                 </form>
@@ -6188,169 +6191,159 @@
     </div>
     {% endif %}
     <!-- View All Students Modal -->
-    <div class="modal" id="viewAllStudentsModal">
-        <div class="modal-content" style="max-width: 1400px; width: 95vw; height: 90vh;">
+    <div class="modal-overlay modal-large" id="viewAllStudentsModal">
+        <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">Lista Completa de Alunos</h3>
+                <h3>
+                    <i class="fas fa-users"></i>
+                    Lista Completa de Alunos
+                </h3>
                 <button aria-label="Fechar" class="modal-close" onclick="closeModal('viewAllStudentsModal')">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div style="padding: 20px;">
+            <div class="modal-body">
                 <!-- Search and Filter Controls -->
-                <div style="display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;">
-                    <div style="flex: 1; min-width: 250px;">
-                        <input class="form-input" id="studentSearchInput" onkeyup="filterStudentsList()"
-                            placeholder="Buscar por nome, CPF ou email..." type="text" />
-                    </div>
-                    <div style="min-width: 150px;">
-                        <select class="form-input" id="studentCategoryFilter" onchange="filterStudentsList()">
-                            <option value="">Todas as categorias</option>
-                            <option value="A">Categoria A</option>
-                            <option value="B">Categoria B</option>
-                            <option value="AB">Categoria AB</option>
-                        </select>
-                    </div>
-                    <div style="min-width: 150px;">
-                        <select class="form-input" id="studentStatusFilter" onchange="filterStudentsList()">
-                            <option value="">Todos os status</option>
-                            <option value="ativo">Ativo</option>
-                            <option value="suspenso">Suspenso</option>
-                            <option value="concluido">Concluído</option>
-                        </select>
-                    </div>
+                <div class="modal-controls">
+                    <input class="form-input modal-search-input" id="studentSearchInput" onkeyup="filterStudentsList()"
+                        placeholder="Buscar por nome, CPF ou email..." type="text" />
+                    <select class="form-input modal-filter-select" id="studentCategoryFilter"
+                        onchange="filterStudentsList()">
+                        <option value="">Todas as categorias</option>
+                        <option value="A">Categoria A</option>
+                        <option value="B">Categoria B</option>
+                        <option value="AB">Categoria AB</option>
+                    </select>
+                    <select class="form-input modal-filter-select" id="studentStatusFilter"
+                        onchange="filterStudentsList()">
+                        <option value="">Todos os status</option>
+                        <option value="ativo">Ativo</option>
+                        <option value="suspenso">Suspenso</option>
+                        <option value="concluido">Concluído</option>
+                    </select>
                 </div>
                 <!-- Students List Container -->
-                <div id="studentsListContainer"
-                    style="max-height: 500px; overflow-y: auto; border: 1px solid var(--border-color, #e0e0e0); border-radius: 8px;">
-                    <div style="padding: 20px; text-align: center;">
-                        <i class="fas fa-spinner fa-spin"
-                            style="font-size: 24px; color: var(--primary-color, #007bff);"></i>
-                        <p style="margin-top: 10px;">Carregando lista de alunos...</p>
+                <div id="studentsListContainer" class="modal-list-container">
+                    <div class="modal-loading">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Carregando lista de alunos...</p>
                     </div>
                 </div>
-                <!-- Action Buttons -->
-                <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
-                    <button class="btn btn-secondary" onclick="exportStudentsList()" type="button">
-                        <i class="fas fa-download"></i>
-                        Exportar Lista
-                    </button>
-                    <button class="btn btn-primary" onclick="openStudentModal(); closeModal('viewAllStudentsModal')"
-                        type="button">
-                        <i class="fas fa-plus"></i>
-                        Adicionar Aluno
-                    </button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="exportStudentsList()" type="button">
+                    <i class="fas fa-download"></i>
+                    Exportar Lista
+                </button>
+                <button class="btn btn-primary" onclick="openStudentModal(); closeModal('viewAllStudentsModal')"
+                    type="button">
+                    <i class="fas fa-plus"></i>
+                    Adicionar Aluno
+                </button>
             </div>
         </div>
     </div>
     <!-- View All Instructors Modal -->
-    <div class="modal" id="viewAllInstructorsModal">
-        <div class="modal-content" style="max-width: 1400px; width: 95vw; height: 90vh;">
+    <div class="modal-overlay modal-large" id="viewAllInstructorsModal">
+        <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">Lista Completa de Instrutores</h3>
+                <h3>
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    Lista Completa de Instrutores
+                </h3>
                 <button aria-label="Fechar" class="modal-close" onclick="closeModal('viewAllInstructorsModal')">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div style="padding: 20px;">
+            <div class="modal-body">
                 <!-- Search and Filter Controls -->
-                <div style="display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;">
-                    <div style="flex: 1; min-width: 250px;">
-                        <input class="form-input" id="instructorSearchInput" onkeyup="filterInstructorsList()"
-                            placeholder="Buscar por nome, CPF ou especialidade..." type="text" />
-                    </div>
-                    <div style="min-width: 150px;">
-                        <select class="form-input" id="instructorSpecialtyFilter" onchange="filterInstructorsList()">
-                            <option value="">Todas as especialidades</option>
-                            <option value="theoretical">Teórica</option>
-                            <option value="practical">Prática</option>
-                            <option value="mixed">Misto</option>
-                        </select>
-                    </div>
-                    <div style="min-width: 150px;">
-                        <select class="form-input" id="instructorStatusFilter" onchange="filterInstructorsList()">
-                            <option value="">Todos os status</option>
-                            <option value="available">Disponível</option>
-                            <option value="busy">Ocupado</option>
-                            <option value="vacation">Férias</option>
-                        </select>
-                    </div>
+                <div class="modal-controls">
+                    <input class="form-input modal-search-input" id="instructorSearchInput"
+                        onkeyup="filterInstructorsList()" placeholder="Buscar por nome, CPF ou especialidade..."
+                        type="text" />
+                    <select class="form-input modal-filter-select" id="instructorSpecialtyFilter"
+                        onchange="filterInstructorsList()">
+                        <option value="">Todas as especialidades</option>
+                        <option value="theoretical">Teórica</option>
+                        <option value="practical">Prática</option>
+                        <option value="mixed">Misto</option>
+                    </select>
+                    <select class="form-input modal-filter-select" id="instructorStatusFilter"
+                        onchange="filterInstructorsList()">
+                        <option value="">Todos os status</option>
+                        <option value="available">Disponível</option>
+                        <option value="busy">Ocupado</option>
+                        <option value="vacation">Férias</option>
+                    </select>
                 </div>
                 <!-- Instructors List Container -->
-                <div id="instructorsListContainer"
-                    style="max-height: 500px; overflow-y: auto; border: 1px solid var(--border-color, #e0e0e0); border-radius: 8px;">
-                    <div style="padding: 20px; text-align: center;">
-                        <i class="fas fa-spinner fa-spin"
-                            style="font-size: 24px; color: var(--primary-color, #007bff);"></i>
-                        <p style="margin-top: 10px;">Carregando lista de instrutores...</p>
+                <div id="instructorsListContainer" class="modal-list-container">
+                    <div class="modal-loading">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Carregando lista de instrutores...</p>
                     </div>
                 </div>
-                <!-- Action Buttons -->
-                <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
-                    <button class="btn btn-secondary" onclick="exportInstructorsList()" type="button">
-                        <i class="fas fa-download"></i>
-                        Exportar Lista
-                    </button>
-                    <button class="btn btn-primary"
-                        onclick="openInstructorModal(); closeModal('viewAllInstructorsModal')" type="button">
-                        <i class="fas fa-plus"></i>
-                        Adicionar Instrutor
-                    </button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="exportInstructorsList()" type="button">
+                    <i class="fas fa-download"></i>
+                    Exportar Lista
+                </button>
+                <button class="btn btn-primary" onclick="openInstructorModal(); closeModal('viewAllInstructorsModal')"
+                    type="button">
+                    <i class="fas fa-plus"></i>
+                    Adicionar Instrutor
+                </button>
             </div>
         </div>
     </div>
     <!-- View All Vehicles Modal -->
-    <div class="modal" id="viewAllVehiclesModal">
-        <div class="modal-content" style="max-width: 1400px; width: 95vw; height: 90vh;">
+    <div class="modal-overlay modal-large" id="viewAllVehiclesModal">
+        <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">Lista Completa de Veículos</h3>
+                <h3>
+                    <i class="fas fa-car-alt"></i>
+                    Lista Completa de Veículos
+                </h3>
                 <button aria-label="Fechar" class="modal-close" onclick="closeModal('viewAllVehiclesModal')">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div style="padding: 20px;">
-                <div style="display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;">
-                    <div style="flex: 1; min-width: 250px;">
-                        <input class="form-input" id="vehicleSearchInput" onkeyup="filterVehiclesList()"
-                            placeholder="Buscar por placa, modelo ou marca..." type="text" />
-                    </div>
-                    <div style="min-width: 150px;">
-                        <select class="form-input" id="vehicleStatusFilter" onchange="filterVehiclesList()">
-                            <option value="">Todos os status</option>
-                            <option value="available">Disponível</option>
-                            <option value="in-use">Em uso</option>
-                            <option value="maintenance">Manutenção</option>
-                        </select>
-                    </div>
-                    <div style="min-width: 150px;">
-                        <select class="form-input" id="vehicleTypeFilter" onchange="filterVehiclesList()">
-                            <option value="">Todos os tipos</option>
-                            <option value="car">Carro</option>
-                            <option value="motorcycle">Moto</option>
-                        </select>
+            <div class="modal-body">
+                <div class="modal-controls">
+                    <input class="form-input modal-search-input" id="vehicleSearchInput" onkeyup="filterVehiclesList()"
+                        placeholder="Buscar por placa, modelo ou marca..." type="text" />
+                    <select class="form-input modal-filter-select" id="vehicleStatusFilter"
+                        onchange="filterVehiclesList()">
+                        <option value="">Todos os status</option>
+                        <option value="available">Disponível</option>
+                        <option value="in-use">Em uso</option>
+                        <option value="maintenance">Manutenção</option>
+                    </select>
+                    <select class="form-input modal-filter-select" id="vehicleTypeFilter"
+                        onchange="filterVehiclesList()">
+                        <option value="">Todos os tipos</option>
+                        <option value="car">Carro</option>
+                        <option value="motorcycle">Moto</option>
+                    </select>
+                </div>
+                <div id="vehiclesListContainer" class="modal-list-container">
+                    <div class="modal-loading">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Carregando lista de veículos...</p>
                     </div>
                 </div>
-                <div id="vehiclesListContainer"
-                    style="max-height: 500px; overflow-y: auto; border: 1px solid var(--border-color, #e0e0e0); border-radius: 8px;">
-                    <div style="padding: 20px; text-align: center;">
-                        <i class="fas fa-spinner fa-spin"
-                            style="font-size: 24px; color: var(--primary-color, #007bff);"></i>
-                        <p style="margin-top: 10px;">Carregando lista de veículos...</p>
-                    </div>
-                </div>
-                <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
-                    <button class="btn btn-secondary" onclick="exportVehiclesList()" type="button">
-                        <i class="fas fa-download"></i>
-                        Exportar Lista
-                    </button>
-                    <button class="btn btn-primary" onclick="openVehicleModal(); closeModal('viewAllVehiclesModal')"
-                        type="button">
-                        <i class="fas fa-plus"></i>
-                        Adicionar Veículo
-                    </button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="exportVehiclesList()" type="button">
+                    <i class="fas fa-download"></i>
+                    Exportar Lista
+                </button>
+                <button class="btn btn-primary" onclick="openVehicleModal(); closeModal('viewAllVehiclesModal')"
+                    type="button">
+                    <i class="fas fa-plus"></i>
+                    Adicionar Veículo
+                </button>
             </div>
         </div>
     </div>
@@ -6941,21 +6934,19 @@
         </div>
     </div>
 
-    <!-- Modal de Logout Elegante -->
-    <div id="logoutModal" class="logout-modal">
-        <div class="logout-modal-content">
-            <div class="logout-modal-header">
-                <div class="logout-modal-icon">
+    <!-- Modal de Logout -->
+    <div class="modal-overlay" id="logoutModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>
                     <i class="fas fa-sign-out-alt"></i>
-                </div>
-                <h3 class="logout-modal-title">Confirmar Saída</h3>
-                <p class="logout-modal-subtitle">Você está prestes a sair do sistema</p>
+                    Confirmar Saída
+                </h3>
             </div>
-            <div class="logout-modal-body">
+            <div class="modal-body">
                 <p class="logout-modal-message">
                     Tem certeza que deseja encerrar sua sessão?
                 </p>
-
                 <div class="logout-modal-user-info">
                     <div class="logout-user-avatar">
                         <span id="logoutUserInitials">U</span>
@@ -6965,17 +6956,16 @@
                         <div class="logout-user-email" id="logoutUserEmail">{{ user_email }}</div>
                     </div>
                 </div>
-
-                <div class="logout-modal-actions">
-                    <button class="logout-btn-cancel" id="logoutCancel">
-                        <i class="fas fa-times"></i>
-                        Cancelar
-                    </button>
-                    <button class="logout-btn-confirm" id="logoutConfirm">
-                        <i class="fas fa-sign-out-alt"></i>
-                        Sair
-                    </button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="logoutCancel">
+                    <i class="fas fa-times"></i>
+                    Cancelar
+                </button>
+                <button class="btn btn-danger" id="logoutConfirm">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Sair
+                </button>
             </div>
         </div>
     </div>
