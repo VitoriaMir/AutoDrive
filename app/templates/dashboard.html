@@ -929,20 +929,20 @@
             <div class="section-content">
                 <!-- Students Overview Cards -->
                 <div class="students-overview">
-                    <div class="student-card active-card">
-                        <div class="student-card-header">
-                            <div class="student-card-icon active">
+                    <div class="overview-card active-card">
+                        <div class="overview-card-header">
+                            <div class="overview-card-icon active">
                                 <i class="fas fa-user-graduate"></i>
                             </div>
-                            <div class="student-card-info">
-                                <h3 class="student-card-title">Alunos Ativos</h3>
-                                <p class="student-card-subtitle">Total matriculados</p>
+                            <div class="overview-card-info">
+                                <h3 class="overview-card-title">Alunos Ativos</h3>
+                                <p class="overview-card-subtitle">Total matriculados</p>
                             </div>
                         </div>
-                        <div class="student-card-content">
-                            <div class="student-value">142</div>
-                            <div class="student-subtitle">Alunos matriculados</div>
-                            <div class="student-stats">
+                        <div class="overview-card-content">
+                            <div class="overview-value">142</div>
+                            <div class="overview-subtitle">Alunos matriculados</div>
+                            <div class="overview-stats">
                                 <div class="stat-item">
                                     <div class="stat-label">
                                         <i class="fas fa-calendar-plus"></i>
@@ -963,19 +963,19 @@
                             </div>
                         </div>
                     </div>
-                    <div class="student-card progress-card">
-                        <div class="student-card-header">
-                            <div class="student-card-icon progress">
+                    <div class="overview-card progress-card">
+                        <div class="overview-card-header">
+                            <div class="overview-card-icon progress">
                                 <i class="fas fa-chart-line"></i>
                             </div>
-                            <div class="student-card-info">
-                                <h3 class="student-card-title">Progresso Médio</h3>
-                                <p class="student-card-subtitle">Aulas completadas</p>
+                            <div class="overview-card-info">
+                                <h3 class="overview-card-title">Progresso Médio</h3>
+                                <p class="overview-card-subtitle">Aulas completadas</p>
                             </div>
                         </div>
-                        <div class="student-card-content">
-                            <div class="student-value">72%</div>
-                            <div class="student-subtitle">Taxa de conclusão</div>
+                        <div class="overview-card-content">
+                            <div class="overview-value">72%</div>
+                            <div class="overview-subtitle">Taxa de conclusão</div>
                             <div class="progress-breakdown">
                                 <div class="breakdown-item">
                                     <div class="breakdown-label">
@@ -1001,19 +1001,19 @@
                         </div>
                     </div>
                     {% if user_role != 'instructor' %}
-                    <div class="student-card payment-card">
-                        <div class="student-card-header">
-                            <div class="student-card-icon payment">
+                    <div class="overview-card payment-card">
+                        <div class="overview-card-header">
+                            <div class="overview-card-icon payment">
                                 <i class="fas fa-credit-card"></i>
                             </div>
-                            <div class="student-card-info">
-                                <h3 class="student-card-title">Status Financeiro</h3>
-                                <p class="student-card-subtitle">Pagamentos</p>
+                            <div class="overview-card-info">
+                                <h3 class="overview-card-title">Status Financeiro</h3>
+                                <p class="overview-card-subtitle">Pagamentos</p>
                             </div>
                         </div>
-                        <div class="student-card-content">
-                            <div class="student-value">85%</div>
-                            <div class="student-subtitle">Pagamentos em dia</div>
+                        <div class="overview-card-content">
+                            <div class="overview-value">85%</div>
+                            <div class="overview-subtitle">Pagamentos em dia</div>
                             <div class="payment-stats">
                                 <div class="payment-item">
                                     <div class="payment-status paid">
@@ -1039,19 +1039,19 @@
                         </div>
                     </div>
                     {% endif %}
-                    <div class="student-card performance-card">
-                        <div class="student-card-header">
-                            <div class="student-card-icon performance">
+                    <div class="overview-card performance-card">
+                        <div class="overview-card-header">
+                            <div class="overview-card-icon performance">
                                 <i class="fas fa-trophy"></i>
                             </div>
-                            <div class="student-card-info">
-                                <h3 class="student-card-title">Performance</h3>
-                                <p class="student-card-subtitle">Taxa de aprovação</p>
+                            <div class="overview-card-info">
+                                <h3 class="overview-card-title">Performance</h3>
+                                <p class="overview-card-subtitle">Taxa de aprovação</p>
                             </div>
                         </div>
-                        <div class="student-card-content">
-                            <div class="student-value">89%</div>
-                            <div class="student-subtitle">Aprovação nos exames</div>
+                        <div class="overview-card-content">
+                            <div class="overview-value">89%</div>
+                            <div class="overview-subtitle">Aprovação nos exames</div>
                             <div class="performance-details">
                                 <div class="detail-row">
                                     <span class="detail-label">Melhor categoria:</span>
@@ -1498,17 +1498,17 @@
             <div class="section-content">
                 <!-- Instructors Overview Cards -->
                 <div class="instructors-overview">
-                    <div class="instructor-card active-card">
-                        <div class="instructor-card-header">
-                            <div class="instructor-card-icon active">
+                    <div class="overview-card active-card">
+                        <div class="overview-card-header">
+                            <div class="overview-card-icon active">
                                 <i class="fas fa-users"></i>
                             </div>
-                            <div class="instructor-card-info">
-                                <h3 class="instructor-card-title">Instrutores Ativos</h3>
-                                <p class="instructor-card-subtitle">Equipe disponível</p>
+                            <div class="overview-card-info">
+                                <h3 class="overview-card-title">Instrutores Ativos</h3>
+                                <p class="overview-card-subtitle">Equipe disponível</p>
                             </div>
                         </div>
-                        <div class="instructor-card-content">
+                        <div class="overview-card-content">
                             <div class="instructor-value">8</div>
                             <div class="instructor-subtitle">Instrutores cadastrados</div>
                             <div class="instructor-stats">
@@ -1532,17 +1532,17 @@
                             </div>
                         </div>
                     </div>
-                    <div class="instructor-card performance-card">
-                        <div class="instructor-card-header">
-                            <div class="instructor-card-icon performance">
+                    <div class="overview-card performance-card">
+                        <div class="overview-card-header">
+                            <div class="overview-card-icon performance">
                                 <i class="fas fa-graduation-cap"></i>
                             </div>
-                            <div class="instructor-card-info">
-                                <h3 class="instructor-card-title">Aulas Ministradas</h3>
-                                <p class="instructor-card-subtitle">Este mês</p>
+                            <div class="overview-card-info">
+                                <h3 class="overview-card-title">Aulas Ministradas</h3>
+                                <p class="overview-card-subtitle">Este mês</p>
                             </div>
                         </div>
-                        <div class="instructor-card-content">
+                        <div class="overview-card-content">
                             <div class="instructor-value">124</div>
                             <div class="instructor-subtitle">Total de aulas</div>
                             <div class="performance-breakdown">
@@ -1573,17 +1573,17 @@
                             </div>
                         </div>
                     </div>
-                    <div class="instructor-card rating-card">
-                        <div class="instructor-card-header">
-                            <div class="instructor-card-icon rating">
+                    <div class="overview-card rating-card">
+                        <div class="overview-card-header">
+                            <div class="overview-card-icon rating">
                                 <i class="fas fa-star"></i>
                             </div>
-                            <div class="instructor-card-info">
-                                <h3 class="instructor-card-title">Avaliações</h3>
-                                <p class="instructor-card-subtitle">Média geral</p>
+                            <div class="overview-card-info">
+                                <h3 class="overview-card-title">Avaliações</h3>
+                                <p class="overview-card-subtitle">Média geral</p>
                             </div>
                         </div>
-                        <div class="instructor-card-content">
+                        <div class="overview-card-content">
                             <div class="instructor-value">4.7</div>
                             <div class="instructor-subtitle">de 5.0 estrelas</div>
                             <div class="rating-stats">
@@ -1617,17 +1617,17 @@
                             </div>
                         </div>
                     </div>
-                    <div class="instructor-card schedule-card">
-                        <div class="instructor-card-header">
-                            <div class="instructor-card-icon schedule">
+                    <div class="overview-card overview-card">
+                        <div class="overview-card-header">
+                            <div class="overview-card-icon schedule">
                                 <i class="fas fa-calendar-alt"></i>
                             </div>
-                            <div class="instructor-card-info">
-                                <h3 class="instructor-card-title">Agenda Hoje</h3>
-                                <p class="instructor-card-subtitle">Distribuição de aulas</p>
+                            <div class="overview-card-info">
+                                <h3 class="overview-card-title">Agenda Hoje</h3>
+                                <p class="overview-card-subtitle">Distribuição de aulas</p>
                             </div>
                         </div>
-                        <div class="instructor-card-content">
+                        <div class="overview-card-content">
                             <div class="instructor-value">18</div>
                             <div class="instructor-subtitle">Aulas agendadas</div>
                             <div class="schedule-distribution">
@@ -2151,20 +2151,20 @@
             <div class="section-content">
                 <!-- Vehicles Overview Cards -->
                 <div class="vehicles-overview">
-                    <div class="vehicle-card fleet-card">
-                        <div class="vehicle-card-header">
-                            <div class="vehicle-card-icon fleet">
+                    <div class="overview-card fleet-card">
+                        <div class="overview-card-header">
+                            <div class="overview-card-icon fleet">
                                 <i class="fas fa-car"></i>
                             </div>
-                            <div class="vehicle-card-info">
-                                <h3 class="vehicle-card-title">Frota Total</h3>
-                                <p class="vehicle-card-subtitle">Veículos cadastrados</p>
+                            <div class="overview-card-info">
+                                <h3 class="overview-card-title">Frota Total</h3>
+                                <p class="overview-card-subtitle">Veículos cadastrados</p>
                             </div>
                         </div>
-                        <div class="vehicle-card-content">
-                            <div class="vehicle-value">12</div>
-                            <div class="vehicle-subtitle">Veículos na frota</div>
-                            <div class="vehicle-stats">
+                        <div class="overview-card-content">
+                            <div class="overview-value">12</div>
+                            <div class="overview-subtitle">Veículos na frota</div>
+                            <div class="overview-stats">
                                 <div class="stat-item">
                                     <span class="stat-label">Disponíveis:</span>
                                     <span class="stat-value available">8</span>
@@ -2179,19 +2179,19 @@
                             </div>
                         </div>
                     </div>
-                    <div class="vehicle-card maintenance-card">
-                        <div class="vehicle-card-header">
-                            <div class="vehicle-card-icon maintenance">
+                    <div class="overview-card maintenance-card">
+                        <div class="overview-card-header">
+                            <div class="overview-card-icon maintenance">
                                 <i class="fas fa-tools"></i>
                             </div>
-                            <div class="vehicle-card-info">
-                                <h3 class="vehicle-card-title">Manutenção</h3>
-                                <p class="vehicle-card-subtitle">Status dos veículos</p>
+                            <div class="overview-card-info">
+                                <h3 class="overview-card-title">Manutenção</h3>
+                                <p class="overview-card-subtitle">Status dos veículos</p>
                             </div>
                         </div>
-                        <div class="vehicle-card-content">
-                            <div class="vehicle-value">2</div>
-                            <div class="vehicle-subtitle">Em manutenção</div>
+                        <div class="overview-card-content">
+                            <div class="overview-value">2</div>
+                            <div class="overview-subtitle">Em manutenção</div>
                             <div class="maintenance-breakdown">
                                 <div class="breakdown-item">
                                     <span class="breakdown-label">Preventiva:</span>
@@ -2208,19 +2208,19 @@
                             </div>
                         </div>
                     </div>
-                    <div class="vehicle-card consumption-card">
-                        <div class="vehicle-card-header">
-                            <div class="vehicle-card-icon consumption">
+                    <div class="overview-card consumption-card">
+                        <div class="overview-card-header">
+                            <div class="overview-card-icon consumption">
                                 <i class="fas fa-gas-pump"></i>
                             </div>
-                            <div class="vehicle-card-info">
-                                <h3 class="vehicle-card-title">Consumo</h3>
-                                <p class="vehicle-card-subtitle">Eficiência da frota</p>
+                            <div class="overview-card-info">
+                                <h3 class="overview-card-title">Consumo</h3>
+                                <p class="overview-card-subtitle">Eficiência da frota</p>
                             </div>
                         </div>
-                        <div class="vehicle-card-content">
-                            <div class="vehicle-value">10.5</div>
-                            <div class="vehicle-subtitle">km/L média</div>
+                        <div class="overview-card-content">
+                            <div class="overview-value">10.5</div>
+                            <div class="overview-subtitle">km/L média</div>
                             <div class="consumption-stats">
                                 <div class="consumption-item best">
                                     <span class="consumption-label">Melhor:</span>
@@ -2237,19 +2237,19 @@
                             </div>
                         </div>
                     </div>
-                    <div class="vehicle-card performance-card">
-                        <div class="vehicle-card-header">
-                            <div class="vehicle-card-icon performance">
+                    <div class="overview-card performance-card">
+                        <div class="overview-card-header">
+                            <div class="overview-card-icon performance">
                                 <i class="fas fa-chart-line"></i>
                             </div>
-                            <div class="vehicle-card-info">
-                                <h3 class="vehicle-card-title">Performance</h3>
-                                <p class="vehicle-card-subtitle">Utilização mensal</p>
+                            <div class="overview-card-info">
+                                <h3 class="overview-card-title">Performance</h3>
+                                <p class="overview-card-subtitle">Utilização mensal</p>
                             </div>
                         </div>
-                        <div class="vehicle-card-content">
-                            <div class="vehicle-value">89%</div>
-                            <div class="vehicle-subtitle">Taxa de utilização</div>
+                        <div class="overview-card-content">
+                            <div class="overview-value">89%</div>
+                            <div class="overview-subtitle">Taxa de utilização</div>
                             <div class="performance-details">
                                 <div class="detail-row">
                                     <span class="detail-label">Horas ativas:</span>
@@ -2759,17 +2759,17 @@
             <div class="section-content">
                 <!-- Schedule Overview Cards -->
                 <div class="schedule-overview">
-                    <div class="schedule-card today-card">
-                        <div class="schedule-card-header">
-                            <div class="schedule-card-icon today">
+                    <div class="overview-card today-card">
+                        <div class="overview-card-header">
+                            <div class="overview-card-icon today">
                                 <i class="fas fa-calendar-day"></i>
                             </div>
-                            <div class="schedule-card-info">
-                                <h3 class="schedule-card-title">Aulas Hoje</h3>
-                                <p class="schedule-card-subtitle">25 de Julho, 2025</p>
+                            <div class="overview-card-info">
+                                <h3 class="overview-card-title">Aulas Hoje</h3>
+                                <p class="overview-card-subtitle">25 de Julho, 2025</p>
                             </div>
                         </div>
-                        <div class="schedule-card-content">
+                        <div class="overview-card-content">
                             <div class="schedule-value">18</div>
                             <div class="schedule-subtitle">Aulas agendadas</div>
                             <div class="schedule-stats">
@@ -2787,17 +2787,17 @@
                             </div>
                         </div>
                     </div>
-                    <div class="schedule-card week-card">
-                        <div class="schedule-card-header">
-                            <div class="schedule-card-icon week">
+                    <div class="overview-card week-card">
+                        <div class="overview-card-header">
+                            <div class="overview-card-icon week">
                                 <i class="fas fa-calendar-week"></i>
                             </div>
-                            <div class="schedule-card-info">
-                                <h3 class="schedule-card-title">Esta Semana</h3>
-                                <p class="schedule-card-subtitle">21 - 27 Julho</p>
+                            <div class="overview-card-info">
+                                <h3 class="overview-card-title">Esta Semana</h3>
+                                <p class="overview-card-subtitle">21 - 27 Julho</p>
                             </div>
                         </div>
-                        <div class="schedule-card-content">
+                        <div class="overview-card-content">
                             <div class="schedule-value">96</div>
                             <div class="schedule-subtitle">Total de aulas</div>
                             <div class="week-breakdown">
@@ -2816,17 +2816,17 @@
                             </div>
                         </div>
                     </div>
-                    <div class="schedule-card instructors-card">
-                        <div class="schedule-card-header">
-                            <div class="schedule-card-icon instructors">
+                    <div class="overview-card instructors-card">
+                        <div class="overview-card-header">
+                            <div class="overview-card-icon instructors">
                                 <i class="fas fa-user-clock"></i>
                             </div>
-                            <div class="schedule-card-info">
-                                <h3 class="schedule-card-title">Instrutores Hoje</h3>
-                                <p class="schedule-card-subtitle">Distribuição de carga</p>
+                            <div class="overview-card-info">
+                                <h3 class="overview-card-title">Instrutores Hoje</h3>
+                                <p class="overview-card-subtitle">Distribuição de carga</p>
                             </div>
                         </div>
-                        <div class="schedule-card-content">
+                        <div class="overview-card-content">
                             <div class="schedule-value">6</div>
                             <div class="schedule-subtitle">Instrutores ativos</div>
                             <div class="instructors-distribution">
@@ -2854,17 +2854,17 @@
                             </div>
                         </div>
                     </div>
-                    <div class="schedule-card capacity-card">
-                        <div class="schedule-card-header">
-                            <div class="schedule-card-icon capacity">
+                    <div class="overview-card capacity-card">
+                        <div class="overview-card-header">
+                            <div class="overview-card-icon capacity">
                                 <i class="fas fa-chart-pie"></i>
                             </div>
-                            <div class="schedule-card-info">
-                                <h3 class="schedule-card-title">Capacidade</h3>
-                                <p class="schedule-card-subtitle">Utilização atual</p>
+                            <div class="overview-card-info">
+                                <h3 class="overview-card-title">Capacidade</h3>
+                                <p class="overview-card-subtitle">Utilização atual</p>
                             </div>
                         </div>
-                        <div class="schedule-card-content">
+                        <div class="overview-card-content">
                             <div class="schedule-value">78%</div>
                             <div class="schedule-subtitle">Ocupação média</div>
                             <div class="capacity-details">
@@ -3320,17 +3320,17 @@
             <div class="section-content">
                 <!-- Exams Overview Cards -->
                 <div class="exams-overview">
-                    <div class="exam-card theoretical-card">
-                        <div class="exam-card-header">
-                            <div class="exam-card-icon theoretical">
+                    <div class="overview-card theoretical-card">
+                        <div class="overview-card-header">
+                            <div class="overview-card-icon theoretical">
                                 <i class="fas fa-clipboard-list"></i>
                             </div>
-                            <div class="exam-card-info">
-                                <h3 class="exam-card-title">Exames Teóricos</h3>
-                                <p class="exam-card-subtitle">Este mês</p>
+                            <div class="overview-card-info">
+                                <h3 class="overview-card-title">Exames Teóricos</h3>
+                                <p class="overview-card-subtitle">Este mês</p>
                             </div>
                         </div>
-                        <div class="exam-card-content">
+                        <div class="overview-card-content">
                             <div class="exam-value">45</div>
                             <div class="exam-subtitle">Exames realizados</div>
                             <div class="exam-stats">
@@ -3354,17 +3354,17 @@
                             </div>
                         </div>
                     </div>
-                    <div class="exam-card practical-card">
-                        <div class="exam-card-header">
-                            <div class="exam-card-icon practical">
+                    <div class="overview-card practical-card">
+                        <div class="overview-card-header">
+                            <div class="overview-card-icon practical">
                                 <i class="fas fa-car"></i>
                             </div>
-                            <div class="exam-card-info">
-                                <h3 class="exam-card-title">Exames Práticos</h3>
-                                <p class="exam-card-subtitle">Este mês</p>
+                            <div class="overview-card-info">
+                                <h3 class="overview-card-title">Exames Práticos</h3>
+                                <p class="overview-card-subtitle">Este mês</p>
                             </div>
                         </div>
-                        <div class="exam-card-content">
+                        <div class="overview-card-content">
                             <div class="exam-value">38</div>
                             <div class="exam-subtitle">Exames realizados</div>
                             <div class="exam-stats">
@@ -3388,17 +3388,17 @@
                             </div>
                         </div>
                     </div>
-                    <div class="exam-card scheduled-card">
-                        <div class="exam-card-header">
-                            <div class="exam-card-icon scheduled">
+                    <div class="overview-card scheduled-card">
+                        <div class="overview-card-header">
+                            <div class="overview-card-icon scheduled">
                                 <i class="fas fa-calendar-check"></i>
                             </div>
-                            <div class="exam-card-info">
-                                <h3 class="exam-card-title">Próximos Exames</h3>
-                                <p class="exam-card-subtitle">Agendados</p>
+                            <div class="overview-card-info">
+                                <h3 class="overview-card-title">Próximos Exames</h3>
+                                <p class="overview-card-subtitle">Agendados</p>
                             </div>
                         </div>
-                        <div class="exam-card-content">
+                        <div class="overview-card-content">
                             <div class="exam-value">48</div>
                             <div class="exam-subtitle">Para o próximo mês</div>
                             <div class="upcoming-breakdown">
@@ -3426,17 +3426,17 @@
                             </div>
                         </div>
                     </div>
-                    <div class="exam-card performance-card">
-                        <div class="exam-card-header">
-                            <div class="exam-card-icon performance">
+                    <div class="overview-card performance-card">
+                        <div class="overview-card-header">
+                            <div class="overview-card-icon performance">
                                 <i class="fas fa-chart-line"></i>
                             </div>
-                            <div class="exam-card-info">
-                                <h3 class="exam-card-title">Performance Geral</h3>
-                                <p class="exam-card-subtitle">Últimos 6 meses</p>
+                            <div class="overview-card-info">
+                                <h3 class="overview-card-title">Performance Geral</h3>
+                                <p class="overview-card-subtitle">Últimos 6 meses</p>
                             </div>
                         </div>
-                        <div class="exam-card-content">
+                        <div class="overview-card-content">
                             <div class="exam-value">72%</div>
                             <div class="exam-subtitle">Taxa de aprovação média</div>
                             <div class="performance-trend">
@@ -3849,17 +3849,17 @@
             <div class="section-content">
                 <!-- Financial Overview Cards -->
                 <div class="finance-overview">
-                    <div class="finance-card revenue-card">
-                        <div class="finance-card-header">
-                            <div class="finance-card-icon revenue">
+                    <div class="overview-card revenue-card">
+                        <div class="overview-card-header">
+                            <div class="overview-card-icon revenue">
                                 <i class="fas fa-trending-up"></i>
                             </div>
-                            <div class="finance-card-info">
-                                <h3 class="finance-card-title">Receita Total</h3>
-                                <p class="finance-card-subtitle">Este mês</p>
+                            <div class="overview-card-info">
+                                <h3 class="overview-card-title">Receita Total</h3>
+                                <p class="overview-card-subtitle">Este mês</p>
                             </div>
                         </div>
-                        <div class="finance-card-content">
+                        <div class="overview-card-content">
                             <div class="finance-value">R$ 22.840,00</div>
                             <div class="finance-trend positive">
                                 <i class="fas fa-arrow-up"></i>
@@ -3873,17 +3873,17 @@
                             </div>
                         </div>
                     </div>
-                    <div class="finance-card expenses-card">
-                        <div class="finance-card-header">
-                            <div class="finance-card-icon expenses">
+                    <div class="overview-card expenses-card">
+                        <div class="overview-card-header">
+                            <div class="overview-card-icon expenses">
                                 <i class="fas fa-chart-pie"></i>
                             </div>
-                            <div class="finance-card-info">
-                                <h3 class="finance-card-title">Despesas</h3>
-                                <p class="finance-card-subtitle">Este mês</p>
+                            <div class="overview-card-info">
+                                <h3 class="overview-card-title">Despesas</h3>
+                                <p class="overview-card-subtitle">Este mês</p>
                             </div>
                         </div>
-                        <div class="finance-card-content">
+                        <div class="overview-card-content">
                             <div class="finance-value">R$ 10.860,00</div>
                             <div class="finance-trend neutral">
                                 <i class="fas fa-minus"></i>
@@ -3923,17 +3923,17 @@
                             </div>
                         </div>
                     </div>
-                    <div class="finance-card pending-card">
-                        <div class="finance-card-header">
-                            <div class="finance-card-icon pending">
+                    <div class="overview-card pending-card">
+                        <div class="overview-card-header">
+                            <div class="overview-card-icon pending">
                                 <i class="fas fa-clock"></i>
                             </div>
-                            <div class="finance-card-info">
-                                <h3 class="finance-card-title">Pendências</h3>
-                                <p class="finance-card-subtitle">A receber</p>
+                            <div class="overview-card-info">
+                                <h3 class="overview-card-title">Pendências</h3>
+                                <p class="overview-card-subtitle">A receber</p>
                             </div>
                         </div>
-                        <div class="finance-card-content">
+                        <div class="overview-card-content">
                             <div class="finance-value">R$ 4.650,00</div>
                             <div class="finance-trend warning">
                                 <i class="fas fa-exclamation-triangle"></i>
@@ -3951,17 +3951,17 @@
                             </div>
                         </div>
                     </div>
-                    <div class="finance-card profit-card">
-                        <div class="finance-card-header">
-                            <div class="finance-card-icon profit">
+                    <div class="overview-card profit-card">
+                        <div class="overview-card-header">
+                            <div class="overview-card-icon profit">
                                 <i class="fas fa-coins"></i>
                             </div>
-                            <div class="finance-card-info">
-                                <h3 class="finance-card-title">Lucro Líquido</h3>
-                                <p class="finance-card-subtitle">Este mês</p>
+                            <div class="overview-card-info">
+                                <h3 class="overview-card-title">Lucro Líquido</h3>
+                                <p class="overview-card-subtitle">Este mês</p>
                             </div>
                         </div>
-                        <div class="finance-card-content">
+                        <div class="overview-card-content">
                             <div class="finance-value">R$ 11.980,00</div>
                             <div class="finance-trend positive">
                                 <i class="fas fa-arrow-up"></i>
