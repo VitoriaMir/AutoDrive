@@ -1,3 +1,14 @@
+.progress-bar {
+  height: 8px;
+  background: transparent;
+  border-radius: 4px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.progress-fill {
+  min-height: 8px;
+}
 /* Special Cyan Card Style for Pendências e Consumo */
 .overview-card.cyan-card::before {
   background: linear-gradient(90deg, #06b6d4, #38bdf8);
@@ -256,6 +267,11 @@
 }
 /* Variáveis CSS - Reorganizadas e agrupadas */
 :root {
+  --progress-green: #10b981;
+  --progress-green-dark: #059669;
+  --accent-color: #fbbf24;
+  --primary-color: #2196f3;
+  --secondary-color: #64b5f6;
   /* Cores */
   --primary: #4361ee;
   --secondary: #3f37c9;
@@ -3924,7 +3940,11 @@ body {
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #10b981, #059669);
+  background: linear-gradient(
+    90deg,
+    var(--progress-green),
+    var(--progress-green-dark)
+  );
   border-radius: 3px;
   transition: width 0.3s ease;
 }
