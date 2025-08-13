@@ -2824,9 +2824,18 @@ body {
 }
 
 .specialty-details {
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  position: absolute;
+  top: -10px;
+  right: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  opacity: 0;
+  transition: var(--transition);
+  background: rgba(0, 0, 0, 0.4);
+  padding: 8px 12px;
+  border-radius: 8px;
+  min-width: 140px;
 }
 
 .specialty-icon.exam {
@@ -7234,7 +7243,7 @@ body {
   gap: 4px;
   opacity: 0;
   transition: var(--transition);
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.4);
   padding: 8px 12px;
   border-radius: 8px;
   min-width: 140px;
@@ -9976,11 +9985,16 @@ body {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 12px;
   transition: var(--transition);
+  position: relative;
 }
 
 .specialty-item:hover {
   background: rgba(255, 255, 255, 0.1);
   transform: translateX(5px);
+}
+
+.specialty-item:hover .specialty-details {
+  opacity: 1;
 }
 
 .specialty-icon {
@@ -10704,7 +10718,7 @@ body {
 .template-card {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 2px solid rgb(0 0 0 / 50%);
   border-radius: 16px;
   padding: 1.5rem;
   transition: all 0.3s ease;
@@ -10831,7 +10845,7 @@ body {
 .report-item {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 2px solid rgb(0 0 0 / 50%);
   border-radius: 12px;
   padding: 1.5rem;
   display: flex;
@@ -10844,7 +10858,7 @@ body {
 .report-item:hover {
   transform: translateX(5px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-  border-color: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
 .report-status-indicator {
@@ -14422,4 +14436,14 @@ body {
   background: #f8fafc;
   border: 1px solid #cbd5e1;
   color: #374151;
+}
+
+[data-theme="light"] .insights-grid .insight-card {
+  background: linear-gradient(135deg, #fef7cd, #fef3c7);
+  border: 1px solid #fde68a;
+}
+
+[data-theme="light"] .insights-grid .insight-card:hover {
+  background: linear-gradient(135deg, #fde68a, #fcd34d);
+  border-color: #f59e0b;
 }
