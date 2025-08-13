@@ -1,3 +1,76 @@
+/* Popup de seleção de tipo de gráfico - Chart Type Popup */
+.chart-type-popup {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 40px;
+  z-index: 9999;
+  background: #222; /* Força fundo escuro para contraste */
+  border: 1px solid #2196f3; /* Azul para destaque */
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18),
+    0 1.5px 8px rgba(33, 150, 243, 0.08);
+  min-width: 240px;
+  animation: chartTypePopupFadeIn 0.25s cubic-bezier(0.4, 1.3, 0.6, 1) both;
+  overflow: hidden;
+}
+
+@keyframes chartTypePopupFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.chart-type-popup-title {
+  padding: 18px 24px 10px 24px;
+  font-weight: 700;
+  color: #fff;
+  font-size: 1.08rem;
+  letter-spacing: 0.01em;
+}
+
+.chart-type-popup-separator {
+  height: 1px;
+  background: var(--border-color, #eee);
+  margin: 0 18px 8px 18px;
+  border: none;
+}
+
+.chart-type-popup-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 10px 0;
+}
+
+.chart-type-option {
+  width: 100%;
+  text-align: left;
+  padding: 12px 24px 12px 24px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-radius: 8px;
+  transition: background 0.18s, color 0.18s;
+}
+.chart-type-option:hover,
+.chart-type-option.active {
+  background: #2196f3;
+  color: #fff;
+}
+.chart-type-option i {
+  font-size: 1.1em;
+  opacity: 0.85;
+}
 .progress-bar {
   height: 8px;
   background: transparent;

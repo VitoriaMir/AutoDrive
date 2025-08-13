@@ -483,6 +483,52 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Initialize theme toggle
   initThemeToggle();
+
+  // === POPUP DE TIPO DE GRÁFICO (ALUNOS) ===
+  const chartTypeBtn = document.getElementById("chart-type-btn");
+  const chartTypePopup = document.getElementById("chart-type-popup");
+  let popupOpen = false;
+
+  if (chartTypeBtn && chartTypePopup) {
+    chartTypeBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      chartTypePopup.style.display = popupOpen ? "none" : "block";
+      popupOpen = !popupOpen;
+    });
+
+    // Fecha popup ao clicar fora
+    document.addEventListener("click", function (e) {
+      if (
+        popupOpen &&
+        !chartTypePopup.contains(e.target) &&
+        e.target !== chartTypeBtn
+      ) {
+        chartTypePopup.style.display = "none";
+        popupOpen = false;
+      }
+    });
+
+    // Troca o tipo do gráfico ao clicar em uma opção
+    chartTypePopup
+      .querySelectorAll(".chart-type-option")
+      .forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          const type = btn.getAttribute("data-type");
+          if (window.studentsChart) {
+            window.studentsChart.config.type = type;
+            window.studentsChart.update();
+          }
+          chartTypePopup.style.display = "none";
+          popupOpen = false;
+          if (typeof showNotification === "function") {
+            showNotification(
+              `Tipo de gráfico alterado para: ${btn.textContent.trim()}`,
+              "success"
+            );
+          }
+        });
+      });
+  }
 });
 
 // Theme Toggle Functionality
@@ -648,6 +694,8 @@ function initStudentsChart() {
   if (studentsCtx) {
     // Clear any existing chart
     studentsChart = destroyChart(studentsChart);
+    // Garantir que o gráfico fique acessível globalmente
+    window.studentsChart = null;
 
     const studentsData = {
       6: {
@@ -860,6 +908,8 @@ function initStudentsChart() {
         },
       },
     });
+    // Garantir que o gráfico fique acessível globalmente
+    window.studentsChart = studentsChart;
 
     console.log("Students progress chart initialized successfully");
   } else {
@@ -3052,38 +3102,50 @@ document.getElementById("userNotes").addEventListener("input", function (e) {
 });
 
 // Formatação automática do CPF
-document.getElementById("userCpf").addEventListener("input", function (e) {
-  let value = e.target.value.replace(/\D/g, "");
-  if (value.length <= 11) {
-    value = value.replace(/(\d{3})(\d)/, "$1.$2");
-    value = value.replace(/(\d{3})(\d)/, "$1.$2");
-    value = value.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
-    e.target.value = value;
-  }
-});
+const cpfInput = document.getElementById("userCpf");
+if (cpfInput) {
+  cpfInput.addEventListener("input", function (e) {
+    let value = e.target.value.replace(/\D/g, "");
+    if (value.length <= 11) {
+      value = value.replace(/(\d{3})(\d)/, "$1.$2");
+      value = value.replace(/(\d{3})(\d)/, "$1.$2");
+      value = value.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+      e.target.value = value;
+    }
+  });
+}
 
-// Formatação automática do telefone
-document.getElementById("userPhone").addEventListener("input", function (e) {
-  let value = e.target.value.replace(/\D/g, "");
-  if (value.length <= 11) {
-    value = value.replace(/(\d{2})(\d)/, "($1) $2");
-    value = value.replace(/(\d)(\d{4})$/, "$1-$2");
-    e.target.value = value;
-  }
-});
+const phoneInput = document.getElementById("userPhone");
+if (phoneInput) {
+  phoneInput.addEventListener("input", function (e) {
+    let value = e.target.value.replace(/\D/g, "");
+    if (value.length <= 11) {
+      value = value.replace(/(\d{2})(\d)/, "($1) $2");
+      value = value.replace(/(\d)(\d{4})$/, "$1-$2");
+      e.target.value = value;
+    }
+  });
+}
 
-document.getElementById("scheduleForm").addEventListener("submit", (e) => {
-  e.preventDefault();
-  showNotification("Aula agendada com sucesso!", "success");
-  closeModal("scheduleModal");
-  e.target.reset();
-});
-document.getElementById("paymentForm").addEventListener("submit", (e) => {
-  e.preventDefault();
-  showNotification("Pagamento registrado com sucesso!", "success");
-  closeModal("paymentModal");
-  e.target.reset();
-});
+const scheduleForm = document.getElementById("scheduleForm");
+if (scheduleForm) {
+  scheduleForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    showNotification("Aula agendada com sucesso!", "success");
+    closeModal("scheduleModal");
+    e.target.reset();
+  });
+}
+
+const paymentForm = document.getElementById("paymentForm");
+if (paymentForm) {
+  paymentForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    showNotification("Pagamento registrado com sucesso!", "success");
+    closeModal("paymentModal");
+    e.target.reset();
+  });
+}
 // Utility functions
 function generateReport(type) {
   showNotification(`Gerando relatório de ${type}...`, "info");
@@ -8521,10 +8583,13 @@ function openFullSchedule() {
 }
 
 function addNewLesson() {
+  // Garantir que a função esteja disponível globalmente para o onclick do HTML
+  window.addNewLesson = addNewLesson;
   showNotification("Abrindo formulário de nova aula...", "info");
-  // Here you would open the lesson creation modal
+  console.log("[DEBUG] addNewLesson chamado");
   setTimeout(() => {
-    openModal("scheduleModal");
+    console.log("[DEBUG] Chamando openScheduleLessonModal");
+    openScheduleLessonModal();
   }, 500);
 }
 
@@ -9015,10 +9080,16 @@ console.log("AutoDrive Dashboard v2.1.0 - Sistema carregado com sucesso!");
 
 // Função para abrir modal de agendamento
 function openScheduleLessonModal() {
+  // Garantir que a função esteja disponível globalmente para o onclick do HTML
+  window.openScheduleLessonModal = openScheduleLessonModal;
+  console.log("[DEBUG] openScheduleLessonModal chamado");
   const modal = document.getElementById("scheduleLessonModal");
   if (modal) {
     modal.classList.add("show");
     document.body.style.overflow = "hidden";
+    console.log("[DEBUG] Modal encontrado e classe 'show' adicionada");
+  } else {
+    console.error("[DEBUG] scheduleLessonModal NÃO encontrado no DOM");
   }
 
   // Definir data mínima como hoje

@@ -577,9 +577,27 @@
                                 <button aria-label="Atualizar gráfico" class="card-action" id="refresh-students-chart">
                                     <i class="fas fa-sync"></i>
                                 </button>
-                                <button aria-label="Configurações" class="card-action">
+                                <button aria-label="Configurações" class="card-action" id="chart-type-btn"
+                                    type="button">
                                     <i class="fas fa-cog"></i>
                                 </button>
+                                <!-- Popup de seleção de tipo de gráfico -->
+                                <div id="chart-type-popup" class="chart-type-popup">
+                                    <div class="chart-type-popup-title">Escolha o tipo de gráfico</div>
+                                    <hr class="chart-type-popup-separator" />
+                                    <ul class="chart-type-popup-list">
+                                        <li><button class="chart-type-option" data-type="bar"><i
+                                                    class="fas fa-chart-bar"></i>Barra</button></li>
+                                        <li><button class="chart-type-option" data-type="line"><i
+                                                    class="fas fa-chart-line"></i>Linha</button></li>
+                                        <li><button class="chart-type-option" data-type="pie"><i
+                                                    class="fas fa-chart-pie"></i>Pizza</button></li>
+                                        <li><button class="chart-type-option" data-type="doughnut"><i
+                                                    class="fas fa-circle-notch"></i>Rosca</button></li>
+                                        <li><button class="chart-type-option" data-type="radar"><i
+                                                    class="fas fa-bullseye"></i>Radar</button></li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                         <div class="chart-container">
@@ -699,10 +717,11 @@
                         <button aria-label="Alternar visualização" class="card-action" onclick="toggleWeekView()">
                             <i class="fas fa-th-list"></i>
                         </button>
-                        <button aria-label="Ver agenda completa" class="card-action" onclick="openFullSchedule()">
+                        <button aria-label="Ver agenda completa" class="card-action" onclick="viewAllLessons()">
                             <i class="fas fa-external-link-alt"></i>
                         </button>
-                        <button aria-label="Adicionar aula" class="card-action" onclick="addNewLesson()">
+                        <button aria-label="Adicionar aula" class="card-action"
+                            onclick="openScheduleLessonModal(); closeModal('viewAllLessonsModal')">
                             <i class="fas fa-plus"></i>
                         </button>
                     </div>
@@ -6443,7 +6462,7 @@
                         Exportar Lista
                     </button>
                     <button class="btn btn-primary"
-                        onclick="openModal('scheduleModal'); closeModal('viewAllLessonsModal')" type="button">
+                        onclick="openScheduleLessonModal(); closeModal('viewAllLessonsModal')" type="button">
                         <i class="fas fa-plus"></i>
                         Agendar Aula
                     </button>
