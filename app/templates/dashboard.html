@@ -442,8 +442,11 @@
                             <button aria-label="Exportar gráfico" class="card-action" id="export-chart">
                                 <i class="fas fa-download"></i>
                             </button>
-                            <button aria-label="Tela cheia" class="card-action" id="fullscreen-chart">
+                            <button aria-label="Tela cheia" class="card-action">
                                 <i class="fas fa-expand"></i>
+                            </button>
+                            <button aria-label="Tela normal" class="card-action">
+                                <i class="fas fa-compress"></i>
                             </button>
                         </div>
                     </div>
@@ -1097,18 +1100,19 @@
                                 Performance dos Alunos - Últimos 6 Meses
                             </div>
                             <div class="card-actions">
-                                <select class="chart-filter" id="students-period-filter"
-                                    onchange="updateStudentsChartPeriod()">
+                                <select class="chart-filter" id="period-filter">
                                     <option value="6">Últimos 6 meses</option>
                                     <option value="12">Último ano</option>
                                     <option value="24">Últimos 2 anos</option>
                                 </select>
-                                <button aria-label="Exportar gráfico" class="card-action"
-                                    onclick="exportStudentsChart()">
+                                <button aria-label="Exportar gráfico" class="card-action" id="export-chart">
                                     <i class="fas fa-download"></i>
                                 </button>
-                                <button aria-label="Tela cheia" class="card-action" onclick="fullscreenStudentsChart()">
+                                <button aria-label="Tela cheia" class="card-action">
                                     <i class="fas fa-expand"></i>
+                                </button>
+                                <button aria-label="Tela normal" class="card-action">
+                                    <i class="fas fa-compress"></i>
                                 </button>
                             </div>
                         </div>
@@ -1663,19 +1667,19 @@
                                 Performance dos Instrutores - Últimos 6 Meses
                             </div>
                             <div class="card-actions">
-                                <select class="chart-filter" id="instructors-period-filter"
-                                    onchange="updateInstructorsChartPeriod()">
+                                <select class="chart-filter" id="period-filter">
                                     <option value="6">Últimos 6 meses</option>
                                     <option value="12">Último ano</option>
                                     <option value="24">Últimos 2 anos</option>
                                 </select>
-                                <button aria-label="Exportar gráfico" class="card-action"
-                                    onclick="exportInstructorsChart()">
+                                <button aria-label="Exportar gráfico" class="card-action" id="export-chart">
                                     <i class="fas fa-download"></i>
                                 </button>
-                                <button aria-label="Tela cheia" class="card-action"
-                                    onclick="fullscreenInstructorsChart()">
+                                <button aria-label="Tela cheia" class="card-action">
                                     <i class="fas fa-expand"></i>
+                                </button>
+                                <button aria-label="Tela normal" class="card-action">
+                                    <i class="fas fa-compress"></i>
                                 </button>
                             </div>
                         </div>
@@ -2280,19 +2284,21 @@
                                 Utilização da Frota - Últimos 6 Meses
                             </div>
                             <div class="card-actions">
-                                <select class="chart-filter" id="vehicles-filter" onchange="updateVehiclesChart()">
+                                <select class="chart-filter" id="period-filter">
                                     <option value="all">Todos os veículos</option>
                                     <option value="available">Disponíveis</option>
                                     <option value="maintenance">Em manutenção</option>
                                     <option value="category-a">Categoria A</option>
                                     <option value="category-b">Categoria B</option>
                                 </select>
-                                <button aria-label="Exportar gráfico" class="card-action"
-                                    onclick="exportVehiclesChart()">
+                                <button aria-label="Exportar gráfico" class="card-action" id="export-chart">
                                     <i class="fas fa-download"></i>
                                 </button>
-                                <button aria-label="Tela cheia" class="card-action" onclick="fullscreenVehiclesChart()">
+                                <button aria-label="Tela cheia" class="card-action">
                                     <i class="fas fa-expand"></i>
+                                </button>
+                                <button aria-label="Tela normal" class="card-action">
+                                    <i class="fas fa-compress"></i>
                                 </button>
                             </div>
                         </div>
@@ -3478,16 +3484,19 @@
                                 Performance de Aprovação - Últimos 6 Meses
                             </div>
                             <div class="card-actions">
-                                <select class="chart-filter" id="exams-period-filter">
+                                <select class="chart-filter" id="period-filter">
                                     <option value="6">Últimos 6 meses</option>
                                     <option value="12">Último ano</option>
                                     <option value="24">Últimos 2 anos</option>
                                 </select>
-                                <button aria-label="Exportar gráfico" class="card-action" onclick="exportExamsChart()">
+                                <button aria-label="Exportar gráfico" class="card-action" id="export-chart">
                                     <i class="fas fa-download"></i>
                                 </button>
-                                <button aria-label="Tela cheia" class="card-action" onclick="fullscreenExamsChart()">
+                                <button aria-label="Tela cheia" class="card-action">
                                     <i class="fas fa-expand"></i>
+                                </button>
+                                <button aria-label="Tela normal" class="card-action">
+                                    <i class="fas fa-compress"></i>
                                 </button>
                             </div>
                         </div>
@@ -4006,17 +4015,19 @@
                                 Fluxo de Caixa - Últimos 6 Meses
                             </div>
                             <div class="card-actions">
-                                <select class="chart-filter">
+                                <select class="chart-filter" id="period-filter">
                                     <option value="6">Últimos 6 meses</option>
                                     <option value="12">Último ano</option>
                                     <option value="24">Últimos 2 anos</option>
                                 </select>
-                                <button aria-label="Exportar gráfico" class="card-action"
-                                    onclick="exportFinanceChart()">
+                                <button aria-label="Exportar gráfico" class="card-action" id="export-chart">
                                     <i class="fas fa-download"></i>
                                 </button>
-                                <button aria-label="Tela cheia" class="card-action" onclick="fullscreenFinanceChart()">
+                                <button aria-label="Tela cheia" class="card-action">
                                     <i class="fas fa-expand"></i>
+                                </button>
+                                <button aria-label="Tela normal" class="card-action">
+                                    <i class="fas fa-compress"></i>
                                 </button>
                             </div>
                         </div>

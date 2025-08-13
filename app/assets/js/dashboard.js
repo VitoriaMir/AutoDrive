@@ -1305,18 +1305,6 @@ function exportFinanceChart() {
   }
 }
 
-// Fullscreen finance chart
-function fullscreenFinanceChart() {
-  const chartContainer = document.querySelector(".finance-flow-chart");
-  if (chartContainer.requestFullscreen) {
-    chartContainer.requestFullscreen();
-  } else if (chartContainer.webkitRequestFullscreen) {
-    chartContainer.webkitRequestFullscreen();
-  } else if (chartContainer.msRequestFullscreen) {
-    chartContainer.msRequestFullscreen();
-  }
-}
-
 // Generate payment report
 function generatePaymentReport() {
   showNotification("Gerando relatório de métodos de pagamento...", "info");
@@ -2004,18 +1992,6 @@ function getFilterLabel(filter) {
     year: "Este Ano",
   };
   return labels[filter] || "Período selecionado";
-}
-
-// Fullscreen exams chart
-function fullscreenExamsChart() {
-  const chartContainer = document.querySelector(".exams-performance-chart");
-  if (chartContainer.requestFullscreen) {
-    chartContainer.requestFullscreen();
-  } else if (chartContainer.webkitRequestFullscreen) {
-    chartContainer.webkitRequestFullscreen();
-  } else if (chartContainer.msRequestFullscreen) {
-    chartContainer.msRequestFullscreen();
-  }
 }
 
 // View all exams
@@ -3478,28 +3454,6 @@ function exportStudentsChart() {
   }
 }
 
-function fullscreenStudentsChart() {
-  const chartContainer = document.querySelector(".students-performance-chart");
-  console.log("Attempting fullscreen for:", chartContainer);
-
-  if (chartContainer) {
-    if (chartContainer.requestFullscreen) {
-      chartContainer.requestFullscreen();
-    } else if (chartContainer.webkitRequestFullscreen) {
-      chartContainer.webkitRequestFullscreen();
-    } else if (chartContainer.msRequestFullscreen) {
-      chartContainer.msRequestFullscreen();
-    } else {
-      showNotification("Fullscreen não suportado neste navegador", "warning");
-      return;
-    }
-    showNotification("Gráfico em tela cheia. Pressione ESC para sair.", "info");
-  } else {
-    console.error("Chart container not found");
-    showNotification("Erro ao abrir em tela cheia", "error");
-  }
-}
-
 function viewAllStudents() {
   openModal("viewAllStudentsModal");
   loadAllStudentsData();
@@ -4230,15 +4184,6 @@ function exportInstructorsChart() {
   setTimeout(() => {
     showNotification("Gráfico exportado com sucesso!", "success");
   }, 1500);
-}
-
-function fullscreenInstructorsChart() {
-  const chartContainer = document.querySelector(
-    ".instructors-performance-chart"
-  );
-  if (chartContainer.requestFullscreen) {
-    chartContainer.requestFullscreen();
-  }
 }
 
 function viewAllInstructors() {
