@@ -7281,6 +7281,74 @@ body {
   background: linear-gradient(90deg, #4caf50, #81c784);
 }
 
+.growth-fill.performance {
+  background: linear-gradient(90deg, #a855f7, #c084fc);
+}
+
+.growth-fill.rating {
+  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+}
+
+.growth-fill.schedule {
+  background: linear-gradient(90deg, #fbbf24, #fcd34d);
+}
+
+.growth-fill.fleet {
+  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+}
+
+.growth-fill.maintenance {
+  background: linear-gradient(90deg, #ef4444, #f87171);
+}
+
+.growth-fill.consumption {
+  background: linear-gradient(90deg, #06b6d4, #22d3ee);
+}
+
+.growth-fill.today {
+  background: linear-gradient(90deg, #10b981, #34d399);
+}
+
+.growth-fill.week {
+  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+}
+
+.growth-fill.instructors {
+  background: linear-gradient(90deg, #f59e0b, #fbbf24);
+}
+
+.growth-fill.capacity {
+  background: linear-gradient(90deg, #8b5cf6, #a78bfa);
+}
+
+.growth-fill.theoretical {
+  background: linear-gradient(90deg, #4caf50, #81c784);
+}
+
+.growth-fill.practical {
+  background: linear-gradient(90deg, #fbbf24, #fcd34d);
+}
+
+.growth-fill.scheduled {
+  background: linear-gradient(90deg, #6366f1, #818cf8);
+}
+
+.growth-fill.revenue {
+  background: linear-gradient(90deg, #10b981, #34d399);
+}
+
+.growth-fill.expenses {
+  background: linear-gradient(90deg, #ef4444, #f87171);
+}
+
+.growth-fill.pending {
+  background: linear-gradient(90deg, #06b6d4, #22d3ee);
+}
+
+.growth-fill.profit {
+  background: linear-gradient(90deg, #fbbf24, #fcd34d);
+}
+
 .breakdown-fill.practical {
   background: linear-gradient(90deg, #2196f3, #64b5f6);
 }
