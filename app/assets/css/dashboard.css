@@ -1,17 +1,217 @@
+/* Special Cyan Card Style for Pendências e Consumo */
+.overview-card.cyan-card::before {
+  background: linear-gradient(90deg, #06b6d4, #38bdf8);
+}
+
+.overview-card.cyan-card {
+  background: linear-gradient(
+    135deg,
+    rgba(6, 182, 212, 0.1),
+    rgba(56, 189, 248, 0.05)
+  );
+  border: 1px solid rgba(6, 182, 212, 0.18);
+  position: relative;
+  overflow: hidden;
+}
+
+.overview-card.cyan-card .overview-card-header {
+  background: linear-gradient(
+    135deg,
+    rgba(6, 182, 212, 0.1),
+    rgba(56, 189, 248, 0.05)
+  );
+  border-radius: 12px;
+  margin-bottom: 16px;
+  padding: 20px;
+  position: relative;
+}
+
+.overview-card.cyan-card .overview-card-header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(6, 182, 212, 0.15),
+    rgba(56, 189, 248, 0.1)
+  );
+  border-radius: 12px;
+  z-index: -1;
+}
+
+.overview-card.cyan-card .overview-card-title {
+  color: #06b6d4;
+  font-weight: 700;
+  text-shadow: 0 1px 3px rgba(6, 182, 212, 0.25);
+}
+
+.overview-card.cyan-card .overview-card-subtitle {
+  color: rgba(6, 182, 212, 0.85);
+  font-weight: 500;
+}
+
+.overview-card.cyan-card .overview-value {
+  background: linear-gradient(135deg, #06b6d4, #38bdf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 48px;
+  font-weight: 800;
+  text-shadow: 0 2px 8px rgba(6, 182, 212, 0.18);
+}
+/* Danger Card Style (Red) */
+.overview-card.danger-card::before {
+  background: linear-gradient(90deg, #e63946, #ff6b6b);
+}
+
+.overview-card.danger-card {
+  background: linear-gradient(
+    135deg,
+    rgba(230, 57, 70, 0.1),
+    rgba(255, 107, 107, 0.05)
+  );
+  border: 1px solid rgba(230, 57, 70, 0.18);
+  position: relative;
+  overflow: hidden;
+}
+
+.overview-card.danger-card .overview-card-header {
+  background: linear-gradient(
+    135deg,
+    rgba(230, 57, 70, 0.1),
+    rgba(255, 107, 107, 0.05)
+  );
+  border-radius: 12px;
+  margin-bottom: 16px;
+  padding: 20px;
+  position: relative;
+}
+
+.overview-card.danger-card .overview-card-header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(230, 57, 70, 0.15),
+    rgba(255, 107, 107, 0.1)
+  );
+  border-radius: 12px;
+  z-index: -1;
+}
+
+.overview-card.danger-card .overview-card-title {
+  color: #e63946;
+  font-weight: 700;
+  text-shadow: 0 1px 3px rgba(230, 57, 70, 0.25);
+}
+
+.overview-card.danger-card .overview-card-subtitle {
+  color: rgba(230, 57, 70, 0.85);
+  font-weight: 500;
+}
+
+.overview-card.danger-card .overview-value {
+  background: linear-gradient(135deg, #e63946, #ff6b6b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 48px;
+  font-weight: 800;
+  text-shadow: 0 2px 8px rgba(230, 57, 70, 0.18);
+}
+/* Performance Purple Card Style */
+.overview-card.performance-purple-card::before {
+  background: linear-gradient(90deg, #7209b7, #b5179e);
+}
+
+.overview-card.performance-purple-card {
+  background: linear-gradient(
+    135deg,
+    rgba(114, 9, 183, 0.1),
+    rgba(181, 23, 158, 0.05)
+  );
+  border: 1px solid rgba(114, 9, 183, 0.18);
+  position: relative;
+  overflow: hidden;
+}
+
+.overview-card.performance-purple-card .overview-card-header {
+  background: linear-gradient(
+    135deg,
+    rgba(114, 9, 183, 0.1),
+    rgba(181, 23, 158, 0.05)
+  );
+  border-radius: 12px;
+  margin-bottom: 16px;
+  padding: 20px;
+  position: relative;
+}
+
+.overview-card.performance-purple-card .overview-card-header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(114, 9, 183, 0.15),
+    rgba(181, 23, 158, 0.1)
+  );
+  border-radius: 12px;
+  z-index: -1;
+}
+
+.overview-card.performance-purple-card .overview-card-title {
+  color: #7209b7;
+  font-weight: 700;
+  text-shadow: 0 1px 3px rgba(114, 9, 183, 0.25);
+}
+
+.overview-card.performance-purple-card .overview-card-subtitle {
+  color: rgba(114, 9, 183, 0.85);
+  font-weight: 500;
+}
+
+.overview-card.performance-purple-card .overview-value {
+  background: linear-gradient(135deg, #7209b7, #b5179e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 48px;
+  font-weight: 800;
+  text-shadow: 0 2px 8px rgba(114, 9, 183, 0.18);
+}
 /* Enhanced Success Card Style (Premium Green) */
 .overview-card.success-card::before {
   background: linear-gradient(90deg, #22c55e, #4ade80);
 }
 
 .overview-card.success-card {
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.10), rgba(74, 222, 128, 0.05));
+  background: linear-gradient(
+    135deg,
+    rgba(34, 197, 94, 0.1),
+    rgba(74, 222, 128, 0.05)
+  );
   border: 1px solid rgba(34, 197, 94, 0.18);
   position: relative;
   overflow: hidden;
 }
 
 .overview-card.success-card .overview-card-header {
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.10), rgba(74, 222, 128, 0.05));
+  background: linear-gradient(
+    135deg,
+    rgba(34, 197, 94, 0.1),
+    rgba(74, 222, 128, 0.05)
+  );
   border-radius: 12px;
   margin-bottom: 16px;
   padding: 20px;
@@ -25,7 +225,11 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(74, 222, 128, 0.10));
+  background: linear-gradient(
+    135deg,
+    rgba(34, 197, 94, 0.15),
+    rgba(74, 222, 128, 0.1)
+  );
   border-radius: 12px;
   z-index: -1;
 }
@@ -83,6 +287,70 @@
   --border-color: rgba(255, 255, 255, 0.1);
 }
 
+/* Financial Status Card Style (Blue, like Progresso Médio) */
+.overview-card.finance-status-card::before {
+  background: linear-gradient(90deg, #2196f3, #64b5f6);
+}
+
+.overview-card.finance-status-card {
+  background: linear-gradient(
+    135deg,
+    rgba(33, 150, 243, 0.1),
+    rgba(100, 181, 246, 0.05)
+  );
+  border: 1px solid rgba(33, 150, 243, 0.18);
+  position: relative;
+  overflow: hidden;
+}
+
+.overview-card.finance-status-card .overview-card-header {
+  background: linear-gradient(
+    135deg,
+    rgba(33, 150, 243, 0.1),
+    rgba(100, 181, 246, 0.05)
+  );
+  border-radius: 12px;
+  margin-bottom: 16px;
+  padding: 20px;
+  position: relative;
+}
+
+.overview-card.finance-status-card .overview-card-header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(33, 150, 243, 0.15),
+    rgba(100, 181, 246, 0.1)
+  );
+  border-radius: 12px;
+  z-index: -1;
+}
+
+.overview-card.finance-status-card .overview-card-title {
+  color: #2196f3;
+  font-weight: 700;
+  text-shadow: 0 1px 3px rgba(33, 150, 243, 0.25);
+}
+
+.overview-card.finance-status-card .overview-card-subtitle {
+  color: rgba(33, 150, 243, 0.85);
+  font-weight: 500;
+}
+
+.overview-card.finance-status-card .overview-value {
+  background: linear-gradient(135deg, #2196f3, #64b5f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 48px;
+  font-weight: 800;
+  text-shadow: 0 2px 8px rgba(33, 150, 243, 0.18);
+}
 /* Tema Claro */
 [data-theme="light"] {
   --bg-primary: linear-gradient(135deg, #f9fafb, #e5e7eb);
