@@ -6906,6 +6906,67 @@ body {
   background: linear-gradient(90deg, #ff9800, #ffb74d);
 }
 
+/* Enhanced Payment Card Style for Agenda Hoje */
+.overview-card.payment-card {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 152, 0, 0.1),
+    rgba(255, 183, 77, 0.05)
+  );
+  border: 1px solid rgba(255, 152, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.overview-card.payment-card .overview-card-header {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 152, 0, 0.1),
+    rgba(255, 183, 77, 0.05)
+  );
+  border-radius: 12px;
+  margin-bottom: 16px;
+  padding: 20px;
+  position: relative;
+}
+
+.overview-card.payment-card .overview-card-header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 152, 0, 0.15),
+    rgba(255, 183, 77, 0.1)
+  );
+  border-radius: 12px;
+  z-index: -1;
+}
+
+.overview-card.payment-card .overview-card-title {
+  color: #ff9800;
+  font-weight: 700;
+  text-shadow: 0 1px 3px rgba(255, 152, 0, 0.3);
+}
+
+.overview-card.payment-card .overview-card-subtitle {
+  color: rgba(255, 183, 77, 0.9);
+  font-weight: 500;
+}
+
+.overview-card.payment-card .overview-value {
+  background: linear-gradient(135deg, #ff9800, #ffb74d);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 48px;
+  font-weight: 800;
+  text-shadow: 0 2px 8px rgba(255, 152, 0, 0.3);
+}
+
 .overview-card.performance-card::before {
   background: linear-gradient(90deg, #9c27b0, #ba68c8);
 }
