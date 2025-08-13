@@ -6965,7 +6965,7 @@ body {
 .overview-value {
   font-size: 48px;
   font-weight: bold;
-  color: var(--primary);
+  color: #fbbf24;
   margin-bottom: 8px;
   line-height: 1;
 }
@@ -7022,6 +7022,82 @@ body {
 .overview-card-icon.efficiency {
   background: rgba(34, 197, 94, 0.2);
   color: #22c55e;
+}
+
+.overview-card-icon.rating {
+  background: rgba(59, 130, 246, 0.2);
+  color: #3b82f6;
+}
+
+.overview-card-icon.schedule {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+}
+
+.overview-card-icon.today {
+  background: rgba(34, 197, 94, 0.2);
+  color: #22c55e;
+}
+
+.overview-card-icon.week {
+  background: rgba(59, 130, 246, 0.2);
+  color: #3b82f6;
+}
+
+.overview-card-icon.instructors {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+}
+
+.overview-card-icon.capacity {
+  background: rgba(168, 85, 247, 0.2);
+  color: #a855f7;
+}
+
+.overview-card-icon.theoretical {
+  background: rgba(34, 197, 94, 0.2);
+  color: #22c55e;
+}
+
+.overview-card-icon.practical {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+}
+
+.overview-card-icon.scheduled {
+  background: rgba(59, 130, 246, 0.2);
+  color: #3b82f6;
+}
+
+.overview-card-icon.performance {
+  background: rgba(168, 85, 247, 0.2);
+  color: #a855f7;
+}
+
+.overview-card-icon.revenue {
+  background: rgba(34, 197, 94, 0.2);
+  color: #22c55e;
+}
+
+.overview-card-icon.revenue::before {
+  content: "$";
+  font-weight: bold;
+  font-size: 28px;
+}
+
+.overview-card-icon.expenses {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.overview-card-icon.pending {
+  background: rgba(6, 182, 212, 0.2);
+  color: #06b6d4;
+}
+
+.overview-card-icon.profit {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
 }
 
 .student-card {
