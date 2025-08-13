@@ -2834,8 +2834,17 @@ body {
   color: #a855f7;
 }
 
+.specialty-icon.education {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
 .specialty-fill.exam {
   background: linear-gradient(90deg, #a855f7 0%, #7c3aed 100%);
+}
+
+.specialty-fill.education {
+  background: linear-gradient(90deg, #ef4444 0%, #dc2626 100%);
 }
 
 /* Enhanced Category Styles */
@@ -5452,11 +5461,12 @@ body {
 .payment-method {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 16px;
+  gap: 24px;
+  padding: 40px;
   background: var(--glass);
   border-radius: 12px;
   transition: var(--transition);
+  min-height: 120px;
 }
 
 .payment-method:hover {
@@ -9981,6 +9991,7 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 24px;
+  flex-shrink: 0;
 }
 
 .specialty-icon.theoretical {
