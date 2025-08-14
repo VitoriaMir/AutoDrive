@@ -187,24 +187,6 @@ function destroyChart(chart) {
   return null;
 }
 
-// Function to refresh all charts
-function refreshAllCharts() {
-  console.log("Refreshing all charts...");
-
-  // Destroy all existing charts
-  lessonsChart = destroyChart(lessonsChart);
-  studentsChart = destroyChart(studentsChart);
-  studentsPerformanceChart = destroyChart(studentsPerformanceChart);
-  instructorsChart = destroyChart(instructorsChart);
-  vehiclesChart = destroyChart(vehiclesChart);
-  scheduleChart = destroyChart(scheduleChart);
-  examsChart = destroyChart(examsChart);
-  financeChart = destroyChart(financeChart);
-
-  // Reinitialize all charts
-  setTimeout(initCharts, 100);
-}
-
 // Function to show a specific section
 function showSection(sectionId) {
   // Hide all sections
@@ -1316,14 +1298,6 @@ function generatePaymentReport() {
   }, 2000);
 }
 
-// Export payment chart
-function exportPaymentChart() {
-  showNotification("Exportando dados de métodos de pagamento...", "info");
-  setTimeout(() => {
-    showNotification("Dados de métodos de pagamento exportados!", "success");
-  }, 1000);
-}
-
 // View payment trends
 function viewPaymentTrends() {
   showNotification("Carregando análise de tendências de pagamento...", "info");
@@ -1686,102 +1660,6 @@ function filterTransactionsList() {
   renderTransactionsList(filteredTransactions);
 }
 
-function exportTransactionsList() {
-  const searchTerm = document
-    .getElementById("transactionSearchInput")
-    .value.toLowerCase();
-  const statusFilter = document.getElementById("transactionStatusFilter").value;
-  const typeFilter = document.getElementById("transactionTypeFilter").value;
-
-  const filteredTransactions = allTransactionsData.filter((transaction) => {
-    const matchesSearch =
-      !searchTerm ||
-      transaction.studentName.toLowerCase().includes(searchTerm) ||
-      transaction.description.toLowerCase().includes(searchTerm) ||
-      transaction.reference.toLowerCase().includes(searchTerm);
-
-    const matchesStatus = !statusFilter || transaction.status === statusFilter;
-    const matchesType = !typeFilter || transaction.type === typeFilter;
-
-    return matchesSearch && matchesStatus && matchesType;
-  });
-
-  const headers = [
-    "Cliente",
-    "Descrição",
-    "Valor",
-    "Tipo",
-    "Status",
-    "Data",
-    "Horário",
-    "Pagamento",
-    "Categoria",
-    "Parcelas",
-    "Referência",
-  ];
-  const csvContent = [
-    headers.join(","),
-    ...filteredTransactions.map((transaction) =>
-      [
-        transaction.studentName,
-        transaction.description,
-        `R$ ${transaction.amount.toFixed(2).replace(".", ",")}`,
-        transaction.type === "income" ? "Entrada" : "Saída",
-        transaction.status === "completed"
-          ? "Concluída"
-          : transaction.status === "pending"
-          ? "Pendente"
-          : transaction.status === "partial"
-          ? "Parcial"
-          : "Cancelada",
-        transaction.date,
-        transaction.time,
-        transaction.paymentMethod === "credit_card"
-          ? "Cartão de Crédito"
-          : transaction.paymentMethod === "debit_card"
-          ? "Cartão de Débito"
-          : transaction.paymentMethod === "pix"
-          ? "PIX"
-          : transaction.paymentMethod === "money"
-          ? "Dinheiro"
-          : "Transferência",
-        transaction.category === "enrollment"
-          ? "Matrícula"
-          : transaction.category === "lesson"
-          ? "Aula"
-          : transaction.category === "exam"
-          ? "Exame"
-          : transaction.category === "package"
-          ? "Pacote"
-          : transaction.category === "fuel"
-          ? "Combustível"
-          : "Manutenção",
-        transaction.installments > 1
-          ? `${transaction.currentInstallment}/${transaction.installments}`
-          : "1/1",
-        transaction.reference,
-      ].join(",")
-    ),
-  ].join("\n");
-
-  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-  const link = document.createElement("a");
-  if (link.download !== undefined) {
-    const url = URL.createObjectURL(blob);
-    link.setAttribute("href", url);
-    link.setAttribute(
-      "download",
-      `lista_transacoes_${new Date().toISOString().split("T")[0]}.csv`
-    );
-    link.style.visibility = "hidden";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
-
-  showNotification("Lista de transações exportada com sucesso!", "success");
-}
-
 // View transaction details
 function viewTransactionDetails(id) {
   showNotification(`Carregando detalhes da transação #${id}...`, "info");
@@ -1898,75 +1776,6 @@ function viewExamDistributionDetails() {
   setTimeout(() => {
     showNotification("Detalhes carregados com sucesso!", "success");
   }, 1000);
-}
-
-function exportExamDistribution() {
-  showNotification("Exportando dados de distribuição de exames...", "info");
-  setTimeout(() => {
-    const data = {
-      theoretical: {
-        total: 45,
-        approved: 35,
-        failed: 10,
-        scheduled: 18,
-        rate: 77.8,
-      },
-      practical: {
-        total: 38,
-        approved: 25,
-        failed: 13,
-        scheduled: 12,
-        rate: 65.8,
-      },
-    };
-
-    const csvContent = [
-      [
-        "Tipo",
-        "Total",
-        "Aprovados",
-        "Reprovados",
-        "Agendados",
-        "Taxa Aprovação",
-      ],
-      [
-        "Teórico",
-        data.theoretical.total,
-        data.theoretical.approved,
-        data.theoretical.failed,
-        data.theoretical.scheduled,
-        data.theoretical.rate + "%",
-      ],
-      [
-        "Prático",
-        data.practical.total,
-        data.practical.approved,
-        data.practical.failed,
-        data.practical.scheduled,
-        data.practical.rate + "%",
-      ],
-    ]
-      .map((row) => row.join(","))
-      .join("\n");
-
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
-    const url = URL.createObjectURL(blob);
-    link.setAttribute("href", url);
-    link.setAttribute(
-      "download",
-      `distribuicao_exames_${new Date().toISOString().split("T")[0]}.csv`
-    );
-    link.style.visibility = "hidden";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-    showNotification(
-      "Distribuição de exames exportada com sucesso!",
-      "success"
-    );
-  }, 1500);
 }
 
 function updateExamDistribution() {
@@ -2306,83 +2115,6 @@ function filterExamsList() {
   });
 
   renderExamsList(filteredExams);
-}
-
-function exportExamsList() {
-  const searchTerm = document
-    .getElementById("examSearchInput")
-    .value.toLowerCase();
-  const statusFilter = document.getElementById("examStatusFilter").value;
-  const typeFilter = document.getElementById("examTypeFilter").value;
-
-  const filteredExams = allExamsData.filter((exam) => {
-    const matchesSearch =
-      !searchTerm ||
-      exam.studentName.toLowerCase().includes(searchTerm) ||
-      exam.category.toLowerCase().includes(searchTerm) ||
-      exam.location.toLowerCase().includes(searchTerm) ||
-      exam.instructorName.toLowerCase().includes(searchTerm);
-
-    const matchesStatus = !statusFilter || exam.status === statusFilter;
-    const matchesType = !typeFilter || exam.examType === typeFilter;
-
-    return matchesSearch && matchesStatus && matchesType;
-  });
-
-  const headers = [
-    "Aluno",
-    "Tipo",
-    "Categoria",
-    "Data",
-    "Horário",
-    "Local",
-    "Instrutor",
-    "Status",
-    "Nota",
-    "Tentativa",
-    "Válido até",
-  ];
-  const csvContent = [
-    headers.join(","),
-    ...filteredExams.map((exam) =>
-      [
-        exam.studentName,
-        exam.examType === "theoretical" ? "Teórico" : "Prático",
-        exam.category,
-        exam.date,
-        exam.time,
-        exam.location,
-        exam.instructorName,
-        exam.status === "approved"
-          ? "Aprovado"
-          : exam.status === "failed"
-          ? "Reprovado"
-          : exam.status === "scheduled"
-          ? "Agendado"
-          : "Pendente",
-        exam.score !== null ? `${exam.score}/${exam.maxScore}` : "N/A",
-        exam.attempts,
-        exam.validUntil || "N/A",
-      ].join(",")
-    ),
-  ].join("\n");
-
-  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-  const link = document.createElement("a");
-  if (link.download !== undefined) {
-    const url = URL.createObjectURL(blob);
-    link.setAttribute("href", url);
-    link.setAttribute(
-      "download",
-      `lista_exames_${new Date().toISOString().split("T")[0]}.csv`
-    );
-    link.style.visibility = "hidden";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
-
-  showNotification("Lista de exames exportada com sucesso!", "success");
 }
 
 // View exam details
@@ -3174,35 +2906,7 @@ function checkEmptyNotifications() {
     notificationsList.style.display = "block";
   }
 }
-function refreshActivities() {
-  const activitiesList = document.getElementById("activities-list");
-  const refreshBtn = document.getElementById("refresh-activities");
 
-  // Add loading state
-  refreshBtn.innerHTML = '<div class="loading"></div>';
-
-  // Simulate API call
-  setTimeout(() => {
-    // Restore button
-    refreshBtn.innerHTML = '<i class="fas fa-sync"></i>';
-    showNotification("Atividades atualizadas com sucesso!", "success");
-
-    // Add new activity to the top
-    const newActivity = document.createElement("div");
-    newActivity.className = "activity-item";
-    newActivity.innerHTML = `
-                    <div class="activity-icon">
-                        <i class="fas fa-sync"></i>
-                    </div>
-                    <div class="activity-content">
-                        <div class="activity-title">Sistema atualizado</div>
-                        <div class="activity-desc">Dados de atividades foram atualizados automaticamente</div>
-                        <div class="activity-time">Agora</div>
-                    </div>
-                `;
-    activitiesList.insertBefore(newActivity, activitiesList.firstChild);
-  }, 1500);
-}
 function createBackup() {
   showNotification("Iniciando backup do sistema...", "info");
 
@@ -3247,37 +2951,6 @@ function editPayment(id) {
 function downloadReport(id) {
   showNotification(`Baixando relatório ID: ${id}`, "success");
 }
-// Event listeners for chart actions
-document.getElementById("export-chart")?.addEventListener("click", () => {
-  if (lessonsChart) {
-    const url = lessonsChart.toBase64Image();
-    const link = document.createElement("a");
-    link.download = "grafico-aulas.png";
-    link.href = url;
-    link.click();
-    showNotification("Gráfico exportado com sucesso!", "success");
-  }
-});
-document
-  .getElementById("refresh-students-chart")
-  ?.addEventListener("click", () => {
-    if (studentsChart) {
-      // Simulate data refresh
-      const newData = [
-        Math.floor(Math.random() * 30) + 50,
-        Math.floor(Math.random() * 10) + 15,
-        Math.floor(Math.random() * 15) + 5,
-        Math.floor(Math.random() * 10) + 5,
-      ];
-
-      studentsChart.data.datasets[0].data = newData;
-      studentsChart.update();
-      showNotification("Dados do gráfico atualizados!", "success");
-    }
-  });
-document
-  .getElementById("refresh-activities")
-  ?.addEventListener("click", refreshActivities);
 
 // Search functionality
 const searchInput = document.querySelector(".search-input");
@@ -3743,78 +3416,6 @@ function filterStudentsList() {
   });
 
   renderStudentsList(filteredStudents);
-}
-
-function exportStudentsList() {
-  // Get current filtered data
-  const searchTerm = document
-    .getElementById("studentSearchInput")
-    .value.toLowerCase();
-  const categoryFilter = document.getElementById("studentCategoryFilter").value;
-  const statusFilter = document.getElementById("studentStatusFilter").value;
-
-  const filteredStudents = allStudentsData.filter((student) => {
-    const matchesSearch =
-      !searchTerm ||
-      student.name.toLowerCase().includes(searchTerm) ||
-      student.cpf.includes(searchTerm) ||
-      student.email.toLowerCase().includes(searchTerm);
-
-    const matchesCategory =
-      !categoryFilter || student.category === categoryFilter;
-    const matchesStatus = !statusFilter || student.status === statusFilter;
-
-    return matchesSearch && matchesCategory && matchesStatus;
-  });
-
-  // Create CSV content
-  const headers = [
-    "Nome",
-    "CPF",
-    "Email",
-    "Telefone",
-    "Categoria",
-    "Status",
-    "Progresso",
-    "Aulas Concluídas",
-    "Total de Aulas",
-    "Data de Ingresso",
-  ];
-  const csvContent = [
-    headers.join(","),
-    ...filteredStudents.map((student) =>
-      [
-        `"${student.name}"`,
-        student.cpf,
-        student.email,
-        student.phone,
-        student.category,
-        student.status,
-        `${student.progress}%`,
-        student.lessonsCompleted,
-        student.totalLessons,
-        student.joinDate,
-      ].join(",")
-    ),
-  ].join("\n");
-
-  // Download CSV
-  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-  const link = document.createElement("a");
-  if (link.download !== undefined) {
-    const url = URL.createObjectURL(blob);
-    link.setAttribute("href", url);
-    link.setAttribute(
-      "download",
-      `lista_alunos_${new Date().toISOString().split("T")[0]}.csv`
-    );
-    link.style.visibility = "hidden";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
-
-  showNotification("Lista de alunos exportada com sucesso!", "success");
 }
 
 function viewStudentProfile(studentId) {
@@ -4495,90 +4096,6 @@ function filterInstructorsList() {
   });
 
   renderInstructorsList(filteredInstructors);
-}
-
-function exportInstructorsList() {
-  // Get current filtered data
-  const searchTerm = document
-    .getElementById("instructorSearchInput")
-    .value.toLowerCase();
-  const specialtyFilter = document.getElementById(
-    "instructorSpecialtyFilter"
-  ).value;
-  const statusFilter = document.getElementById("instructorStatusFilter").value;
-
-  const filteredInstructors = allInstructorsData.filter((instructor) => {
-    const matchesSearch =
-      !searchTerm ||
-      instructor.name.toLowerCase().includes(searchTerm) ||
-      instructor.cpf.includes(searchTerm) ||
-      instructor.email.toLowerCase().includes(searchTerm);
-
-    const matchesSpecialty =
-      !specialtyFilter || instructor.specialty === specialtyFilter;
-    const matchesStatus = !statusFilter || instructor.status === statusFilter;
-
-    return matchesSearch && matchesSpecialty && matchesStatus;
-  });
-
-  // Create CSV content
-  const headers = [
-    "Nome",
-    "CPF",
-    "Email",
-    "Telefone",
-    "Especialidade",
-    "Status",
-    "Experiência",
-    "Alunos Atribuídos",
-    "Avaliação",
-    "Aulas Ministradas",
-    "Data de Ingresso",
-  ];
-  const csvContent = [
-    headers.join(","),
-    ...filteredInstructors.map((instructor) =>
-      [
-        `"${instructor.name}"`,
-        instructor.cpf,
-        instructor.email,
-        instructor.phone,
-        instructor.specialty === "theoretical"
-          ? "Teórica"
-          : instructor.specialty === "practical"
-          ? "Prática"
-          : "Misto",
-        instructor.status === "available"
-          ? "Disponível"
-          : instructor.status === "busy"
-          ? "Ocupado"
-          : "Férias",
-        `${instructor.experience} anos`,
-        instructor.studentsAssigned,
-        instructor.rating,
-        instructor.lessonsTaught,
-        instructor.joinDate,
-      ].join(",")
-    ),
-  ].join("\n");
-
-  // Download CSV
-  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-  const link = document.createElement("a");
-  if (link.download !== undefined) {
-    const url = URL.createObjectURL(blob);
-    link.setAttribute("href", url);
-    link.setAttribute(
-      "download",
-      `lista_instrutores_${new Date().toISOString().split("T")[0]}.csv`
-    );
-    link.style.visibility = "hidden";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
-
-  showNotification("Lista de instrutores exportada com sucesso!", "success");
 }
 
 function viewInstructorProfile(instructorId) {
@@ -5311,76 +4828,6 @@ function filterUsersList() {
   renderUsersList(filteredUsers);
 }
 
-function exportUsersList() {
-  const searchTerm = document
-    .getElementById("userSearchInput")
-    .value.toLowerCase();
-  const roleFilter = document.getElementById("userRoleFilter").value;
-  const statusFilter = document.getElementById("userStatusFilter").value;
-
-  const filteredUsers = allUsersData.filter((user) => {
-    const matchesSearch =
-      !searchTerm ||
-      user.name.toLowerCase().includes(searchTerm) ||
-      user.email.toLowerCase().includes(searchTerm) ||
-      user.cpf.includes(searchTerm);
-
-    const matchesRole = !roleFilter || user.role === roleFilter;
-    const matchesStatus = !statusFilter || user.status === statusFilter;
-
-    return matchesSearch && matchesRole && matchesStatus;
-  });
-
-  const headers = [
-    "Nome",
-    "CPF",
-    "Email",
-    "Telefone",
-    "Tipo",
-    "Status",
-    "Permissões",
-    "Último Acesso",
-    "Data de Cadastro",
-  ];
-  const csvContent = [
-    headers.join(","),
-    ...filteredUsers.map((user) =>
-      [
-        user.name,
-        user.cpf,
-        user.email,
-        user.phone,
-        user.role === "admin"
-          ? "Administrador"
-          : user.role === "instructor"
-          ? "Instrutor"
-          : "Funcionário",
-        user.status === "active" ? "Ativo" : "Inativo",
-        user.permissions.join("; "),
-        user.lastAccess,
-        user.joinDate,
-      ].join(",")
-    ),
-  ].join("\n");
-
-  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-  const link = document.createElement("a");
-  if (link.download !== undefined) {
-    const url = URL.createObjectURL(blob);
-    link.setAttribute("href", url);
-    link.setAttribute(
-      "download",
-      `lista_usuarios_${new Date().toISOString().split("T")[0]}.csv`
-    );
-    link.style.visibility = "hidden";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
-
-  showNotification("Lista de usuários exportada com sucesso!", "success");
-}
-
 function viewUserProfile(userId) {
   showNotification(`Carregando perfil do usuário ${userId}...`, "info");
   // Here you would open user profile modal/page
@@ -5800,57 +5247,6 @@ function viewVehicleCategoryDetails() {
   // Here you would open a modal with detailed category information
 }
 
-function exportVehicleCategories() {
-  console.log("Exporting vehicle categories...");
-
-  const vehicleCategories = {
-    "Categoria B": {
-      vehicles: 8,
-      percentage: 66.7,
-      utilization: 92.1,
-      avgConsumption: 9.8,
-      rating: 4.2,
-    },
-    "Categoria A": {
-      vehicles: 3,
-      percentage: 25.0,
-      utilization: 82.5,
-      avgConsumption: 16.2,
-      rating: 4.6,
-    },
-    "Categoria AB": {
-      vehicles: 1,
-      percentage: 8.3,
-      utilization: 75.2,
-      avgConsumption: 8.1,
-      rating: 4.1,
-    },
-  };
-
-  const csvContent =
-    "data:text/csv;charset=utf-8," +
-    "Categoria,Veículos,Percentual,Utilização (%),Consumo Médio (km/L),Avaliação\n" +
-    Object.entries(vehicleCategories)
-      .map(
-        ([category, data]) =>
-          `${category},${data.vehicles},${data.percentage}%,${data.utilization}%,${data.avgConsumption},${data.rating}`
-      )
-      .join("\n");
-
-  const encodedUri = encodeURI(csvContent);
-  const link = document.createElement("a");
-  link.setAttribute("href", encodedUri);
-  link.setAttribute("download", "categorias-veiculos.csv");
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-
-  showNotification(
-    "Dados das categorias de veículos exportados com sucesso!",
-    "success"
-  );
-}
-
 // Sample vehicle data for demonstration
 const allVehiclesData = [
   {
@@ -6093,78 +5489,6 @@ function filterVehiclesList() {
   renderVehiclesList(filteredVehicles);
 }
 
-function exportVehiclesList() {
-  const searchTerm = document
-    .getElementById("vehicleSearchInput")
-    .value.toLowerCase();
-  const statusFilter = document.getElementById("vehicleStatusFilter").value;
-  const typeFilter = document.getElementById("vehicleTypeFilter").value;
-
-  const filteredVehicles = allVehiclesData.filter((vehicle) => {
-    const matchesSearch =
-      !searchTerm ||
-      vehicle.plate.toLowerCase().includes(searchTerm) ||
-      vehicle.brand.toLowerCase().includes(searchTerm) ||
-      vehicle.model.toLowerCase().includes(searchTerm);
-
-    const matchesStatus = !statusFilter || vehicle.status === statusFilter;
-    const matchesType = !typeFilter || vehicle.type === typeFilter;
-
-    return matchesSearch && matchesStatus && matchesType;
-  });
-
-  const headers = [
-    "Placa",
-    "Marca",
-    "Modelo",
-    "Ano",
-    "Tipo",
-    "Status",
-    "Quilometragem",
-    "Combustível",
-    "Última Manutenção",
-    "Próxima Manutenção",
-  ];
-  const csvContent = [
-    headers.join(","),
-    ...filteredVehicles.map((vehicle) =>
-      [
-        vehicle.plate,
-        vehicle.brand,
-        vehicle.model,
-        vehicle.year,
-        vehicle.type === "car" ? "Carro" : "Moto",
-        vehicle.status === "available"
-          ? "Disponível"
-          : vehicle.status === "in-use"
-          ? "Em uso"
-          : "Manutenção",
-        vehicle.mileage,
-        vehicle.fuelType,
-        vehicle.lastMaintenance,
-        vehicle.nextMaintenance,
-      ].join(",")
-    ),
-  ].join("\n");
-
-  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-  const link = document.createElement("a");
-  if (link.download !== undefined) {
-    const url = URL.createObjectURL(blob);
-    link.setAttribute("href", url);
-    link.setAttribute(
-      "download",
-      `lista_veiculos_${new Date().toISOString().split("T")[0]}.csv`
-    );
-    link.style.visibility = "hidden";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
-
-  showNotification("Lista de veículos exportada com sucesso!", "success");
-}
-
 // Schedule Section JavaScript Functions
 function initScheduleChart() {
   const ctx = document.getElementById("schedule-chart");
@@ -6373,11 +5697,6 @@ function contactInstructor(lessonId) {
 function generateScheduleReport() {
   showNotification("Gerando relatório de agenda...", "info");
   // Here you would generate and download schedule report
-}
-
-function exportScheduleChart() {
-  showNotification("Exportando cronograma...", "info");
-  // Here you would export the timeline
 }
 
 function printSchedule() {
@@ -6721,87 +6040,6 @@ function filterLessonsList() {
   });
 
   renderLessonsList(filteredLessons);
-}
-
-function exportLessonsList() {
-  const searchTerm = document
-    .getElementById("lessonSearchInput")
-    .value.toLowerCase();
-  const statusFilter = document.getElementById("lessonStatusFilter").value;
-  const typeFilter = document.getElementById("lessonTypeFilter").value;
-
-  const filteredLessons = allLessonsData.filter((lesson) => {
-    const matchesSearch =
-      !searchTerm ||
-      lesson.studentName.toLowerCase().includes(searchTerm) ||
-      lesson.instructorName.toLowerCase().includes(searchTerm) ||
-      lesson.category.toLowerCase().includes(searchTerm) ||
-      lesson.location.toLowerCase().includes(searchTerm);
-
-    const matchesStatus = !statusFilter || lesson.status === statusFilter;
-    const matchesType = !typeFilter || lesson.type === typeFilter;
-
-    return matchesSearch && matchesStatus && matchesType;
-  });
-
-  const headers = [
-    "Aluno",
-    "Instrutor",
-    "Data",
-    "Horário",
-    "Duração (min)",
-    "Tipo",
-    "Categoria",
-    "Local",
-    "Veículo",
-    "Status",
-    "Observações",
-  ];
-  const csvContent = [
-    headers.join(","),
-    ...filteredLessons.map((lesson) =>
-      [
-        lesson.studentName,
-        lesson.instructorName,
-        lesson.date,
-        lesson.time,
-        lesson.duration,
-        lesson.type === "practical"
-          ? "Prática"
-          : lesson.type === "theoretical"
-          ? "Teórica"
-          : "Exame",
-        lesson.category,
-        lesson.location,
-        lesson.vehicle || "N/A",
-        lesson.status === "completed"
-          ? "Concluída"
-          : lesson.status === "in-progress"
-          ? "Em andamento"
-          : lesson.status === "scheduled"
-          ? "Agendada"
-          : "Cancelada",
-        lesson.notes || "",
-      ].join(",")
-    ),
-  ].join("\n");
-
-  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-  const link = document.createElement("a");
-  if (link.download !== undefined) {
-    const url = URL.createObjectURL(blob);
-    link.setAttribute("href", url);
-    link.setAttribute(
-      "download",
-      `lista_aulas_${new Date().toISOString().split("T")[0]}.csv`
-    );
-    link.style.visibility = "hidden";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
-
-  showNotification("Lista de aulas exportada com sucesso!", "success");
 }
 
 // Add event listeners for schedule section
@@ -7319,91 +6557,6 @@ function filterReportsList() {
   });
 
   renderReportsList(filteredReports);
-}
-
-function exportReportsList() {
-  const searchTerm = document
-    .getElementById("reportSearchInput")
-    .value.toLowerCase();
-  const statusFilter = document.getElementById("reportStatusFilter").value;
-  const typeFilter = document.getElementById("reportTypeFilter").value;
-
-  const filteredReports = allReportsData.filter((report) => {
-    const matchesSearch =
-      !searchTerm ||
-      report.title.toLowerCase().includes(searchTerm) ||
-      report.description.toLowerCase().includes(searchTerm) ||
-      report.generatedBy.toLowerCase().includes(searchTerm) ||
-      report.period.toLowerCase().includes(searchTerm);
-
-    const matchesStatus = !statusFilter || report.status === statusFilter;
-    const matchesType = !typeFilter || report.type === typeFilter;
-
-    return matchesSearch && matchesStatus && matchesType;
-  });
-
-  const headers = [
-    "Título",
-    "Descrição",
-    "Tipo",
-    "Status",
-    "Criado por",
-    "Data",
-    "Horário",
-    "Formato",
-    "Período",
-    "Tamanho",
-    "Downloads",
-  ];
-  const csvContent = [
-    headers.join(","),
-    ...filteredReports.map((report) =>
-      [
-        report.title,
-        report.description,
-        report.type === "financial"
-          ? "Financeiro"
-          : report.type === "performance"
-          ? "Performance"
-          : report.type === "statistics"
-          ? "Estatísticas"
-          : report.type === "operational"
-          ? "Operacional"
-          : "Acadêmico",
-        report.status === "completed"
-          ? "Concluído"
-          : report.status === "processing"
-          ? "Processando"
-          : report.status === "scheduled"
-          ? "Agendado"
-          : "Erro",
-        report.generatedBy,
-        report.createdDate,
-        report.createdTime,
-        report.format,
-        report.period,
-        report.size || "N/A",
-        report.downloads,
-      ].join(",")
-    ),
-  ].join("\n");
-
-  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-  const link = document.createElement("a");
-  if (link.download !== undefined) {
-    const url = URL.createObjectURL(blob);
-    link.setAttribute("href", url);
-    link.setAttribute(
-      "download",
-      `lista_relatorios_${new Date().toISOString().split("T")[0]}.csv`
-    );
-    link.style.visibility = "hidden";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
-
-  showNotification("Lista de relatórios exportada com sucesso!", "success");
 }
 
 function downloadReport(reportId) {
@@ -8352,158 +7505,6 @@ function updateChartMetrics(period) {
   document.getElementById("period-total").textContent = `• ${data.total}`;
 }
 
-// Export chart functionality
-function exportChart() {
-  const exportBtn = document.getElementById("export-chart");
-  const chartElement = document.getElementById("lessons-chart");
-
-  if (exportBtn) {
-    exportBtn.classList.add("loading");
-  }
-
-  if (chartElement) {
-    // Get chart instance
-    const chart = Chart.getChart(chartElement);
-    if (chart) {
-      setTimeout(() => {
-        // Create download link
-        const url = chart.toBase64Image();
-        const link = document.createElement("a");
-        link.download = `progresso-aulas-${
-          new Date().toISOString().split("T")[0]
-        }.png`;
-        link.href = url;
-        link.click();
-
-        if (exportBtn) {
-          exportBtn.classList.remove("loading");
-        }
-
-        showNotification("Gráfico exportado com sucesso!", "success");
-      }, 1000);
-    } else {
-      if (exportBtn) {
-        exportBtn.classList.remove("loading");
-      }
-      showNotification("Erro ao exportar gráfico. Tente novamente.", "error");
-    }
-  }
-}
-
-// Fullscreen chart functionality
-function fullscreenChart() {
-  const fullscreenBtn = document.getElementById("fullscreen-chart");
-  const chartCard = document.querySelector(".primary-chart");
-
-  if (fullscreenBtn) {
-    fullscreenBtn.classList.add("loading");
-  }
-
-  if (chartCard) {
-    setTimeout(() => {
-      if (chartCard.requestFullscreen) {
-        chartCard.requestFullscreen();
-      } else if (chartCard.webkitRequestFullscreen) {
-        chartCard.webkitRequestFullscreen();
-      } else if (chartCard.msRequestFullscreen) {
-        chartCard.msRequestFullscreen();
-      } else {
-        if (fullscreenBtn) {
-          fullscreenBtn.classList.remove("loading");
-        }
-        showNotification(
-          "Modo tela cheia não suportado neste navegador.",
-          "warning"
-        );
-        return;
-      }
-
-      if (fullscreenBtn) {
-        fullscreenBtn.classList.remove("loading");
-      }
-
-      showNotification(
-        "Modo tela cheia ativado. Pressione ESC para sair.",
-        "info"
-      );
-    }, 500);
-  }
-}
-
-// Refresh students chart
-function refreshStudentsChart() {
-  const refreshBtn = document.getElementById("refresh-students-chart");
-  const chartContainer = document.querySelector(
-    ".secondary-chart .chart-container"
-  );
-
-  if (refreshBtn) {
-    refreshBtn.classList.add("loading");
-  }
-
-  if (chartContainer) {
-    chartContainer.classList.add("refreshing");
-  }
-
-  showNotification("Atualizando gráfico de alunos...", "info");
-
-  // Simulate chart refresh
-  setTimeout(() => {
-    if (refreshBtn) {
-      refreshBtn.classList.remove("loading");
-    }
-
-    if (chartContainer) {
-      chartContainer.classList.remove("refreshing");
-    }
-
-    showNotification("Gráfico de alunos atualizado!", "success");
-
-    // Update chart if it exists
-    const chartElement = document.getElementById("students-chart");
-    if (chartElement) {
-      const chart = Chart.getChart(chartElement);
-      if (chart) {
-        // Update chart data with animation
-        chart.update("active");
-      }
-    }
-  }, 2000);
-}
-
-// Refresh activities
-function refreshActivities() {
-  const refreshBtn = document.getElementById("refresh-activities");
-  const activitiesList = document.getElementById("activities-list");
-
-  if (refreshBtn) {
-    refreshBtn.classList.add("loading");
-  }
-
-  showNotification("Atualizando atividades recentes...", "info");
-
-  // Simulate activities refresh
-  setTimeout(() => {
-    if (refreshBtn) {
-      refreshBtn.classList.remove("loading");
-    }
-
-    showNotification("Atividades atualizadas!", "success");
-
-    // Add visual refresh effect
-    if (activitiesList) {
-      activitiesList.style.transform = "scale(0.98)";
-      activitiesList.style.opacity = "0.7";
-
-      setTimeout(() => {
-        activitiesList.style.transform = "scale(1)";
-        activitiesList.style.opacity = "1";
-        activitiesList.style.transition = "all 0.3s ease";
-      }, 200);
-    }
-  }, 1500);
-}
-
 // Weekly schedule functions
 function toggleWeekView() {
   const scheduleGrid = document.getElementById("schedule-grid");
@@ -8563,82 +7564,6 @@ function viewLessonDetails(lessonId) {
   setTimeout(() => {
     showNotification("Detalhes da aula carregados!", "success");
   }, 800);
-}
-
-// Initialize all chart functionality
-function initChartFunctionality() {
-  // Initialize period selector
-  initChartPeriodSelector();
-
-  // Add event listeners for chart buttons
-  const exportBtn = document.getElementById("export-chart");
-  if (exportBtn) {
-    exportBtn.addEventListener("click", exportChart);
-  }
-
-  const fullscreenBtn = document.getElementById("fullscreen-chart");
-  if (fullscreenBtn) {
-    fullscreenBtn.addEventListener("click", fullscreenChart);
-  }
-
-  const refreshStudentsBtn = document.getElementById("refresh-students-chart");
-  if (refreshStudentsBtn) {
-    refreshStudentsBtn.addEventListener("click", refreshStudentsChart);
-  }
-
-  const refreshActivitiesBtn = document.getElementById("refresh-activities");
-  if (refreshActivitiesBtn) {
-    refreshActivitiesBtn.addEventListener("click", refreshActivities);
-  }
-
-  // Students Chart Filter
-  const studentsFilter = document.getElementById("students-period-filter");
-  if (studentsFilter) {
-    studentsFilter.addEventListener("change", function (e) {
-      updateStudentsChart(e.target.value);
-    });
-  }
-
-  // Add refresh button functionality for students chart
-  const studentsChartCard = document.querySelector(
-    ".students-performance-chart"
-  );
-  if (studentsChartCard) {
-    // Add a refresh button if it doesn't exist
-    const existingRefresh =
-      studentsChartCard.querySelector(".refresh-chart-btn");
-    if (!existingRefresh) {
-      const cardActions = studentsChartCard.querySelector(".card-actions");
-      if (cardActions) {
-        const refreshBtn = document.createElement("button");
-        refreshBtn.className = "card-action refresh-chart-btn";
-        refreshBtn.innerHTML = '<i class="fas fa-sync"></i>';
-        refreshBtn.setAttribute("aria-label", "Atualizar gráfico");
-        refreshBtn.onclick = function () {
-          refreshStudentsProgressChart();
-        };
-        cardActions.insertBefore(refreshBtn, cardActions.firstChild);
-      }
-    }
-  }
-}
-
-// Function to refresh students progress chart
-function refreshStudentsProgressChart() {
-  console.log("Refreshing students progress chart...");
-  showNotification("Atualizando gráfico de progresso...", "info");
-
-  // Destroy existing chart if it exists
-  if (studentsChart) {
-    studentsChart.destroy();
-    studentsChart = null;
-  }
-
-  // Recreate chart after a brief delay
-  setTimeout(() => {
-    initStudentsChart();
-    showNotification("Gráfico de progresso atualizado!", "success");
-  }, 500);
 }
 
 function updateStudentsChart(period) {
@@ -8992,12 +7917,6 @@ function showLessonDetails(student, instructor, time, type) {
     `${typeNames[type]}: ${student} com ${instructor} às ${time}`,
     "info"
   );
-}
-
-function refreshTimeline() {
-  const dateSelector = document.getElementById("timeline-date-selector");
-  loadTimelineData(dateSelector.value);
-  showNotification("Cronograma atualizado!", "success");
 }
 
 function updateTimelineForDate(customDate) {

@@ -439,7 +439,7 @@
                                 <button class="period-btn" data-label="Histórico completo"
                                     data-period="all">Tudo</button>
                             </div>
-                            <button aria-label="Exportar gráfico" class="card-action" id="export-chart">
+                            <button aria-label="Exportar gráfico" class="card-action">
                                 <i class="fas fa-download"></i>
                             </button>
                             <button aria-label="Tela cheia" class="card-action">
@@ -577,7 +577,7 @@
                                 </div>
                             </div>
                             <div class="card-actions">
-                                <button aria-label="Atualizar gráfico" class="card-action" id="refresh-students-chart">
+                                <button aria-label="Atualizar gráfico" class="card-action">
                                     <i class="fas fa-sync"></i>
                                 </button>
                                 <button aria-label="Configurações" class="card-action" id="chart-type-btn"
@@ -629,7 +629,7 @@
                                 </div>
                             </div>
                             <div class="card-actions">
-                                <button aria-label="Atualizar atividades" class="card-action" id="refresh-activities">
+                                <button aria-label="Atualizar atividades" class="card-action">
                                     <i class="fas fa-sync"></i>
                                 </button>
                             </div>
@@ -1105,7 +1105,7 @@
                                     <option value="12">Último ano</option>
                                     <option value="24">Últimos 2 anos</option>
                                 </select>
-                                <button aria-label="Exportar gráfico" class="card-action" id="export-chart">
+                                <button aria-label="Exportar gráfico" class="card-action">
                                     <i class="fas fa-download"></i>
                                 </button>
                                 <button aria-label="Tela cheia" class="card-action">
@@ -1197,8 +1197,7 @@
                                     onclick="viewCategoryDetails()">
                                     <i class="fas fa-eye"></i>
                                 </button>
-                                <button aria-label="Exportar categorias" class="card-action"
-                                    onclick="exportCategories()">
+                                <button aria-label="Exportar categorias" class="card-action">
                                     <i class="fas fa-download"></i>
                                 </button>
                             </div>
@@ -1239,281 +1238,279 @@
                                     <div class="category-label">Categoria A</div>
                                     <div class="category-count">28 alunos</div>
                                     <div class="category-percentage">19.7%</div>
-                                    <div class="category-rating">
-                                        <i class="fas fa-star"></i>
-                                        <span>4.9★</span>
-                                    </div>
-                                </div>
-                                <div class="category-bar">
-                                    <div class="category-fill category-a" style="width: 19.7%"></div>
-                                </div>
-                                <div class="category-details">
-                                    <div class="detail-item">
-                                        <span class="detail-label">Aprovação:</span>
-                                        <span class="detail-value success">89.1%</span>
-                                    </div>
-                                    <div class="detail-item">
-                                        <span class="detail-label">Tempo médio:</span>
-                                        <span class="detail-value">3.2 meses</span>
-                                    </div>
+                                    <div class="category-percentage">76.1%</div>
+                                    <div class="category-percentage">76.1%</div>
+                                    <i class="fas fa-star"></i>
+                                    <span>4.9★</span>
                                 </div>
                             </div>
-                            <div class="category-item">
-                                <div class="category-icon category-ab">
-                                    <i class="fas fa-truck"></i>
+                            <div class="category-bar">
+                                <div class="category-fill category-a" style="width: 19.7%"></div>
+                            </div>
+                            <div class="category-details">
+                                <div class="detail-item">
+                                    <span class="detail-label">Aprovação:</span>
+                                    <span class="detail-value success">89.1%</span>
                                 </div>
-                                <div class="category-info">
-                                    <div class="category-label">Categoria AB</div>
-                                    <div class="category-count">6 alunos</div>
-                                    <div class="category-percentage">4.2%</div>
-                                    <div class="category-rating">
-                                        <i class="fas fa-star"></i>
-                                        <span>4.5★</span>
-                                    </div>
-                                </div>
-                                <div class="category-bar">
-                                    <div class="category-fill category-ab" style="width: 4.2%"></div>
-                                </div>
-                                <div class="category-details">
-                                    <div class="detail-item">
-                                        <span class="detail-label">Aprovação:</span>
-                                        <span class="detail-value success">72.3%</span>
-                                    </div>
-                                    <div class="detail-item">
-                                        <span class="detail-label">Tempo médio:</span>
-                                        <span class="detail-value">5.8 meses</span>
-                                    </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Tempo médio:</span>
+                                    <span class="detail-value">3.2 meses</span>
                                 </div>
                             </div>
                         </div>
+                        <div class="category-item">
+                            <div class="category-icon category-ab">
+                                <i class="fas fa-truck"></i>
+                            </div>
+                            <div class="category-info">
+                                <div class="category-label">Categoria AB</div>
+                                <div class="category-count">6 alunos</div>
+                                <div class="category-percentage">4.2%</div>
+                                <div class="category-rating">
+                                    <i class="fas fa-star"></i>
+                                    <span>4.5★</span>
+                                </div>
+                            </div>
+                            <div class="category-bar">
+                                <div class="category-fill category-ab" style="width: 4.2%"></div>
+                            </div>
+                            <div class="category-details">
+                                <div class="detail-item">
+                                    <span class="detail-label">Aprovação:</span>
+                                    <span class="detail-value success">72.3%</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Tempo médio:</span>
+                                    <span class="detail-value">5.8 meses</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                        <!-- Insights e Estatísticas Adicionais -->
-                        <div class="categories-insights">
-                            <div class="insights-header">
-                                <h4 class="insights-title">
-                                    <i class="fas fa-chart-line"></i>
-                                    Insights & Tendências
-                                </h4>
+                    <!-- Insights e Estatísticas Adicionais -->
+                    <div class="categories-insights">
+                        <div class="insights-header">
+                            <h4 class="insights-title">
+                                <i class="fas fa-chart-line"></i>
+                                Insights & Tendências
+                            </h4>
+                        </div>
+
+                        <div class="insights-grid">
+                            <div class="insight-card popular">
+                                <div class="insight-icon">
+                                    <i class="fas fa-crown"></i>
+                                </div>
+                                <div class="insight-content">
+                                    <div class="insight-label">Categoria Mais Popular</div>
+                                    <div class="insight-value">Categoria B (76.1%)</div>
+                                    <div class="insight-detail">Representa 3/4 dos alunos</div>
+                                </div>
                             </div>
 
-                            <div class="insights-grid">
-                                <div class="insight-card popular">
-                                    <div class="insight-icon">
-                                        <i class="fas fa-crown"></i>
-                                    </div>
-                                    <div class="insight-content">
-                                        <div class="insight-label">Categoria Mais Popular</div>
-                                        <div class="insight-value">Categoria B (76.1%)</div>
-                                        <div class="insight-detail">Representa 3/4 dos alunos</div>
-                                    </div>
+                            <div class="insight-card performance">
+                                <div class="insight-icon">
+                                    <i class="fas fa-medal"></i>
                                 </div>
-
-                                <div class="insight-card performance">
-                                    <div class="insight-icon">
-                                        <i class="fas fa-medal"></i>
-                                    </div>
-                                    <div class="insight-content">
-                                        <div class="insight-label">Melhor Performance</div>
-                                        <div class="insight-value">Categoria A (89.1%)</div>
-                                        <div class="insight-detail">Taxa de aprovação</div>
-                                    </div>
+                                <div class="insight-content">
+                                    <div class="insight-label">Melhor Performance</div>
+                                    <div class="insight-value">Categoria A (89.1%)</div>
+                                    <div class="insight-detail">Taxa de aprovação</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- Students Management -->
-                <div class="students-management">
-                    <div class="management-header">
-                        <h3 class="management-title">
-                            <i class="fas fa-list-alt"></i>
-                            Lista de Alunos
-                        </h3>
-                        <div class="management-filters">
-                            <input class="search-input" placeholder="Buscar aluno..." type="text" />
-                            <select class="filter-select">
-                                <option value="all">Todos</option>
-                                <option value="active">Ativos</option>
-                                <option value="pending">Pendentes</option>
-                                <option value="graduated">Formados</option>
-                                <option value="suspended">Suspensos</option>
-                            </select>
-                            <button class="btn btn-secondary" onclick="viewAllStudents()">
-                                Ver Todos
+            </div>
+            <!-- Students Management -->
+            <div class="students-management">
+                <div class="management-header">
+                    <h3 class="management-title">
+                        <i class="fas fa-list-alt"></i>
+                        Lista de Alunos
+                    </h3>
+                    <div class="management-filters">
+                        <input class="search-input" placeholder="Buscar aluno..." type="text" />
+                        <select class="filter-select">
+                            <option value="all">Todos</option>
+                            <option value="active">Ativos</option>
+                            <option value="pending">Pendentes</option>
+                            <option value="graduated">Formados</option>
+                            <option value="suspended">Suspensos</option>
+                        </select>
+                        <button class="btn btn-secondary" onclick="viewAllStudents()">
+                            Ver Todos
+                        </button>
+                    </div>
+                </div>
+                <div class="students-list">
+                    <div class="student-item active">
+                        <div class="student-avatar">
+                            <img alt="João Silva" src="/assets/images/avatar-placeholder.svg" />
+                            <div class="student-status active"></div>
+                        </div>
+                        <div class="student-details">
+                            <div class="student-name">
+                                <strong>João Silva</strong>
+                                <span class="student-category">Categoria B</span>
+                            </div>
+                            <div class="student-info">
+                                <span class="student-cpf">123.456.789-00</span>
+                                <span class="student-enrollment">Matrícula: 2024001</span>
+                                <span class="student-date">Desde: 15/01/2024</span>
+                            </div>
+                        </div>
+                        <div class="student-progress">
+                            <div class="progress-label">Progresso Geral</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 75%"></div>
+                            </div>
+                            <div class="progress-value">75%</div>
+                        </div>
+                        <div class="student-status-badge">
+                            <span class="status-badge status-active">Ativo</span>
+                        </div>
+                        <div class="student-actions">
+                            <button aria-label="Ver perfil" class="btn-icon" onclick="viewStudentProfile(1)">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button aria-label="Editar" class="btn-icon" onclick="editStudent(1)">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button aria-label="Ver aulas" class="btn-icon" onclick="viewStudentLessons(1)">
+                                <i class="fas fa-calendar"></i>
+                            </button>
+                            {% if user_role != 'instructor' %}
+                            <button aria-label="Ver pagamentos" class="btn-icon" onclick="viewStudentPayments(1)">
+                                <i class="fas fa-credit-card"></i>
+                            </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="student-item pending">
+                        <div class="student-avatar">
+                            <img alt="Maria Oliveira" src="/assets/images/avatar-placeholder.svg" />
+                            <div class="student-status pending"></div>
+                        </div>
+                        <div class="student-details">
+                            <div class="student-name">
+                                <strong>Maria Oliveira</strong>
+                                <span class="student-category">Categoria B</span>
+                            </div>
+                            <div class="student-info">
+                                <span class="student-cpf">987.654.321-00</span>
+                                <span class="student-enrollment">Matrícula: 2024002</span>
+                                <span class="student-date">Desde: 22/01/2024</span>
+                            </div>
+                        </div>
+                        <div class="student-progress">
+                            <div class="progress-label">Progresso Geral</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 45%"></div>
+                            </div>
+                            <div class="progress-value">45%</div>
+                        </div>
+                        <div class="student-status-badge">
+                            <span class="status-badge status-pending">Documentação Pendente</span>
+                        </div>
+                        <div class="student-actions">
+                            <button aria-label="Ver perfil" class="btn-icon" onclick="viewStudentProfile(2)">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button aria-label="Editar" class="btn-icon" onclick="editStudent(2)">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button aria-label="Solicitar documentos" class="btn-icon" onclick="requestDocuments(2)">
+                                <i class="fas fa-file-alt"></i>
+                            </button>
+                            <button aria-label="Entrar em contato" class="btn-icon" onclick="contactStudent(2)">
+                                <i class="fas fa-phone"></i>
                             </button>
                         </div>
                     </div>
-                    <div class="students-list">
-                        <div class="student-item active">
-                            <div class="student-avatar">
-                                <img alt="João Silva" src="/assets/images/avatar-placeholder.svg" />
-                                <div class="student-status active"></div>
+                    <div class="student-item graduated">
+                        <div class="student-avatar">
+                            <img alt="Pedro Santos" src="/assets/images/avatar-placeholder.svg" />
+                            <div class="student-status graduated"></div>
+                        </div>
+                        <div class="student-details">
+                            <div class="student-name">
+                                <strong>Pedro Santos</strong>
+                                <span class="student-category">Categoria B</span>
                             </div>
-                            <div class="student-details">
-                                <div class="student-name">
-                                    <strong>João Silva</strong>
-                                    <span class="student-category">Categoria B</span>
-                                </div>
-                                <div class="student-info">
-                                    <span class="student-cpf">123.456.789-00</span>
-                                    <span class="student-enrollment">Matrícula: 2024001</span>
-                                    <span class="student-date">Desde: 15/01/2024</span>
-                                </div>
-                            </div>
-                            <div class="student-progress">
-                                <div class="progress-label">Progresso Geral</div>
-                                <div class="progress-bar">
-                                    <div class="progress-fill" style="width: 75%"></div>
-                                </div>
-                                <div class="progress-value">75%</div>
-                            </div>
-                            <div class="student-status-badge">
-                                <span class="status-badge status-active">Ativo</span>
-                            </div>
-                            <div class="student-actions">
-                                <button aria-label="Ver perfil" class="btn-icon" onclick="viewStudentProfile(1)">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                                <button aria-label="Editar" class="btn-icon" onclick="editStudent(1)">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button aria-label="Ver aulas" class="btn-icon" onclick="viewStudentLessons(1)">
-                                    <i class="fas fa-calendar"></i>
-                                </button>
-                                {% if user_role != 'instructor' %}
-                                <button aria-label="Ver pagamentos" class="btn-icon" onclick="viewStudentPayments(1)">
-                                    <i class="fas fa-credit-card"></i>
-                                </button>
-                                {% endif %}
+                            <div class="student-info">
+                                <span class="student-cpf">456.789.123-00</span>
+                                <span class="student-enrollment">Matrícula: 2023156</span>
+                                <span class="student-date">Formado em: 10/07/2024</span>
                             </div>
                         </div>
-                        <div class="student-item pending">
-                            <div class="student-avatar">
-                                <img alt="Maria Oliveira" src="/assets/images/avatar-placeholder.svg" />
-                                <div class="student-status pending"></div>
+                        <div class="student-progress">
+                            <div class="progress-label">Curso Concluído</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill completed" style="width: 100%"></div>
                             </div>
-                            <div class="student-details">
-                                <div class="student-name">
-                                    <strong>Maria Oliveira</strong>
-                                    <span class="student-category">Categoria B</span>
-                                </div>
-                                <div class="student-info">
-                                    <span class="student-cpf">987.654.321-00</span>
-                                    <span class="student-enrollment">Matrícula: 2024002</span>
-                                    <span class="student-date">Desde: 22/01/2024</span>
-                                </div>
+                            <div class="progress-value">100%</div>
+                        </div>
+                        <div class="student-status-badge">
+                            <span class="status-badge status-graduated">Formado</span>
+                        </div>
+                        <div class="student-actions">
+                            <button aria-label="Ver perfil" class="btn-icon" onclick="viewStudentProfile(3)">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button aria-label="Ver certificado" class="btn-icon" onclick="viewStudentCertificate(3)">
+                                <i class="fas fa-certificate"></i>
+                            </button>
+                            <button aria-label="Baixar relatório" class="btn-icon" onclick="downloadStudentReport(3)">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="student-item active">
+                        <div class="student-avatar">
+                            <img alt="Ana Costa" src="/assets/images/avatar-placeholder.svg" />
+                            <div class="student-status active"></div>
+                        </div>
+                        <div class="student-details">
+                            <div class="student-name">
+                                <strong>Ana Costa</strong>
+                                <span class="student-category">Categoria A</span>
                             </div>
-                            <div class="student-progress">
-                                <div class="progress-label">Progresso Geral</div>
-                                <div class="progress-bar">
-                                    <div class="progress-fill" style="width: 45%"></div>
-                                </div>
-                                <div class="progress-value">45%</div>
-                            </div>
-                            <div class="student-status-badge">
-                                <span class="status-badge status-pending">Documentação Pendente</span>
-                            </div>
-                            <div class="student-actions">
-                                <button aria-label="Ver perfil" class="btn-icon" onclick="viewStudentProfile(2)">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                                <button aria-label="Editar" class="btn-icon" onclick="editStudent(2)">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button aria-label="Solicitar documentos" class="btn-icon"
-                                    onclick="requestDocuments(2)">
-                                    <i class="fas fa-file-alt"></i>
-                                </button>
-                                <button aria-label="Entrar em contato" class="btn-icon" onclick="contactStudent(2)">
-                                    <i class="fas fa-phone"></i>
-                                </button>
+                            <div class="student-info">
+                                <span class="student-cpf">321.654.987-00</span>
+                                <span class="student-enrollment">Matrícula: 2024003</span>
+                                <span class="student-date">Desde: 05/02/2024</span>
                             </div>
                         </div>
-                        <div class="student-item graduated">
-                            <div class="student-avatar">
-                                <img alt="Pedro Santos" src="/assets/images/avatar-placeholder.svg" />
-                                <div class="student-status graduated"></div>
+                        <div class="student-progress">
+                            <div class="progress-label">Progresso Geral</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 92%"></div>
                             </div>
-                            <div class="student-details">
-                                <div class="student-name">
-                                    <strong>Pedro Santos</strong>
-                                    <span class="student-category">Categoria B</span>
-                                </div>
-                                <div class="student-info">
-                                    <span class="student-cpf">456.789.123-00</span>
-                                    <span class="student-enrollment">Matrícula: 2023156</span>
-                                    <span class="student-date">Formado em: 10/07/2024</span>
-                                </div>
-                            </div>
-                            <div class="student-progress">
-                                <div class="progress-label">Curso Concluído</div>
-                                <div class="progress-bar">
-                                    <div class="progress-fill completed" style="width: 100%"></div>
-                                </div>
-                                <div class="progress-value">100%</div>
-                            </div>
-                            <div class="student-status-badge">
-                                <span class="status-badge status-graduated">Formado</span>
-                            </div>
-                            <div class="student-actions">
-                                <button aria-label="Ver perfil" class="btn-icon" onclick="viewStudentProfile(3)">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                                <button aria-label="Ver certificado" class="btn-icon"
-                                    onclick="viewStudentCertificate(3)">
-                                    <i class="fas fa-certificate"></i>
-                                </button>
-                                <button aria-label="Baixar relatório" class="btn-icon"
-                                    onclick="downloadStudentReport(3)">
-                                    <i class="fas fa-download"></i>
-                                </button>
-                            </div>
+                            <div class="progress-value">92%</div>
                         </div>
-                        <div class="student-item active">
-                            <div class="student-avatar">
-                                <img alt="Ana Costa" src="/assets/images/avatar-placeholder.svg" />
-                                <div class="student-status active"></div>
-                            </div>
-                            <div class="student-details">
-                                <div class="student-name">
-                                    <strong>Ana Costa</strong>
-                                    <span class="student-category">Categoria A</span>
-                                </div>
-                                <div class="student-info">
-                                    <span class="student-cpf">321.654.987-00</span>
-                                    <span class="student-enrollment">Matrícula: 2024003</span>
-                                    <span class="student-date">Desde: 05/02/2024</span>
-                                </div>
-                            </div>
-                            <div class="student-progress">
-                                <div class="progress-label">Progresso Geral</div>
-                                <div class="progress-bar">
-                                    <div class="progress-fill" style="width: 92%"></div>
-                                </div>
-                                <div class="progress-value">92%</div>
-                            </div>
-                            <div class="student-status-badge">
-                                <span class="status-badge status-active">Pronto para Exame</span>
-                            </div>
-                            <div class="student-actions">
-                                <button aria-label="Ver perfil" class="btn-icon" onclick="viewStudentProfile(4)">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                                <button aria-label="Editar" class="btn-icon" onclick="editStudent(4)">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button aria-label="Agendar exame" class="btn-icon" onclick="scheduleExam(4)">
-                                    <i class="fas fa-clipboard-check"></i>
-                                </button>
-                                {% if user_role != 'instructor' %}
-                                <button aria-label="Ver pagamentos" class="btn-icon" onclick="viewStudentPayments(4)">
-                                    <i class="fas fa-credit-card"></i>
-                                </button>
-                                {% endif %}
-                            </div>
+                        <div class="student-status-badge">
+                            <span class="status-badge status-active">Pronto para Exame</span>
+                        </div>
+                        <div class="student-actions">
+                            <button aria-label="Ver perfil" class="btn-icon" onclick="viewStudentProfile(4)">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button aria-label="Editar" class="btn-icon" onclick="editStudent(4)">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button aria-label="Agendar exame" class="btn-icon" onclick="scheduleExam(4)">
+                                <i class="fas fa-clipboard-check"></i>
+                            </button>
+                            {% if user_role != 'instructor' %}
+                            <button aria-label="Ver pagamentos" class="btn-icon" onclick="viewStudentPayments(4)">
+                                <i class="fas fa-credit-card"></i>
+                            </button>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
+            </div>
             </div>
         </section>
         <!-- Instructors Content -->
@@ -1672,7 +1669,7 @@
                                     <option value="12">Último ano</option>
                                     <option value="24">Últimos 2 anos</option>
                                 </select>
-                                <button aria-label="Exportar gráfico" class="card-action" id="export-chart">
+                                <button aria-label="Exportar gráfico" class="card-action">
                                     <i class="fas fa-download"></i>
                                 </button>
                                 <button aria-label="Tela cheia" class="card-action">
@@ -1764,8 +1761,7 @@
                                     onclick="viewSpecialtyDetails()">
                                     <i class="fas fa-eye"></i>
                                 </button>
-                                <button aria-label="Exportar especialidades" class="card-action"
-                                    onclick="exportSpecialties()">
+                                <button aria-label="Exportar especialidades" class="card-action">
                                     <i class="fas fa-download"></i>
                                 </button>
                             </div>
@@ -2291,7 +2287,7 @@
                                     <option value="category-a">Categoria A</option>
                                     <option value="category-b">Categoria B</option>
                                 </select>
-                                <button aria-label="Exportar gráfico" class="card-action" id="export-chart">
+                                <button aria-label="Exportar gráfico" class="card-action">
                                     <i class="fas fa-download"></i>
                                 </button>
                                 <button aria-label="Tela cheia" class="card-action">
@@ -2383,8 +2379,7 @@
                                     onclick="viewVehicleCategoryDetails()">
                                     <i class="fas fa-eye"></i>
                                 </button>
-                                <button aria-label="Exportar categorias" class="card-action"
-                                    onclick="exportVehicleCategories()">
+                                <button aria-label="Exportar categorias" class="card-action">
                                     <i class="fas fa-download"></i>
                                 </button>
                             </div>
@@ -2921,12 +2916,10 @@
                                     <option value="tomorrow">Amanhã</option>
                                     <option value="custom">Data Específica</option>
                                 </select>
-                                <button aria-label="Atualizar cronograma" class="card-action"
-                                    onclick="refreshTimeline()">
+                                <button aria-label="Atualizar cronograma" class="card-action">
                                     <i class="fas fa-sync-alt"></i>
                                 </button>
-                                <button aria-label="Exportar cronograma" class="card-action"
-                                    onclick="exportScheduleChart()">
+                                <button aria-label="Exportar cronograma" class="card-action">
                                     <i class="fas fa-download"></i>
                                 </button>
                                 <button aria-label="Imprimir agenda" class="card-action" onclick="printSchedule()">
@@ -3489,7 +3482,7 @@
                                     <option value="12">Último ano</option>
                                     <option value="24">Últimos 2 anos</option>
                                 </select>
-                                <button aria-label="Exportar gráfico" class="card-action" id="export-chart">
+                                <button aria-label="Exportar gráfico" class="card-action">
                                     <i class="fas fa-download"></i>
                                 </button>
                                 <button aria-label="Tela cheia" class="card-action">
@@ -3587,8 +3580,7 @@
                                     onclick="viewExamDistributionDetails()">
                                     <i class="fas fa-eye"></i>
                                 </button>
-                                <button aria-label="Exportar distribuição" class="card-action"
-                                    onclick="exportExamDistribution()">
+                                <button aria-label="Exportar distribuição" class="card-action">
                                     <i class="fas fa-download"></i>
                                 </button>
                             </div>
@@ -4020,7 +4012,7 @@
                                     <option value="12">Último ano</option>
                                     <option value="24">Últimos 2 anos</option>
                                 </select>
-                                <button aria-label="Exportar gráfico" class="card-action" id="export-chart">
+                                <button aria-label="Exportar gráfico" class="card-action">
                                     <i class="fas fa-download"></i>
                                 </button>
                                 <button aria-label="Tela cheia" class="card-action">
@@ -4156,7 +4148,7 @@
                                 <i class="fas fa-file-pdf"></i>
                                 Relatório
                             </button>
-                            <button class="payment-action-btn" onclick="exportPaymentChart()" title="Exportar Gráfico">
+                            <button class="payment-action-btn" title="Exportar Gráfico">
                                 <i class="fas fa-download"></i>
                                 Exportar
                             </button>
@@ -6311,7 +6303,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="exportStudentsList()" type="button">
+                <button class="btn btn-secondary" type="button">
                     <i class="fas fa-download"></i>
                     Exportar Lista
                 </button>
@@ -6365,7 +6357,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="exportInstructorsList()" type="button">
+                <button class="btn btn-secondary" type="button">
                     <i class="fas fa-download"></i>
                     Exportar Lista
                 </button>
@@ -6415,7 +6407,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="exportVehiclesList()" type="button">
+                <button class="btn btn-secondary" type="button">
                     <i class="fas fa-download"></i>
                     Exportar Lista
                 </button>
@@ -6468,7 +6460,7 @@
                     </div>
                 </div>
                 <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
-                    <button class="btn btn-secondary" onclick="exportLessonsList()" type="button">
+                    <button class="btn btn-secondary" type="button">
                         <i class="fas fa-download"></i>
                         Exportar Lista
                     </button>
@@ -6522,7 +6514,7 @@
                     </div>
                 </div>
                 <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
-                    <button class="btn btn-secondary" onclick="exportExamsList()" type="button">
+                    <button class="btn btn-secondary" type="button">
                         <i class="fas fa-download"></i>
                         Exportar Lista
                     </button>
@@ -6575,7 +6567,7 @@
                     </div>
                 </div>
                 <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
-                    <button class="btn btn-secondary" onclick="exportTransactionsList()" type="button">
+                    <button class="btn btn-secondary" type="button">
                         <i class="fas fa-download"></i>
                         Exportar Lista
                     </button>
@@ -6630,7 +6622,7 @@
                     </div>
                 </div>
                 <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
-                    <button class="btn btn-secondary" onclick="exportReportsList()" type="button">
+                    <button class="btn btn-secondary" type="button">
                         <i class="fas fa-download"></i>
                         Exportar Lista
                     </button>
@@ -7000,7 +6992,7 @@
                 </div>
                 <!-- Action Buttons -->
                 <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
-                    <button class="btn btn-secondary" onclick="exportUsersList()" type="button">
+                    <button class="btn btn-secondary" type="button">
                         <i class="fas fa-download"></i>
                         Exportar Lista
                     </button>
