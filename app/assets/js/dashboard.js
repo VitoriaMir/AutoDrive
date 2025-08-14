@@ -1,3 +1,63 @@
+// === FULLSCREEN CHARTS ===
+function fullscreenChart(button) {
+  // Encontra o card mais próximo
+  const card = button.closest(".chart-card");
+  if (!card) return;
+  // Entra em fullscreen
+  if (card.requestFullscreen) {
+    card.requestFullscreen();
+  } else if (card.webkitRequestFullscreen) {
+    card.webkitRequestFullscreen();
+  } else if (card.msRequestFullscreen) {
+    card.msRequestFullscreen();
+  }
+}
+
+function exitFullscreenChart() {
+  if (document.fullscreenElement) {
+    document.exitFullscreen();
+  } else if (document.webkitFullscreenElement) {
+    document.webkitExitFullscreen();
+  } else if (document.msFullscreenElement) {
+    document.msExitFullscreen();
+  }
+}
+
+// Alternar visibilidade dos botões ao entrar/sair do fullscreen
+document.addEventListener("fullscreenchange", () => {
+  document.querySelectorAll(".chart-card").forEach((card) => {
+    const expandBtn = card.querySelector(".fa-expand")?.closest("button");
+    const compressBtn = card.querySelector(".fa-compress")?.closest("button");
+    if (document.fullscreenElement === card) {
+      if (expandBtn) expandBtn.style.display = "none";
+      if (compressBtn) compressBtn.style.display = "";
+    } else {
+      if (expandBtn) expandBtn.style.display = "";
+      if (compressBtn) compressBtn.style.display = "none";
+    }
+  });
+});
+
+// Inicializar listeners dos botões de fullscreen
+function setupFullscreenButtons() {
+  document.querySelectorAll(".chart-card").forEach((card) => {
+    const expandBtn = card.querySelector(".fa-expand")?.closest("button");
+    const compressBtn = card.querySelector(".fa-compress")?.closest("button");
+    if (expandBtn) {
+      expandBtn.onclick = function () {
+        fullscreenChart(this);
+      };
+    }
+    if (compressBtn) {
+      compressBtn.onclick = function () {
+        exitFullscreenChart();
+      };
+      compressBtn.style.display = "none";
+    }
+  });
+}
+
+document.addEventListener("DOMContentLoaded", setupFullscreenButtons);
 // Variables
 const sidebar = document.getElementById("sidebar");
 const toggleBtn = document.getElementById("toggle-sidebar");
