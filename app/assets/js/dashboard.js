@@ -57,7 +57,47 @@ function setupFullscreenButtons() {
   });
 }
 
-document.addEventListener("DOMContentLoaded", setupFullscreenButtons);
+document.addEventListener("DOMContentLoaded", () => {
+  setupFullscreenButtons();
+  // Ativa exportação para todos os botões fa-download dentro de chart-card
+  document.querySelectorAll(".chart-card").forEach((card) => {
+    const exportBtn = card.querySelector(".fa-download")?.closest("button");
+    if (exportBtn) {
+      exportBtn.onclick = function () {
+        // Procura o canvas do gráfico dentro do card
+        const canvas = card.querySelector("canvas");
+        if (canvas && window.Chart) {
+          // Procura o objeto Chart associado
+          let chartInstance = null;
+          // Tenta encontrar o chart pelo id do canvas
+          if (canvas.id && window[canvas.id.replace("-chart", "Chart")]) {
+            chartInstance = window[canvas.id.replace("-chart", "Chart")];
+          }
+          // Fallback: tenta Chart.getChart(canvas)
+          if (!chartInstance && window.Chart.getChart) {
+            chartInstance = window.Chart.getChart(canvas);
+          }
+          if (chartInstance && chartInstance.toBase64Image) {
+            const url = chartInstance.toBase64Image();
+            const link = document.createElement("a");
+            link.download = (canvas.id || "grafico") + ".png";
+            link.href = url;
+            link.click();
+            showNotification("Gráfico exportado com sucesso!", "success");
+          } else {
+            showNotification(
+              "Não foi possível exportar este gráfico.",
+              "error"
+            );
+          }
+        } else {
+          showNotification("Nenhum gráfico encontrado para exportar.", "error");
+        }
+      };
+    }
+  });
+});
+
 // Variables
 const sidebar = document.getElementById("sidebar");
 const toggleBtn = document.getElementById("toggle-sidebar");
