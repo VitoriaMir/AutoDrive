@@ -1727,12 +1727,6 @@ function viewTransactionDetails(id) {
 }
 
 // Download receipt
-function downloadReceipt(id) {
-  showNotification(`Baixando recibo da transação #${id}...`, "info");
-  setTimeout(() => {
-    showNotification("Recibo baixado com sucesso!", "success");
-  }, 1000);
-}
 
 // Send payment reminder
 function sendReminder(id) {
@@ -2195,14 +2189,6 @@ function generateCertificate(id) {
   setTimeout(() => {
     showNotification("Certificado gerado com sucesso!", "success");
   }, 2000);
-}
-
-// Download exam report
-function downloadExamReport(id) {
-  showNotification(`Baixando relatório do exame #${id}...`, "info");
-  setTimeout(() => {
-    showNotification("Relatório baixado com sucesso!", "success");
-  }, 1000);
 }
 
 // Send exam reminder
@@ -3008,9 +2994,6 @@ function viewPayment(id) {
 function editPayment(id) {
   showNotification(`Editando pagamento ID: ${id}`, "info");
 }
-function downloadReport(id) {
-  showNotification(`Baixando relatório ID: ${id}`, "success");
-}
 
 // Search functionality
 const searchInput = document.querySelector(".search-input");
@@ -3511,11 +3494,6 @@ function contactStudent(studentId) {
 function viewStudentCertificate(studentId) {
   showNotification(`Carregando certificado do aluno ${studentId}...`, "info");
   // Here you would show/download certificate
-}
-
-function downloadStudentReport(studentId) {
-  showNotification(`Baixando relatório do aluno ${studentId}...`, "info");
-  // Here you would download student report
 }
 
 function scheduleExam(studentId) {
@@ -6547,12 +6525,6 @@ function renderReportsList(reports) {
                         style="padding: 6px 10px; border-radius: 6px;">
                   <i class="fas fa-eye"></i>
                 </button>
-                <button class="btn btn-sm btn-outline-success" 
-                        onclick="downloadReport(${report.id})" 
-                        title="Download"
-                        style="padding: 6px 10px; border-radius: 6px;">
-                  <i class="fas fa-download"></i>
-                </button>
                 <button class="btn btn-sm btn-outline-info" 
                         onclick="shareReport(${report.id})" 
                         title="Compartilhar"
@@ -6617,11 +6589,6 @@ function filterReportsList() {
   });
 
   renderReportsList(filteredReports);
-}
-
-function downloadReport(reportId) {
-  showNotification(`Baixando relatório ${reportId}...`, "success");
-  // Here you would trigger the download
 }
 
 function viewReport(reportId) {
