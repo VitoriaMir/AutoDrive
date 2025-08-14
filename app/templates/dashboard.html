@@ -159,56 +159,6 @@
                 </button>
             </div>
             <div class="profile-panel-content">
-                <!-- Quick Stats for User -->
-                <div class="profile-quick-stats">
-                    <div class="quick-stat">
-                        <div class="stat-icon">
-                            <i class="fas fa-calendar-check"></i>
-                        </div>
-                        <div class="stat-info">
-                            <div class="stat-number">
-                                {% if user_role == 'instructor' %}
-                                12
-                                {% else %}
-                                5
-                                {% endif %}
-                            </div>
-                            <div class="stat-label">
-                                {% if user_role == 'instructor' %}
-                                Aulas Hoje
-                                {% else %}
-                                Atividades
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                    {% if user_role != 'instructor' %}
-                    <div class="quick-stat">
-                        <div class="stat-icon">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <div class="stat-info">
-                            <div class="stat-number">142</div>
-                            <div class="stat-label">Alunos Ativos</div>
-                        </div>
-                    </div>
-                    {% endif %}
-                    <div class="quick-stat">
-                        <div class="stat-icon">
-                            <i class="fas fa-clock"></i>
-                        </div>
-                        <div class="stat-info">
-                            <div class="stat-number">
-                                {% if user_role == 'instructor' %}
-                                8h30
-                                {% else %}
-                                4h15
-                                {% endif %}
-                            </div>
-                            <div class="stat-label">Hoje</div>
-                        </div>
-                    </div>
-                </div>
 
                 <div class="profile-settings-list">
                     <div class="profile-setting-item" onclick="openUserSettings()">

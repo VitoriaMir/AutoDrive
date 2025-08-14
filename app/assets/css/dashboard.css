@@ -14239,62 +14239,6 @@ body {
   color: white;
 }
 
-/* Quick Stats in Profile */
-.profile-quick-stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-  gap: 15px;
-  margin-bottom: 25px;
-  padding: 20px;
-  background: var(--card-bg);
-  border-radius: 16px;
-  border: 1px solid var(--border-color);
-}
-
-.quick-stat {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 15px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  transition: var(--transition);
-}
-
-.quick-stat:hover {
-  background: rgba(255, 255, 255, 0.08);
-  transform: translateY(-2px);
-}
-
-.quick-stat .stat-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  background: var(--primary);
-  border-radius: 10px;
-  color: white;
-  font-size: 1.1rem;
-}
-
-.quick-stat .stat-info {
-  flex: 1;
-}
-
-.quick-stat .stat-number {
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  line-height: 1;
-  margin-bottom: 4px;
-}
-
-.quick-stat .stat-label {
-  font-size: 0.8rem;
-  color: var(--text-secondary);
-  font-weight: 500;
-}
 
 /* Improved Profile Header */
 .profile-user-details {
@@ -14317,27 +14261,6 @@ body {
 }
 
 /* Responsive improvements */
-@media (max-width: 768px) {
-  .profile-quick-stats {
-    grid-template-columns: 1fr;
-    gap: 12px;
-    padding: 15px;
-  }
-
-  .quick-stat {
-    padding: 12px;
-  }
-
-  .quick-stat .stat-icon {
-    width: 35px;
-    height: 35px;
-    font-size: 1rem;
-  }
-
-  .quick-stat .stat-number {
-    font-size: 1.2rem;
-  }
-}
 
 /* ===== MODAL PADRONIZADO ===== */
 /* Estrutura base para todos os modais */
