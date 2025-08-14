@@ -456,19 +456,124 @@ document.addEventListener("click", (e) => {
 });
 
 // Modal functions
+// Funções utilitárias para controle de overflow
+function disableBodyScroll() {
+  document.body.style.overflow = "hidden";
+  console.log("[DEBUG] Scroll do body desabilitado");
+}
+
+function enableBodyScroll() {
+  document.body.style.overflow = "auto";
+  console.log("[DEBUG] Scroll do body habilitado");
+}
+
+// Função de emergência para restaurar scroll
+function forceEnableBodyScroll() {
+  document.body.style.overflow = "";
+  document.body.style.removeProperty("overflow");
+  document.body.classList.remove("modal-open");
+
+  // Remover todos os overlays modais que possam estar interferindo
+  const allModals = document.querySelectorAll(".modal, .modal-overlay");
+  allModals.forEach((modal) => {
+    modal.classList.remove("show");
+    modal.style.display = "none";
+  });
+
+  // Garantir que não há elementos com pointer-events: none no body
+  document.body.style.removeProperty("pointer-events");
+
+  console.log("[DEBUG] Scroll do body forçadamente restaurado e modais limpos");
+}
+
+// Função completa para fechar modal com limpeza total
+function forceCloseAllModals() {
+  // Fechar todos os modais
+  const allModals = document.querySelectorAll(
+    ".modal.show, .modal-overlay.show"
+  );
+  allModals.forEach((modal) => {
+    modal.classList.remove("show");
+    if (modal.id) {
+      console.log(`[DEBUG] Fechando modal: ${modal.id}`);
+    }
+  });
+
+  // Restaurar scroll
+  forceEnableBodyScroll();
+
+  console.log("[DEBUG] Todos os modais fechados forçadamente");
+}
+
+// Disponibilizar globalmente para debug
+window.forceEnableBodyScroll = forceEnableBodyScroll;
+window.forceCloseAllModals = forceCloseAllModals;
+
+// Função de diagnóstico completo
+function diagnosePage() {
+  console.log("=== DIAGNÓSTICO DA PÁGINA ===");
+  console.log("Body overflow:", document.body.style.overflow);
+  console.log("Body pointer-events:", document.body.style.pointerEvents);
+
+  const allModals = document.querySelectorAll(".modal, .modal-overlay");
+  console.log(`Total de modais: ${allModals.length}`);
+
+  allModals.forEach((modal, index) => {
+    const style = getComputedStyle(modal);
+    console.log(`Modal ${index + 1} (${modal.id || "sem-id"}):`);
+    console.log(`  - Classes: ${modal.className}`);
+    console.log(`  - Display: ${style.display}`);
+    console.log(`  - Opacity: ${style.opacity}`);
+    console.log(`  - Z-index: ${style.zIndex}`);
+    console.log(`  - Pointer-events: ${style.pointerEvents}`);
+  });
+
+  // Testar clique no centro da tela
+  const centerX = window.innerWidth / 2;
+  const centerY = window.innerHeight / 2;
+  const elementsAtCenter = document.elementsFromPoint(centerX, centerY);
+  console.log("Elementos no centro da tela:", elementsAtCenter.slice(0, 5));
+
+  console.log("=== FIM DO DIAGNÓSTICO ===");
+}
+
+window.diagnosePage = diagnosePage;
+
 function openModal(modalId) {
   const modal = document.getElementById(modalId);
   if (modal) {
     modal.classList.add("show");
-    document.body.style.overflow = "hidden";
+    disableBodyScroll();
   }
 }
 
 function closeModal(modalId) {
+  console.log(`[DEBUG] Fechando modal: ${modalId}`);
   const modal = document.getElementById(modalId);
   if (modal) {
     modal.classList.remove("show");
-    document.body.style.overflow = "auto";
+    // Forçar display none também para garantir
+    setTimeout(() => {
+      if (!modal.classList.contains("show")) {
+        modal.style.display = "none";
+      }
+    }, 300);
+    console.log(`[DEBUG] Classe 'show' removida do modal: ${modalId}`);
+  } else {
+    console.warn(`[DEBUG] Modal não encontrado: ${modalId}`);
+  }
+
+  // Verificar se ainda há modais abertos
+  const remainingModals = document.querySelectorAll(
+    ".modal.show, .modal-overlay.show"
+  );
+  console.log(`[DEBUG] Modais restantes abertos: ${remainingModals.length}`);
+
+  // Só restaurar o scroll se não houver mais modais abertos
+  if (remainingModals.length === 0) {
+    enableBodyScroll();
+    // Garantir que não há elementos invisíveis interferindo
+    document.body.style.removeProperty("pointer-events");
   }
 }
 
@@ -480,8 +585,9 @@ document.addEventListener("click", (e) => {
   ) {
     const modal = e.target.closest(".modal, .modal-overlay");
     if (modal) {
-      modal.classList.remove("show");
-      document.body.style.overflow = "auto";
+      console.log("[DEBUG] Fechando modal por clique fora");
+      // Usar a função closeModal padronizada
+      closeModal(modal.id);
       // Limpar formulário se existir
       const form = modal.querySelector("form");
       if (form) {
@@ -490,6 +596,88 @@ document.addEventListener("click", (e) => {
     }
   }
 });
+
+// Close modal when pressing ESC key
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    const openModal = document.querySelector(
+      ".modal.show, .modal-overlay.show"
+    );
+    if (openModal) {
+      console.log("[DEBUG] Fechando modal com tecla ESC");
+      closeModal(openModal.id);
+    }
+  }
+});
+
+// Adicionar detector de problemas de clique
+document.addEventListener(
+  "click",
+  (e) => {
+    // Se o clique foi em um elemento que deveria ser clicável mas não funcionou
+    const clickableElements = document.elementsFromPoint(e.clientX, e.clientY);
+    console.log(
+      "[DEBUG] Elementos no ponto do clique:",
+      clickableElements.map(
+        (el) =>
+          el.tagName + (el.className ? "." + el.className.split(" ")[0] : "")
+      )
+    );
+
+    // Verificar se há overlays invisíveis bloqueando
+    const hasInvisibleOverlay = clickableElements.some(
+      (el) =>
+        el.classList.contains("modal-overlay") ||
+        el.classList.contains("modal") ||
+        getComputedStyle(el).pointerEvents === "none"
+    );
+
+    if (hasInvisibleOverlay) {
+      console.warn("[DEBUG] Possível overlay invisível detectado!");
+    }
+  },
+  true
+); // Use capture para pegar antes de outros handlers
+
+// Detector automático de modais fantasma
+function checkForGhostModals() {
+  const modals = document.querySelectorAll(".modal, .modal-overlay");
+  const visibleModals = [];
+  const hiddenModals = [];
+
+  modals.forEach((modal) => {
+    const style = getComputedStyle(modal);
+    const isVisible =
+      modal.classList.contains("show") ||
+      style.display !== "none" ||
+      style.opacity !== "0";
+
+    if (isVisible && !modal.classList.contains("show")) {
+      hiddenModals.push(modal);
+    } else if (modal.classList.contains("show")) {
+      visibleModals.push(modal);
+    }
+  });
+
+  if (hiddenModals.length > 0) {
+    console.warn("[DEBUG] Modais fantasma detectados:", hiddenModals);
+    hiddenModals.forEach((modal) => {
+      modal.style.display = "none";
+      modal.classList.remove("show");
+    });
+  }
+
+  // Se não há modais visíveis mas o body ainda tem overflow hidden
+  if (visibleModals.length === 0 && document.body.style.overflow === "hidden") {
+    console.warn(
+      "[DEBUG] Body com overflow hidden sem modal visível - corrigindo"
+    );
+    enableBodyScroll();
+  }
+}
+
+// Executar verificação a cada 3 segundos
+setInterval(checkForGhostModals, 3000);
 
 // Logout button
 document.getElementById("logout-btn").addEventListener("click", () => {
@@ -6281,7 +6469,7 @@ function testCreateTemplateModal() {
     setTimeout(() => {
       modal.classList.remove("show");
       modal.style.display = "none";
-      document.body.style.overflow = "";
+      document.body.style.overflow = "auto";
       console.log("Modal de teste fechado automaticamente");
     }, 3000);
   }
@@ -8112,14 +8300,9 @@ function openScheduleLessonModal() {
   // Garantir que a função esteja disponível globalmente para o onclick do HTML
   window.openScheduleLessonModal = openScheduleLessonModal;
   console.log("[DEBUG] openScheduleLessonModal chamado");
-  const modal = document.getElementById("scheduleLessonModal");
-  if (modal) {
-    modal.classList.add("show");
-    document.body.style.overflow = "hidden";
-    console.log("[DEBUG] Modal encontrado e classe 'show' adicionada");
-  } else {
-    console.error("[DEBUG] scheduleLessonModal NÃO encontrado no DOM");
-  }
+
+  // Usar a função padronizada openModal para consistência
+  openModal("scheduleLessonModal");
 
   // Definir data mínima como hoje
   const today = new Date().toISOString().split("T")[0];
@@ -9218,18 +9401,6 @@ function openModal(modalId) {
 }
 
 /**
- * Fecha um modal com animação
- * @param {string} modalId - ID do modal a ser fechado
- */
-function closeModal(modalId) {
-  const modal = document.getElementById(modalId);
-  if (modal) {
-    modal.classList.remove("show");
-    document.body.style.overflow = ""; // Restaurar scroll do body
-  }
-}
-
-/**
  * Alterna a visibilidade de um modal
  * @param {string} modalId - ID do modal
  */
@@ -9286,7 +9457,6 @@ function showModalError(containerId, message = "Erro ao carregar dados") {
 window.openStudentModal = () => openModal("addStudentModal");
 window.openInstructorModal = () => openModal("addInstructorModal");
 window.openVehicleModal = () => openModal("addVehicleModal");
-window.openScheduleLessonModal = () => openModal("scheduleLessonModal");
 window.openPaymentModal = () => openModal("paymentModal");
 
 // Funções para modais de visualização
