@@ -539,6 +539,42 @@ function diagnosePage() {
 
 window.diagnosePage = diagnosePage;
 
+// Função de teste específica para o modal de usuário
+function testUserModal() {
+  console.log("=== TESTE MODAL DE USUÁRIO ===");
+  
+  // Verificar se o modal existe
+  const modal = document.getElementById("addUserModal");
+  console.log("Modal encontrado:", !!modal);
+  
+  // Verificar se o formulário existe
+  const form = document.getElementById("addUserForm");
+  console.log("Formulário encontrado:", !!form);
+  
+  // Verificar campos essenciais
+  const fields = ['userName', 'userEmail', 'userCpf', 'userPassword', 'userPasswordConfirm', 'userRole'];
+  fields.forEach(fieldId => {
+    const field = document.getElementById(fieldId);
+    console.log(`Campo ${fieldId}:`, !!field);
+  });
+  
+  // Testar abertura do modal
+  if (modal && form) {
+    console.log("Tentando abrir modal...");
+    openModal("addUserModal");
+    console.log("Modal possui classe 'show':", modal.classList.contains("show"));
+    
+    setTimeout(() => {
+      console.log("Fechando modal de teste...");
+      closeModal("addUserModal");
+    }, 2000);
+  }
+  
+  console.log("=== FIM DO TESTE ===");
+}
+
+window.testUserModal = testUserModal;
+
 function openModal(modalId) {
   const modal = document.getElementById(modalId);
   if (modal) {
@@ -799,7 +835,106 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       });
   }
+
+  // Setup form event listeners
+  setupFormEventListeners();
 });
+
+// Function to setup all form event listeners
+function setupFormEventListeners() {
+  // Add Student Form
+  const addStudentForm = document.getElementById("addStudentForm");
+  if (addStudentForm) {
+    addStudentForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      showNotification("Novo aluno adicionado com sucesso!", "success");
+      closeModal("addStudentModal");
+      e.target.reset();
+    });
+  }
+
+  // Add User Form
+  const addUserForm = document.getElementById("addUserForm");
+  if (addUserForm) {
+    addUserForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      // Validar se as senhas coincidem
+      const password = document.getElementById("userPassword").value;
+      const confirmPassword = document.getElementById("userPasswordConfirm").value;
+
+      if (password !== confirmPassword) {
+        showNotification("As senhas não coincidem!", "error");
+        return;
+      }
+
+      if (password.length < 8) {
+        showNotification("A senha deve ter pelo menos 8 caracteres!", "error");
+        return;
+      }
+
+      // Validar CPF
+      const cpf = document.getElementById("userCpf").value.replace(/\D/g, "");
+      if (cpf.length !== 11) {
+        showNotification("CPF deve ter 11 dígitos!", "error");
+        return;
+      }
+
+      // Validar email
+      const email = document.getElementById("userEmail").value;
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        showNotification("Email inválido!", "error");
+        return;
+      }
+
+      // Simular cadastro
+      const userName = document.getElementById("userName").value;
+      const userRole = document.getElementById("userRole").value;
+      const selectedPermissions = Array.from(
+        document.querySelectorAll('input[name="permissions"]:checked')
+      ).map((cb) => cb.value);
+
+      showNotification(`✅ Usuário ${userName} cadastrado com sucesso!`, "success");
+      showNotification(
+        `📋 Perfil: ${userRole} | Permissões: ${selectedPermissions.length} módulos`,
+        "info"
+      );
+      closeModal("addUserModal");
+      e.target.reset();
+
+      // Reset password indicators
+      const passwordStrength = document.getElementById("passwordStrength");
+      const passwordMatch = document.getElementById("passwordMatch");
+      if (passwordStrength) passwordStrength.style.display = "none";
+      if (passwordMatch) passwordMatch.style.display = "none";
+    });
+  }
+
+  // Add Exam Form
+  const examForm = document.getElementById("examForm");
+  if (examForm) {
+    examForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const studentName = document.getElementById("examStudent");
+      const examType = document.getElementById("examType").value;
+      const examDate = document.getElementById("examDate").value;
+      const examTime = document.getElementById("examTime").value;
+
+      if (!studentName.value || !examType || !examDate || !examTime) {
+        showNotification("Preencha todos os campos obrigatórios!", "error");
+        return;
+      }
+
+      const studentText = studentName.options[studentName.selectedIndex].text;
+      showNotification(`✅ Exame ${examType} agendado para ${studentText}!`, "success");
+      showNotification(`📅 Data: ${new Date(examDate).toLocaleDateString()} às ${examTime}`, "info");
+      closeModal("examModal");
+      e.target.reset();
+    });
+  }
+}
 
 // Theme Toggle Functionality
 function initThemeToggle() {
@@ -2927,65 +3062,6 @@ function showNotification(message, type = "success") {
   }, 5000);
 }
 // Form handlers
-document.getElementById("addStudentForm").addEventListener("submit", (e) => {
-  e.preventDefault();
-  showNotification("Novo aluno adicionado com sucesso!", "success");
-  closeModal("addStudentModal");
-  e.target.reset();
-});
-
-document.getElementById("addUserForm").addEventListener("submit", (e) => {
-  e.preventDefault();
-
-  // Validar se as senhas coincidem
-  const password = document.getElementById("userPassword").value;
-  const confirmPassword = document.getElementById("userPasswordConfirm").value;
-
-  if (password !== confirmPassword) {
-    showNotification("As senhas não coincidem!", "error");
-    return;
-  }
-
-  if (password.length < 8) {
-    showNotification("A senha deve ter pelo menos 8 caracteres!", "error");
-    return;
-  }
-
-  // Validar CPF
-  const cpf = document.getElementById("userCpf").value.replace(/\D/g, "");
-  if (cpf.length !== 11) {
-    showNotification("CPF deve ter 11 dígitos!", "error");
-    return;
-  }
-
-  // Validar email
-  const email = document.getElementById("userEmail").value;
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
-    showNotification("Email inválido!", "error");
-    return;
-  }
-
-  // Simular cadastro
-  const userName = document.getElementById("userName").value;
-  const userRole = document.getElementById("userRole").value;
-  const selectedPermissions = Array.from(
-    document.querySelectorAll('input[name="permissions"]:checked')
-  ).map((cb) => cb.value);
-
-  showNotification(`✅ Usuário ${userName} cadastrado com sucesso!`, "success");
-  showNotification(
-    `📋 Perfil: ${userRole} | Permissões: ${selectedPermissions.length} módulos`,
-    "info"
-  );
-  closeModal("addUserModal");
-  e.target.reset();
-
-  // Reset password indicators
-  document.getElementById("passwordStrength").style.display = "none";
-  document.getElementById("passwordMatch").style.display = "none";
-});
-
 // Toggle password visibility
 function togglePasswordVisibility(inputId) {
   const input = document.getElementById(inputId);
@@ -3725,8 +3801,18 @@ function viewStudentCertificate(studentId) {
 }
 
 function scheduleExam(studentId) {
-  showNotification(`Agendando exame para aluno ${studentId}...`, "info");
-  // Here you would open exam scheduling modal
+  // Se um ID de aluno for fornecido, pré-selecionar no modal
+  if (studentId) {
+    setTimeout(() => {
+      const studentSelect = document.getElementById("examStudent");
+      if (studentSelect) {
+        studentSelect.value = studentId;
+      }
+    }, 100);
+  }
+  
+  // Abrir o modal de agendamento de exame
+  openModal("examModal");
 }
 
 // Initialize students performance chart
@@ -9457,6 +9543,8 @@ function showModalError(containerId, message = "Erro ao carregar dados") {
 window.openStudentModal = () => openModal("addStudentModal");
 window.openInstructorModal = () => openModal("addInstructorModal");
 window.openVehicleModal = () => openModal("addVehicleModal");
+window.openUserModal = () => openModal("addUserModal");
+window.openExamModal = () => openModal("examModal");
 window.openPaymentModal = () => openModal("paymentModal");
 
 // Funções para modais de visualização

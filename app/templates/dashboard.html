@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap"
         rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
-    <link href="/assets/css/dashboard.css" rel="stylesheet" />
+    <link href="/assets/css/dashboard.css?v=4.0" rel="stylesheet" />
 
 </head>
 
@@ -6519,7 +6519,7 @@
     </div>
     <!-- Add User Modal -->
     <div class="modal" id="addUserModal">
-        <div class="modal-content" style="max-width: 900px;">
+        <div class="modal-content">
             <div class="modal-header">
                 <div style="display: flex; align-items: center; gap: 1rem;">
                     <div style="
@@ -6546,7 +6546,7 @@
                 </button>
             </div>
             <form id="addUserForm">
-                <div class="modal-body" style="padding: 2rem;">
+                <div class="modal-body">
                     <!-- Seção: Informações Pessoais -->
                     <div class="form-section">
                         <div class="section-header">
@@ -6809,26 +6809,23 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer"
-                    style="padding: 1.5rem 2rem; background: var(--background-secondary, #f8f9fa); border-top: 1px solid var(--border-color, #e0e0e0);">
-                    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                        <div style="color: var(--text-secondary, #6c757d); font-size: 14px;">
-                            <i class="fas fa-info-circle"></i>
-                            Campos obrigatórios marcados com <span class="required">*</span>
-                        </div>
-                        <div style="display: flex; gap: 1rem;">
-                            <button class="btn btn-secondary" onclick="closeModal('addUserModal')" type="button">
-                                <i class="fas fa-times"></i>
-                                Cancelar
-                            </button>
-                            <button class="btn btn-primary" type="submit">
-                                <i class="fas fa-save"></i>
-                                Cadastrar Usuário
-                            </button>
-                        </div>
-                    </div>
-                </div>
             </form>
+            <div class="modal-footer">
+                <div class="footer-info">
+                    <i class="fas fa-info-circle"></i>
+                    Campos obrigatórios marcados com <span class="required">*</span>
+                </div>
+                <div class="footer-buttons">
+                    <button class="btn btn-secondary" onclick="closeModal('addUserModal')" type="button">
+                        <i class="fas fa-times"></i>
+                        Cancelar
+                    </button>
+                    <button class="btn btn-primary" type="submit" form="addUserForm">
+                        <i class="fas fa-save"></i>
+                        Cadastrar Usuário
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
     <!-- View All Users Modal -->
@@ -7408,8 +7405,143 @@
         </div>
     </div>
 
+    <!-- Exam Modal -->
+    <div class="modal" id="examModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div style="
+            width: 48px; 
+            height: 48px; 
+            background: linear-gradient(135deg, var(--primary-color, #007bff), var(--success-color, #28a745)); 
+            border-radius: 12px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: white;
+          ">
+                        <i class="fas fa-file-alt" style="font-size: 20px;"></i>
+                    </div>
+                    <div>
+                        <h3 style="margin: 0; color: var(--text-primary, #333);">Agendar Exame</h3>
+                        <p style="margin: 0; color: var(--text-secondary, #6c757d); font-size: 14px;">
+                            Agendar exame teórico ou prático para o aluno
+                        </p>
+                    </div>
+                </div>
+                <button aria-label="Fechar" class="modal-close" onclick="closeModal('examModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="examForm">
+                <div class="modal-body">
+                    <!-- Seção: Informações do Exame -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <div>
+                                <h4>Informações do Exame</h4>
+                                <p>Dados básicos do agendamento</p>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="examStudent">
+                                    <i class="fas fa-user"></i>
+                                    Aluno <span class="required">*</span>
+                                </label>
+                                <select id="examStudent" name="examStudent" required>
+                                    <option value="">Selecione o aluno</option>
+                                    <option value="1">Ana Silva</option>
+                                    <option value="2">Bruno Costa</option>
+                                    <option value="3">Carla Mendes</option>
+                                    <option value="4">Daniel Santos</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="examType">
+                                    <i class="fas fa-clipboard-list"></i>
+                                    Tipo de Exame <span class="required">*</span>
+                                </label>
+                                <select id="examType" name="examType" required>
+                                    <option value="">Selecione o tipo</option>
+                                    <option value="teorico">Exame Teórico</option>
+                                    <option value="pratico">Exame Prático</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="examDate">
+                                    <i class="fas fa-calendar"></i>
+                                    Data do Exame <span class="required">*</span>
+                                </label>
+                                <input type="date" id="examDate" name="examDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="examTime">
+                                    <i class="fas fa-clock"></i>
+                                    Horário <span class="required">*</span>
+                                </label>
+                                <input type="time" id="examTime" name="examTime" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="examLocation">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    Local do Exame
+                                </label>
+                                <input type="text" id="examLocation" name="examLocation" 
+                                       placeholder="Ex: DETRAN - Unidade Centro">
+                            </div>
+                            <div class="form-group">
+                                <label for="examInstructor">
+                                    <i class="fas fa-chalkboard-teacher"></i>
+                                    Instrutor Responsável
+                                </label>
+                                <select id="examInstructor" name="examInstructor">
+                                    <option value="">Selecione o instrutor</option>
+                                    <option value="1">Carlos Silva</option>
+                                    <option value="2">Maria Santos</option>
+                                    <option value="3">João Oliveira</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="examNotes">
+                                <i class="fas fa-sticky-note"></i>
+                                Observações
+                            </label>
+                            <textarea id="examNotes" name="examNotes" rows="3" 
+                                      placeholder="Observações adicionais sobre o exame..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="modal-footer">
+                <div class="footer-info">
+                    <i class="fas fa-info-circle"></i>
+                    Campos obrigatórios marcados com <span class="required">*</span>
+                </div>
+                <div class="footer-buttons">
+                    <button class="btn btn-secondary" onclick="closeModal('examModal')" type="button">
+                        <i class="fas fa-times"></i>
+                        Cancelar
+                    </button>
+                    <button class="btn btn-primary" type="submit" form="examForm">
+                        <i class="fas fa-calendar-plus"></i>
+                        Agendar Exame
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="/assets/js/dashboard.js?v=4.0"></script>
+    <script src="/assets/js/dashboard.js?v=6.0"></script>
 </body>
 
 </html>

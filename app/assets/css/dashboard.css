@@ -13469,6 +13469,86 @@ body {
   max-height: 90vh;
 }
 
+/* Modal de usuário específico - garantir scroll */
+#addUserModal .modal-content {
+  max-width: 900px;
+  width: 90%;
+  max-height: 85vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+#addUserModal .modal-body {
+  padding: 2rem;
+  overflow-y: auto;
+  flex: 1;
+  max-height: calc(85vh - 160px); /* Subtraindo header (~80px) e footer (~80px) */
+}
+
+#addUserModal .modal-footer {
+  flex-shrink: 0;
+  padding: 1.5rem 2rem;
+  background: var(--background-secondary, #f8f9fa);
+  border-top: 1px solid var(--border-color, #e0e0e0);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#addUserModal .modal-footer .footer-info {
+  color: var(--text-secondary, #6c757d);
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+#addUserModal .modal-footer .footer-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+/* Modal de exame específico - garantir scroll */
+#examModal .modal-content {
+  max-width: 700px;
+  width: 90%;
+  max-height: 85vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+#examModal .modal-body {
+  padding: 2rem;
+  overflow-y: auto;
+  flex: 1;
+  max-height: calc(85vh - 160px);
+}
+
+#examModal .modal-footer {
+  flex-shrink: 0;
+  padding: 1.5rem 2rem;
+  background: var(--background-secondary, #f8f9fa);
+  border-top: 1px solid var(--border-color, #e0e0e0);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#examModal .modal-footer .footer-info {
+  color: var(--text-secondary, #6c757d);
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+#examModal .modal-footer .footer-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
 /* Controles de filtro/busca */
 .modal-controls {
   display: flex;
