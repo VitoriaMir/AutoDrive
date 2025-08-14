@@ -1151,8 +1151,6 @@ body {
   }
 }
 
-/* ...existing styles... */
-
 /* Reset e estilos globais */
 * {
   margin: 0;
@@ -5423,7 +5421,7 @@ body {
   position: fixed;
   top: 20px;
   right: 20px;
-  background: rgba(255, 255, 255, 0.98);
+  background: rgba(235, 187, 197, 5);
   backdrop-filter: blur(15px);
   border-radius: 12px;
   padding: 1rem 1.5rem;
