@@ -7280,8 +7280,136 @@
         </div>
     </div>
 
+    <!-- Modal de Criar Modelo de Relatório -->
+    <div class="modal-overlay" id="createTemplateModal">
+        <div class="modal-content schedule-lesson-modal">
+            <div class="modal-header">
+                <h3>
+                    <i class="fas fa-file-alt"></i>
+                    Criar Novo Modelo de Relatório
+                </h3>
+                <button class="modal-close" onclick="closeModal('createTemplateModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="createTemplateForm" class="schedule-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="templateName">
+                                <i class="fas fa-tag"></i>
+                                Nome do Modelo
+                            </label>
+                            <input type="text" id="templateName" name="templateName" required
+                                placeholder="Ex: Relatório Mensal Personalizado">
+                        </div>
+                        <div class="form-group">
+                            <label for="templateCategory">
+                                <i class="fas fa-folder"></i>
+                                Categoria
+                            </label>
+                            <select id="templateCategory" name="templateCategory" required>
+                                <option value="">Selecione uma categoria</option>
+                                <option value="financial">Financeiro</option>
+                                <option value="operational">Operacional</option>
+                                <option value="students">Alunos</option>
+                                <option value="instructors">Instrutores</option>
+                                <option value="vehicles">Veículos</option>
+                                <option value="exams">Exames</option>
+                                <option value="custom">Personalizado</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="templateDescription">
+                            <i class="fas fa-align-left"></i>
+                            Descrição
+                        </label>
+                        <textarea id="templateDescription" name="templateDescription" rows="3"
+                            placeholder="Descreva o propósito e conteúdo deste modelo..."></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="templateFrequency">
+                                <i class="fas fa-calendar-alt"></i>
+                                Frequência Padrão
+                            </label>
+                            <select id="templateFrequency" name="templateFrequency">
+                                <option value="once">Uma vez</option>
+                                <option value="daily">Diário</option>
+                                <option value="weekly">Semanal</option>
+                                <option value="monthly">Mensal</option>
+                                <option value="quarterly">Trimestral</option>
+                                <option value="annually">Anual</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="templateFormat">
+                                <i class="fas fa-file-export"></i>
+                                Formato de Saída
+                            </label>
+                            <select id="templateFormat" name="templateFormat">
+                                <option value="pdf">PDF</option>
+                                <option value="excel">Excel</option>
+                                <option value="csv">CSV</option>
+                                <option value="html">HTML</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <i class="fas fa-chart-bar"></i>
+                            Seções do Relatório
+                        </label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="sections" value="summary">
+                                <span class="checkmark"></span>
+                                Resumo Executivo
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="sections" value="financial">
+                                <span class="checkmark"></span>
+                                Dados Financeiros
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="sections" value="performance">
+                                <span class="checkmark"></span>
+                                Indicadores de Performance
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="sections" value="charts">
+                                <span class="checkmark"></span>
+                                Gráficos e Visualizações
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="sections" value="detailed">
+                                <span class="checkmark"></span>
+                                Dados Detalhados
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="sections" value="recommendations">
+                                <span class="checkmark"></span>
+                                Recomendações
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('createTemplateModal')">
+                    Cancelar
+                </button>
+                <button type="button" class="btn btn-primary" onclick="submitTemplate()">
+                    <i class="fas fa-save"></i>
+                    Criar Modelo
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="/assets/js/dashboard.js"></script>
+    <script src="/assets/js/dashboard.js?v=2.0"></script>
 </body>
 
 </html>

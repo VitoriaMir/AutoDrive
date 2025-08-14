@@ -6228,8 +6228,106 @@ function scheduleReport() {
 }
 
 function createTemplate() {
-  showNotification("Abrindo criador de modelos de relatórios...", "info");
-  // Here you would open the template creator modal
+  // Tentar múltiplas abordagens para garantir que funciona
+  try {
+    console.log("createTemplate() executada");
+
+    const modal = document.getElementById("createTemplateModal");
+    if (!modal) {
+      console.error("Modal createTemplateModal não encontrado no DOM!");
+      showNotification(
+        "Erro: Modal de criação de template não encontrado",
+        "error"
+      );
+      return;
+    }
+
+    // Limpar classes e estilos anteriores
+    modal.classList.remove("show");
+    modal.style.display = "none";
+
+    // Forçar recálculo do layout
+    modal.offsetHeight;
+
+    // Aplicar classes e estilos para mostrar
+    modal.classList.add("show");
+    modal.style.display = "flex";
+    document.body.style.overflow = "hidden";
+
+    console.log("Modal exibido com sucesso");
+  } catch (error) {
+    console.error("Erro ao abrir modal:", error);
+    showNotification(
+      "Erro ao abrir modal de criação de template: " + error.message,
+      "error"
+    );
+  }
+}
+
+// Função de teste - pode ser chamada no console do navegador
+function testCreateTemplateModal() {
+  console.log("=== TESTE DE MODAL ===");
+  console.log("Versão do script: 2.0");
+
+  const modal = document.getElementById("createTemplateModal");
+  console.log("Modal encontrado:", modal);
+
+  if (modal) {
+    modal.classList.add("show");
+    modal.style.display = "flex";
+    document.body.style.overflow = "hidden";
+    console.log("Modal de teste aberto!");
+
+    setTimeout(() => {
+      modal.classList.remove("show");
+      modal.style.display = "none";
+      document.body.style.overflow = "";
+      console.log("Modal de teste fechado automaticamente");
+    }, 3000);
+  }
+}
+
+function submitTemplate() {
+  const form = document.getElementById("createTemplateForm");
+  const formData = new FormData(form);
+
+  // Pegar os valores do formulário
+  const templateName = formData.get("templateName");
+  const templateCategory = formData.get("templateCategory");
+  const templateDescription = formData.get("templateDescription");
+  const templateFrequency = formData.get("templateFrequency");
+  const templateFormat = formData.get("templateFormat");
+
+  // Pegar seções selecionadas
+  const sections = formData.getAll("sections");
+
+  // Validação básica
+  if (!templateName || !templateCategory) {
+    showNotification("Por favor, preencha os campos obrigatórios.", "error");
+    return;
+  }
+
+  // Aqui você faria a requisição para o backend
+  const templateData = {
+    name: templateName,
+    category: templateCategory,
+    description: templateDescription,
+    frequency: templateFrequency,
+    format: templateFormat,
+    sections: sections,
+  };
+
+  console.log("Dados do template:", templateData);
+
+  // Simular salvamento
+  showNotification(`Modelo "${templateName}" criado com sucesso!`, "success");
+
+  // Fechar modal e limpar formulário
+  closeModal("createTemplateModal");
+  form.reset();
+
+  // Aqui você poderia atualizar a lista de templates na interface
+  // updateTemplatesList();
 }
 
 function generateReport(type) {

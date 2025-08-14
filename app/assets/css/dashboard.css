@@ -4107,6 +4107,31 @@ body {
   box-shadow: 0 8px 16px rgba(139, 92, 246, 0.3);
 }
 
+.metric-icon.efficiency::before {
+  content: "⚡";
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  inset: 0;
+  opacity: 0.9;
+}
+
+/* Se não houver ícone HTML definido, mostra o ícone CSS */
+.metric-icon.efficiency:empty::before {
+  content: "⚡";
+}
+
+/* Alternativa com FontAwesome - descomente se preferir */
+/*
+.metric-icon.efficiency:empty::before {
+  font-family: "Font Awesome 5 Free";
+  content: "\f0e7";
+  font-weight: 900;
+}
+*/
+
 .metric-icon.revenue {
   background: linear-gradient(135deg, #06d6a0, #118d5e);
   color: white;
@@ -11068,6 +11093,58 @@ body {
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 0.75rem;
   margin-top: 0.5rem;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  padding: 0.75rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+  background: var(--background-card, rgba(255, 255, 255, 0.02));
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}
+
+.checkbox-label:hover {
+  background: var(--background-hover, rgba(255, 255, 255, 0.08));
+  border-color: var(--primary-color, rgba(67, 97, 238, 0.3));
+  transform: translateY(-1px);
+}
+
+.checkbox-label input[type="checkbox"] {
+  display: none;
+}
+
+.checkbox-label .checkmark {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border-color, rgba(255, 255, 255, 0.3));
+  border-radius: 4px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  background: transparent;
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkmark {
+  background: var(--primary-color, #4361ee);
+  border-color: var(--primary-color, #4361ee);
+  box-shadow: 0 0 10px rgba(67, 97, 238, 0.3);
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkmark::after {
+  content: "\f00c";
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  color: white;
+  font-size: 12px;
 }
 
 .checkbox-item {
