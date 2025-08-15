@@ -12,18 +12,12 @@
         rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
     <link href="/assets/css/dashboard.css?v=4.0" rel="stylesheet" />
-    <link href="/assets/css/loading-states.css?v=1.0" rel="stylesheet" />
-    <link href="/assets/css/loading-buttons.css?v=1.0" rel="stylesheet" />
     
     <!-- Firebase Scripts -->
     <script src="/assets/js/firebase-config.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-    
-    <!-- Loading Manager -->
-    <script src="/assets/js/loading-manager.js"></script>
-    <script src="/assets/js/loading-demo.js"></script>
 
 </head>
 
@@ -299,10 +293,10 @@
                     </div>
                     <div class="stat-content">
                         <div class="stat-title">Receita Mensal</div>
-                        <div class="stat-value" id="revenue-count">R$ 6.560</div>
-                        <div class="stat-trend down">
+                        <div class="stat-value">R$ 0</div>
+                        <div class="stat-trend">
                             <i class="fas fa-chart-line"></i>
-                            <span>Meta: R$ 8.000</span>
+                            <span>Aguardando dados</span>
                         </div>
                     </div>
                 </div>
@@ -313,10 +307,10 @@
                     </div>
                     <div class="stat-content">
                         <div class="stat-title">Aulas Agendadas</div>
-                        <div class="stat-value" data-stat="lessons-month">24</div>
+                        <div class="stat-value">0</div>
                         <div class="stat-trend">
                             <i class="fas fa-clock"></i>
-                            <span>8 em andamento</span>
+                            <span>Nenhuma aula</span>
                         </div>
                     </div>
                 </div>
@@ -326,10 +320,10 @@
                     </div>
                     <div class="stat-content">
                         <div class="stat-title">Frota Ativa</div>
-                        <div class="stat-value" data-stat="total-vehicles">12</div>
+                        <div class="stat-value">0</div>
                         <div class="stat-trend">
                             <i class="fas fa-tools"></i>
-                            <span>2 em manutenção</span>
+                            <span>Nenhum veículo</span>
                         </div>
                     </div>
                 </div>
@@ -339,10 +333,10 @@
                     </div>
                     <div class="stat-content">
                         <div class="stat-title">Alunos Matriculados</div>
-                        <div class="stat-value" data-stat="total-students">156</div>
+                        <div class="stat-value" data-stat="total-students">0</div>
                         <div class="stat-trend">
                             <i class="fas fa-user-plus"></i>
-                            <span>+12 este mês</span>
+                            <span>Nenhum aluno</span>
                         </div>
                     </div>
                 </div>
@@ -401,14 +395,14 @@
                                     <i class="fas fa-book"></i>
                                 </div>
                                 <div class="metric-content">
-                                    <div class="metric-value" id="theoretical-count">648</div>
+                                    <div class="metric-value">0</div>
                                     <div class="metric-label">Aulas Teóricas</div>
-                                    <div class="metric-change positive">
-                                        <i class="fas fa-arrow-up"></i>
-                                        <span>+8.5%</span>
+                                    <div class="metric-change neutral">
+                                        <i class="fas fa-equals"></i>
+                                        <span>--</span>
                                     </div>
                                     <div class="metric-details">
-                                        <span class="metric-avg" id="theoretical-avg">108/mês</span>
+                                        <span class="metric-avg">0/mês</span>
                                     </div>
                                 </div>
                             </div>
@@ -417,14 +411,14 @@
                                     <i class="fas fa-car"></i>
                                 </div>
                                 <div class="metric-content">
-                                    <div class="metric-value" id="practical-count">592</div>
+                                    <div class="metric-value">0</div>
                                     <div class="metric-label">Aulas Práticas</div>
-                                    <div class="metric-change positive">
-                                        <i class="fas fa-arrow-up"></i>
-                                        <span>+12.3%</span>
+                                    <div class="metric-change neutral">
+                                        <i class="fas fa-equals"></i>
+                                        <span>--</span>
                                     </div>
                                     <div class="metric-details">
-                                        <span class="metric-avg" id="practical-avg">99/mês</span>
+                                        <span class="metric-avg">0/mês</span>
                                     </div>
                                 </div>
                             </div>
@@ -433,14 +427,14 @@
                                     <i class="fas fa-chart-bar"></i>
                                 </div>
                                 <div class="metric-content">
-                                    <div class="metric-value" id="average-count">206</div>
+                                    <div class="metric-value">0</div>
                                     <div class="metric-label">Média Mensal</div>
                                     <div class="metric-change neutral">
-                                        <i class="fas fa-minus"></i>
-                                        <span>+2.1%</span>
+                                        <i class="fas fa-equals"></i>
+                                        <span>--</span>
                                     </div>
                                     <div class="metric-details">
-                                        <span class="metric-avg" id="average-target">Meta: 220</span>
+                                        <span class="metric-avg">Meta: 0</span>
                                     </div>
                                 </div>
                             </div>
@@ -449,14 +443,14 @@
                                     <i class="fas fa-target"></i>
                                 </div>
                                 <div class="metric-content">
-                                    <div class="metric-value" id="efficiency-rate">89%</div>
+                                    <div class="metric-value">0%</div>
                                     <div class="metric-label">Taxa de Conclusão</div>
-                                    <div class="metric-change positive">
-                                        <i class="fas fa-arrow-up"></i>
-                                        <span>+3.2%</span>
+                                    <div class="metric-change neutral">
+                                        <i class="fas fa-equals"></i>
+                                        <span>--</span>
                                     </div>
                                     <div class="metric-details">
-                                        <span class="metric-avg" id="efficiency-trend">Tendência ↗</span>
+                                        <span class="metric-avg">--</span>
                                     </div>
                                 </div>
                             </div>
@@ -466,14 +460,14 @@
                                     <i class="fas fa-dollar-sign"></i>
                                 </div>
                                 <div class="metric-content">
-                                    <div class="metric-value" id="revenue-lessons">R$ 86K</div>
+                                    <div class="metric-value">R$ 0</div>
                                     <div class="metric-label">Receita Estimada</div>
-                                    <div class="metric-change positive">
-                                        <i class="fas fa-arrow-up"></i>
-                                        <span>+15.7%</span>
+                                    <div class="metric-change neutral">
+                                        <i class="fas fa-equals"></i>
+                                        <span>--</span>
                                     </div>
                                     <div class="metric-details">
-                                        <span class="metric-avg" id="revenue-avg">R$ 14.3K/mês</span>
+                                        <span class="metric-avg">R$ 0/mês</span>
                                     </div>
                                 </div>
                             </div>
@@ -483,14 +477,14 @@
                                     <i class="fas fa-users"></i>
                                 </div>
                                 <div class="metric-content">
-                                    <div class="metric-value" id="instructors-active">8</div>
+                                    <div class="metric-value">0</div>
                                     <div class="metric-label">Instrutores Ativos</div>
                                     <div class="metric-change neutral">
                                         <i class="fas fa-equals"></i>
-                                        <span>0%</span>
+                                        <span>--</span>
                                     </div>
                                     <div class="metric-details">
-                                        <span class="metric-avg" id="instructor-load">26 aulas/instrutor</span>
+                                        <span class="metric-avg">0 aulas/instrutor</span>
                                     </div>
                                 </div>
                             </div>
@@ -542,13 +536,13 @@
                         <div class="chart-container">
                             <canvas id="students-chart"></canvas>
                         </div>
-                        <div class="chart-stats">
+                        <div class="chart-stats" id="students-chart-stats">
                             <div class="stat-mini">
-                                <div class="stat-mini-value">89%</div>
+                                <div class="stat-mini-value" id="completion-rate">--%</div>
                                 <div class="stat-mini-label">Taxa de Conclusão</div>
                             </div>
                             <div class="stat-mini">
-                                <div class="stat-mini-value">+12</div>
+                                <div class="stat-mini-value" id="new-students">--</div>
                                 <div class="stat-mini-label">Novos este mês</div>
                             </div>
                         </div>
@@ -572,32 +566,14 @@
                         </div>
                         <div class="activities-list" id="activities-list"
                             style="max-height: 300px; overflow-y: auto; overflow-x: hidden;">
-                            <div class="dashboard-item activity">
-                                <div class="activity-icon">
-                                    <i class="fas fa-user-plus"></i>
+                            <!-- Atividades serão carregadas dinamicamente -->
+                            <div class="loading-state compact">
+                                <div class="loading-spinner small">
+                                    <div class="spinner-circle"></div>
                                 </div>
-                                <div class="activity-content">
-                                    <div class="activity-title">Novo aluno cadastrado</div>
-                                    <div class="activity-desc">João Silva realizou matrícula no curso de carro</div>
-                                    <div class="activity-time">Há 5 minutos</div>
-                                </div>
+                                <p class="loading-text small">Carregando atividades...</p>
                             </div>
-                            <div class="dashboard-item activity">
-                                <div class="activity-icon">
-                                    <i class="fas fa-car"></i>
-                                </div>
-                                <div class="activity-content">
-                                    <div class="activity-title">Aula prática realizada</div>
-                                    <div class="activity-desc">Maria Oliveira completou aula prática no veículo ABC-1234
-                                    </div>
-                                    <div class="activity-time">Há 1 hora</div>
-                                </div>
-                            </div>
-                            
-                            <div class="dashboard-item activity">
-                                <div class="activity-icon">
-                                    <i class="fas fa-file-invoice-dollar"></i>
-                                </div>
+                        </div>
                                 <div class="activity-content">
                                     <div class="activity-title">Pagamento recebido</div>
                                     <div class="activity-desc">Pedro Santos realizou pagamento de R$ 300,00</div>
