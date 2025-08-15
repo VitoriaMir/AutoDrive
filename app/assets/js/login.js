@@ -1,7 +1,43 @@
+// ===== FIREBASE AUTHENTICATION LOGIN =====
+
+// Variáveis globais
+let auth;
+let isFirebaseInitialized = false;
+
 // Esperar o DOM carregar completamente
 document.addEventListener("DOMContentLoaded", function () {
+  initializeFirebase();
   initializeLogin();
 });
+
+// Inicializar Firebase
+function initializeFirebase() {
+  try {
+    if (typeof firebase !== 'undefined' && window.firebaseConfig) {
+      firebase.initializeApp(window.firebaseConfig);
+      auth = firebase.auth();
+      isFirebaseInitialized = true;
+      
+      // Monitorar estado de autenticação
+      auth.onAuthStateChanged((user) => {
+        if (user) {
+          showMessage('Login realizado com sucesso! Redirecionando...', 'success');
+          setTimeout(() => {
+            window.location.href = '/dashboard.html';
+          }, 1500);
+        }
+      });
+      
+      console.log('🔥 Firebase Authentication inicializado');
+    } else {
+      console.error('Firebase não está disponível ou configuração não encontrada');
+      showMessage('Erro ao inicializar sistema de autenticação', 'error');
+    }
+  } catch (error) {
+    console.error('Erro ao inicializar Firebase:', error);
+    showMessage('Erro ao inicializar sistema de autenticação', 'error');
+  }
+}
 
 // Função principal de inicialização
 function initializeLogin() {
@@ -36,17 +72,178 @@ function togglePassword() {
   }
 }
 
-// Função para lidar com o login
+// Função para lidar com o login - INTEGRADA COM FIREBASE
 async function handleLogin(event) {
   event.preventDefault();
 
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
   const remember = document.getElementById("remember").checked;
-  const loginBtn = document.querySelector(".login-btn");
 
   // Limpar erros anteriores
   clearErrors();
+  hideMessage();
+
+  // Validação básica
+  if (!email || !password) {
+    showMessage('Por favor, preencha todos os campos', 'error');
+    return;
+  }
+
+  if (!isFirebaseInitialized) {
+    showMessage('Sistema de autenticação não inicializado', 'error');
+    return;
+  }
+
+  // Mostrar estado de carregamento
+  setLoginLoading(true);
+
+  try {
+    // Login com Firebase Authentication
+    const userCredential = await auth.signInWithEmailAndPassword(email, password);
+    const user = userCredential.user;
+
+    console.log('Login bem-sucedido:', user.email);
+
+    // Salvar credenciais se solicitado
+    if (remember) {
+      saveCredentials(email);
+    } else {
+      clearSavedCredentials();
+    }
+
+    // Sucesso - redirecionamento será feito pelo onAuthStateChanged
+    showMessage('Login realizado com sucesso!', 'success');
+
+  } catch (error) {
+    console.error('Erro no login:', error);
+    handleLoginError(error);
+  } finally {
+    setLoginLoading(false);
+  }
+}
+
+// Tratar erros de login
+function handleLoginError(error) {
+  let message = 'Erro ao fazer login. Tente novamente.';
+  
+  switch (error.code) {
+    case 'auth/user-not-found':
+      message = 'Usuário não encontrado. Verifique o email.';
+      break;
+    case 'auth/wrong-password':
+      message = 'Senha incorreta. Tente novamente.';
+      break;
+    case 'auth/invalid-email':
+      message = 'Email inválido. Verifique o formato.';
+      break;
+    case 'auth/user-disabled':
+      message = 'Esta conta foi desabilitada. Contate o administrador.';
+      break;
+    case 'auth/too-many-requests':
+      message = 'Muitas tentativas falharam. Tente novamente mais tarde.';
+      break;
+    case 'auth/network-request-failed':
+      message = 'Erro de conexão. Verifique sua internet.';
+      break;
+    default:
+      message = `Erro: ${error.message}`;
+  }
+  
+  showMessage(message, 'error');
+}
+
+// Função para esqueci minha senha - INTEGRADA COM FIREBASE
+async function forgotPassword() {
+  const email = document.getElementById("email").value.trim();
+  
+  if (!email) {
+    showMessage('Digite seu email primeiro para recuperar a senha', 'info');
+    document.getElementById("email").focus();
+    return;
+  }
+
+  if (!isFirebaseInitialized) {
+    showMessage('Sistema de autenticação não inicializado', 'error');
+    return;
+  }
+
+  try {
+    await auth.sendPasswordResetEmail(email);
+    showMessage('Email de recuperação enviado! Verifique sua caixa de entrada.', 'success');
+  } catch (error) {
+    console.error('Erro ao enviar email de recuperação:', error);
+    let message = 'Erro ao enviar email de recuperação.';
+    
+    switch (error.code) {
+      case 'auth/user-not-found':
+        message = 'Email não encontrado. Verifique o endereço digitado.';
+        break;
+      case 'auth/invalid-email':
+        message = 'Email inválido. Verifique o formato.';
+        break;
+      default:
+        message = `Erro: ${error.message}`;
+    }
+    
+    showMessage(message, 'error');
+  }
+}
+
+// Estados do botão de login
+function setLoginLoading(loading) {
+  const loginBtn = document.getElementById('loginBtn');
+  const btnText = document.getElementById('btnText');
+  const btnIcon = document.getElementById('btnIcon');
+  const spinner = document.getElementById('spinner');
+
+  if (loading) {
+    loginBtn.disabled = true;
+    loginBtn.classList.add('loading');
+    btnText.textContent = 'Entrando...';
+    btnIcon.style.display = 'none';
+    spinner.style.display = 'block';
+  } else {
+    loginBtn.disabled = false;
+    loginBtn.classList.remove('loading');
+    btnText.textContent = 'Entrar';
+    btnIcon.style.display = 'block';
+    spinner.style.display = 'none';
+  }
+}
+
+// Mostrar mensagens
+function showMessage(message, type) {
+  const messageArea = document.getElementById('messageArea');
+  const messageContent = document.getElementById('messageContent');
+  
+  messageContent.textContent = message;
+  messageArea.className = `message-area ${type}`;
+  messageArea.style.display = 'block';
+  
+  // Auto-hide para mensagens de sucesso
+  if (type === 'success') {
+    setTimeout(() => {
+      hideMessage();
+    }, 3000);
+  }
+}
+
+// Esconder mensagens
+function hideMessage() {
+  const messageArea = document.getElementById('messageArea');
+  messageArea.style.display = 'none';
+}
+
+// Limpar erros
+function clearErrors() {
+  hideMessage();
+  
+  // Remover classes de erro dos inputs
+  document.querySelectorAll('.input-wrapper').forEach(wrapper => {
+    wrapper.classList.remove('error', 'success');
+  });
+}
 
   // Validações
   if (!validateInputs(email, password)) {

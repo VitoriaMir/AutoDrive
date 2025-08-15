@@ -743,3 +743,108 @@ body {
     justify-content: center;
   }
 }
+
+/* ===== ESTILOS FIREBASE AUTHENTICATION ===== */
+
+/* Área de Mensagens */
+.message-area {
+  margin-bottom: 20px;
+  border-radius: 8px;
+  padding: 12px 15px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.message-area.success {
+  background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+  border: 1px solid #b8dabc;
+  color: #155724;
+}
+
+.message-area.error {
+  background: linear-gradient(135deg, #f8d7da 0%, #f1c2c7 100%);
+  border: 1px solid #f1c2c7;
+  color: #721c24;
+}
+
+.message-area.info {
+  background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+  border: 1px solid #b3d7e0;
+  color: #0c5460;
+}
+
+/* Estados do Botão */
+.login-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.login-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.login-btn .spinner {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.login-btn.loading .btn-text {
+  opacity: 0.7;
+}
+
+.login-btn.loading .fa-arrow-right {
+  display: none;
+}
+
+/* Estados de Input */
+.input-wrapper.error input {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.25);
+}
+
+.input-wrapper.success input {
+  border-color: #28a745;
+  box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.25);
+}
+
+/* Animação de fade in para mensagens */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.message-area {
+  animation: fadeIn 0.3s ease;
+}
+
+/* Loading spinner */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.fa-spinner {
+  animation: spin 1s linear infinite;
+}
+
+/* Redirecionamento */
+.redirecting {
+  text-align: center;
+  padding: 20px;
+  color: #667eea;
+  font-weight: 500;
+}
+
+.redirecting i {
+  margin-right: 10px;
+}

@@ -1,0 +1,76 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Função para verificar se o usuário está autenticado
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Função para verificar se o usuário é admin
+    function isAdmin() {
+      return isAuthenticated() && 
+             resource.data.role == 'admin' ||
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Função para verificar se o usuário é instrutor
+    function isInstructor() {
+      return isAuthenticated() && 
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'instructor';
+    }
+    
+    // Usuários - apenas usuários autenticados podem ler/escrever seus próprios dados
+    match /users/{userId} {
+      allow read, write: if isAuthenticated() && request.auth.uid == userId;
+      allow read: if isAdmin(); // Admin pode ver todos os usuários
+      allow create: if isAuthenticated(); // Qualquer usuário autenticado pode se criar
+    }
+    
+    // Alunos - Admin e instrutores podem gerenciar
+    match /students/{studentId} {
+      allow read, write: if isAdmin() || isInstructor();
+    }
+    
+    // Instrutores - Admin pode gerenciar, instrutores podem ler
+    match /instructors/{instructorId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+      allow write: if isAuthenticated() && request.auth.uid == instructorId; // Instrutor pode editar próprio perfil
+    }
+    
+    // Veículos - Admin e instrutores podem gerenciar
+    match /vehicles/{vehicleId} {
+      allow read, write: if isAdmin() || isInstructor();
+    }
+    
+    // Aulas/Agendamentos - Admin e instrutores podem gerenciar
+    match /lessons/{lessonId} {
+      allow read, write: if isAdmin() || isInstructor();
+      allow read: if isAuthenticated() && resource.data.studentId == request.auth.uid; // Aluno pode ver suas aulas
+    }
+    
+    // Exames - Admin e instrutores podem gerenciar
+    match /exams/{examId} {
+      allow read, write: if isAdmin() || isInstructor();
+      allow read: if isAuthenticated() && resource.data.studentId == request.auth.uid; // Aluno pode ver seus exames
+    }
+    
+    // Pagamentos - Admin pode gerenciar, outros podem apenas ler os próprios
+    match /payments/{paymentId} {
+      allow read, write: if isAdmin();
+      allow read: if isAuthenticated() && resource.data.studentId == request.auth.uid;
+    }
+    
+    // Relatórios - Apenas admin
+    match /reports/{reportId} {
+      allow read, write: if isAdmin();
+    }
+    
+    // Configurações do sistema - Apenas admin
+    match /settings/{settingId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+  }
+}
