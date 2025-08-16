@@ -24,27 +24,32 @@ AutoDrive é um sistema completo de gestão para auto escolas, desenvolvido com 
 
 ```
 AutoDrive/
-├── public/                 # Arquivos estáticos (Firebase Hosting)
-│   ├── index.html         # Página inicial
-│   ├── login.html         # Tela de login
-│   ├── dashboard.html     # Dashboard principal (7500+ linhas)
-│   ├── css/              # Estilos
-│   │   ├── style.css     # Estilos da homepage
-│   │   ├── login.css     # Estilos do login
-│   │   └── dashboard.css # Estilos do dashboard
-│   ├── js/               # Scripts
-│   │   ├── firebase-config.js    # Configuração Firebase
-│   │   ├── firebase-init.js      # Inicialização Firebase
-│   │   ├── auth-interceptor.js   # Interceptador de autenticação
-│   │   ├── login.js             # Lógica do login
-│   │   ├── dashboard.js         # Lógica do dashboard
-│   │   └── main.js              # Scripts gerais
-│   ├── images/           # Imagens e assets
-│   └── videos/           # Vídeos
-├── app/                  # Backend (opcional - não usado atualmente)
-├── firebase.json         # Configuração do Firebase
-├── .firebaserc          # Projeto Firebase
-└── package.json         # Dependências do projeto
+├── public/                    # Arquivos estáticos (Firebase Hosting)
+│   ├── index.html            # Página inicial
+│   ├── login.html            # Tela de login
+│   ├── dashboard.html        # Dashboard principal (7500+ linhas)
+│   └── assets/              # Assets estáticos
+│       ├── css/             # Estilos
+│       │   ├── style.css    # Estilos da homepage
+│       │   ├── login.css    # Estilos do login
+│       │   └── dashboard.css # Estilos do dashboard
+│       ├── js/              # Scripts
+│       │   ├── firebase-config.js      # Configuração Firebase
+│       │   ├── firebase-init.js        # Inicialização Firebase
+│       │   ├── auth-interceptor.js     # Interceptador de autenticação
+│       │   ├── login-clean.js          # Lógica do login
+│       │   ├── dashboard.js            # Lógica do dashboard
+│       │   ├── dashboard-integration.js # Integração do dashboard
+│       │   ├── firestore-manager.js    # Gerenciador do Firestore
+│       │   └── main.js                 # Scripts gerais
+│       ├── images/          # Imagens e assets
+│       └── videos/          # Vídeos
+├── firebase.json            # Configuração do Firebase
+├── firestore.rules          # Regras do Firestore
+├── firestore.indexes.json   # Índices do Firestore
+├── storage.rules            # Regras do Storage
+├── init_firebase.py         # Script de inicialização do Firebase
+└── README.md               # Documentação do projeto
 ```
 
 ## 🚀 Como Executar

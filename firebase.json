@@ -1,11 +1,7 @@
 {
   "hosting": {
     "public": "public",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "headers": [
       {
         "source": "**/*.html",
@@ -18,14 +14,7 @@
       }
     ]
   },
-  "functions": {
-    "source": ".",
-    "runtime": "python39"
-  },
   "emulators": {
-    "functions": {
-      "port": 5001
-    },
     "hosting": {
       "port": 5080
     },
