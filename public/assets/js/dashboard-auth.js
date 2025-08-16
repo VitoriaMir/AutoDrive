@@ -6,20 +6,20 @@ let currentUser = null;
 // Configuração inicial do usuário (fallback)
 window.currentUser = {
     role: "admin",
-    name: "Usuário Admin", 
+    name: "Usuário Admin",
     email: "admin@autodrive.com"
 };
 
 // Inicializar Firebase quando a página carregar
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     console.log('🔥 Inicializando Firebase Authentication...');
-    
+
     if (typeof firebase !== 'undefined' && window.firebaseConfig) {
         try {
             firebase.initializeApp(window.firebaseConfig);
             auth = firebase.auth();
             console.log('✅ Firebase inicializado com sucesso');
-            
+
             // Verificar estado de autenticação
             auth.onAuthStateChanged((user) => {
                 if (user) {
@@ -44,16 +44,16 @@ document.addEventListener('DOMContentLoaded', function() {
 function updateDashboardUserInfo(user) {
     const userName = user.displayName || user.email.split('@')[0];
     const userEmail = user.email;
-    const userInitials = userName.length > 1 ? 
-        userName[0].toUpperCase() + (userName.split(' ')[1] ? 
-        userName.split(' ')[1][0].toUpperCase() : 
-        (userName[1] ? userName[1].toUpperCase() : '')) : 
+    const userInitials = userName.length > 1 ?
+        userName[0].toUpperCase() + (userName.split(' ')[1] ?
+            userName.split(' ')[1][0].toUpperCase() :
+            (userName[1] ? userName[1].toUpperCase() : '')) :
         userName[0].toUpperCase();
 
     // Atualizar elementos da interface
     const elements = {
         'user-avatar': userInitials,
-        'user-name': userName, 
+        'user-name': userName,
         'user-role': 'Admin',
         'profile-avatar-large': userInitials,
         'profile-user-name': userName,
