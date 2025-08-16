@@ -44,11 +44,12 @@ AutoDrive/
 │       │   └── main.js                 # Scripts gerais
 │       ├── images/          # Imagens e assets
 │       └── videos/          # Vídeos
-├── firebase.json            # Configuração do Firebase
-├── firestore.rules          # Regras do Firestore
-├── firestore.indexes.json   # Índices do Firestore
-├── storage.rules            # Regras do Storage
-├── init_firebase.py         # Script de inicialização do Firebase
+├── firebase/                # Configurações Firebase
+│   ├── firestore.rules      # Regras do Firestore
+│   ├── firestore.indexes.json # Índices do Firestore
+│   ├── storage.rules        # Regras do Storage
+│   └── init_firebase.py     # Script de inicialização do Firebase
+├── firebase.json            # Configuração principal do Firebase
 └── README.md               # Documentação do projeto
 ```
 
