@@ -1,0 +1,691 @@
+<section class="content-section" id="settings-content">
+    <div class="section-content">
+
+        <!-- Settings Navigation Tabs -->
+        <div class="settings-navigation">
+            <button class="settings-tab active" data-tab="general" onclick="showSettingsTab('general')">
+                <i class="fas fa-building"></i>
+                Geral
+            </button>
+            <button class="settings-tab" data-tab="users" onclick="showSettingsTab('users')">
+                <i class="fas fa-users-cog"></i>
+                Usuários
+            </button>
+            <button class="settings-tab" data-tab="security" onclick="showSettingsTab('security')">
+                <i class="fas fa-shield-alt"></i>
+                Segurança
+            </button>
+            <button class="settings-tab" data-tab="system" onclick="showSettingsTab('system')">
+                <i class="fas fa-server"></i>
+                Sistema
+            </button>
+            <button class="settings-tab" data-tab="appearance" onclick="showSettingsTab('appearance')">
+                <i class="fas fa-palette"></i>
+                Aparência
+            </button>
+        </div>
+
+        <!-- General Settings Tab -->
+        <div class="settings-tab-content active" id="general-settings">
+            <div class="settings-section">
+                <div class="section-title-bar">
+                    <h3 class="section-heading">
+                        <i class="fas fa-info-circle"></i>
+                        Informações da Autoescola
+                    </h3>
+                    <p class="section-description">Dados básicos e informações de contato da empresa</p>
+                </div>
+                <div class="settings-grid">
+                    <div class="setting-card company-info">
+                        <div class="setting-header">
+                            <div class="setting-icon">
+                                <i class="fas fa-building"></i>
+                            </div>
+                            <div class="setting-title">Dados da Empresa</div>
+                        </div>
+                        <div class="setting-content">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Nome da Autoescola</label>
+                                    <input class="form-input" placeholder="Nome da empresa" type="text"
+                                        value="AutoDrive Centro de Formação" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Nome Fantasia</label>
+                                    <input class="form-input" placeholder="Nome fantasia" type="text"
+                                        value="AutoDrive" />
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">CNPJ</label>
+                                    <input class="form-input" placeholder="00.000.000/0000-00" type="text"
+                                        value="12.345.678/0001-90" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Inscrição Estadual</label>
+                                    <input class="form-input" placeholder="Inscrição estadual" type="text"
+                                        value="123.456.789.000" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="setting-card contact-info">
+                        <div class="setting-header">
+                            <div class="setting-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div class="setting-title">Informações de Contato</div>
+                        </div>
+                        <div class="setting-content">
+                            <div class="form-group">
+                                <label class="form-label">Telefone Principal</label>
+                                <input class="form-input" placeholder="(00) 0000-0000" type="tel"
+                                    value="(11) 3456-7890" />
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">WhatsApp</label>
+                                <input class="form-input" placeholder="(00) 90000-0000" type="tel"
+                                    value="(11) 99876-5432" />
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">E-mail</label>
+                                <input class="form-input" placeholder="email@empresa.com" type="email"
+                                    value="contato@autodrive.com.br" />
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Website</label>
+                                <input class="form-input" placeholder="www.empresa.com" type="url"
+                                    value="www.autodrive.com.br" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="setting-card address-info">
+                        <div class="setting-header">
+                            <div class="setting-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="setting-title">Endereço</div>
+                        </div>
+                        <div class="setting-content">
+                            <div class="form-row">
+                                <div class="form-group flex-2">
+                                    <label class="form-label">Logradouro</label>
+                                    <input class="form-input" placeholder="Rua, Avenida, etc." type="text"
+                                        value="Rua das Flores, 123" />
+                                </div>
+                                <div class="form-group flex-1">
+                                    <label class="form-label">Bairro</label>
+                                    <input class="form-input" placeholder="Bairro" type="text" value="Centro" />
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group flex-2">
+                                    <label class="form-label">Cidade</label>
+                                    <input class="form-input" placeholder="Cidade" type="text" value="São Paulo" />
+                                </div>
+                                <div class="form-group flex-1">
+                                    <label class="form-label">Estado</label>
+                                    <select class="form-input">
+                                        <option selected="" value="SP">São Paulo</option>
+                                        <option value="RJ">Rio de Janeiro</option>
+                                        <option value="MG">Minas Gerais</option>
+                                        <!-- Add more states -->
+                                    </select>
+                                </div>
+                                <div class="form-group flex-1">
+                                    <label class="form-label">CEP</label>
+                                    <input class="form-input" placeholder="00000-000" type="text" value="01234-567" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Users Settings Tab -->
+        <div class="settings-tab-content" id="users-settings">
+            <div class="settings-section">
+                <div class="section-title-bar">
+                    <h3 class="section-heading">
+                        <i class="fas fa-users"></i>
+                        Gerenciamento de Usuários
+                    </h3>
+                    <p class="section-description">Controle de acesso e permissões do sistema</p>
+                    <button class="btn btn-primary" onclick="openModal('addUserModal')">
+                        <i class="fas fa-user-plus"></i>
+                        Novo Usuário
+                    </button>
+                </div>
+                <div class="users-overview">
+                    <div class="user-stat-card">
+                        <div class="stat-icon admin">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">2</div>
+                            <div class="stat-label">Administradores</div>
+                        </div>
+                    </div>
+                    <div class="user-stat-card">
+                        <div class="stat-icon instructor">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">6</div>
+                            <div class="stat-label">Instrutores</div>
+                        </div>
+                    </div>
+                    <div class="user-stat-card">
+                        <div class="stat-icon staff">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">4</div>
+                            <div class="stat-label">Funcionários</div>
+                        </div>
+                    </div>
+                    <div class="user-stat-card">
+                        <div class="stat-icon active">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">11</div>
+                            <div class="stat-label">Ativos</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="management-header">
+                    <h3 class="management-title">
+                        <i class="fas fa-users-cog"></i>
+                        Lista de Usuários
+                    </h3>
+                    <div class="management-filters">
+                        <input class="search-input" placeholder="Buscar usuário..." type="text" />
+                        <select class="filter-select">
+                            <option value="all">Todos os Tipos</option>
+                            <option value="admin">Administradores</option>
+                            <option value="instructor">Instrutores</option>
+                            <option value="staff">Funcionários</option>
+                        </select>
+                        <select class="filter-select">
+                            <option value="all">Todos os Status</option>
+                            <option value="active">Ativos</option>
+                            <option value="inactive">Inativos</option>
+                        </select>
+                        <button class="btn btn-secondary" onclick="viewAllUsers()">
+                            Ver Todos
+                        </button>
+                    </div>
+                </div>
+                <div class="users-list">
+                    <div class="user-item admin active">
+                        <div class="user-avatar">
+                            <img alt="Avatar" src="/assets/images/avatar-placeholder.svg" />
+                            <div class="user-status-indicator active"></div>
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name">João Silva</div>
+                            <div class="user-email">joao@autodrive.com.br</div>
+                            <div class="user-role admin">Administrador</div>
+                        </div>
+                        <div class="user-permissions">
+                            <span class="permission-badge">Todas</span>
+                        </div>
+                        <div class="user-last-access">
+                            <div class="access-label">Último acesso</div>
+                            <div class="access-time">Hoje, 14:30</div>
+                        </div>
+                        <div class="user-actions">
+                            <button aria-label="Editar usuário" class="btn-icon" onclick="editUser(1)">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button aria-label="Redefinir senha" class="btn-icon" onclick="resetPassword(1)">
+                                <i class="fas fa-key"></i>
+                            </button>
+                            <button aria-label="Ativar/Desativar" class="btn-icon" onclick="toggleUserStatus(1)">
+                                <i class="fas fa-power-off"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="user-item instructor active">
+                        <div class="user-avatar">
+                            <img alt="Avatar" src="/assets/images/avatar-placeholder.svg" />
+                            <div class="user-status-indicator active"></div>
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name">Maria Santos</div>
+                            <div class="user-email">maria@autodrive.com.br</div>
+                            <div class="user-role instructor">Instrutora</div>
+                        </div>
+                        <div class="user-permissions">
+                            <span class="permission-badge">Aulas</span>
+                            <span class="permission-badge">Exames</span>
+                        </div>
+                        <div class="user-last-access">
+                            <div class="access-label">Último acesso</div>
+                            <div class="access-time">Hoje, 12:15</div>
+                        </div>
+                        <div class="user-actions">
+                            <button aria-label="Editar usuário" class="btn-icon" onclick="editUser(2)">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button aria-label="Redefinir senha" class="btn-icon" onclick="resetPassword(2)">
+                                <i class="fas fa-key"></i>
+                            </button>
+                            <button aria-label="Ativar/Desativar" class="btn-icon" onclick="toggleUserStatus(2)">
+                                <i class="fas fa-power-off"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="user-item staff inactive">
+                        <div class="user-avatar">
+                            <img alt="Avatar" src="/assets/images/avatar-placeholder.svg" />
+                            <div class="user-status-indicator inactive"></div>
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name">Carlos Oliveira</div>
+                            <div class="user-email">carlos@autodrive.com.br</div>
+                            <div class="user-role staff">Funcionário</div>
+                        </div>
+                        <div class="user-permissions">
+                            <span class="permission-badge">Cadastros</span>
+                        </div>
+                        <div class="user-last-access">
+                            <div class="access-label">Último acesso</div>
+                            <div class="access-time">2 dias atrás</div>
+                        </div>
+                        <div class="user-actions">
+                            <button aria-label="Editar usuário" class="btn-icon" onclick="editUser(3)">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button aria-label="Redefinir senha" class="btn-icon" onclick="resetPassword(3)">
+                                <i class="fas fa-key"></i>
+                            </button>
+                            <button aria-label="Ativar/Desativar" class="btn-icon warning"
+                                onclick="toggleUserStatus(3)">
+                                <i class="fas fa-power-off"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Security Settings Tab -->
+    <div class="settings-tab-content" id="security-settings">
+        <div class="settings-section">
+            <div class="section-title-bar">
+                <h3 class="section-heading">
+                    <i class="fas fa-shield-alt"></i>
+                    Configurações de Segurança
+                </h3>
+                <p class="section-description">Políticas de segurança e autenticação</p>
+            </div>
+            <div class="settings-grid">
+                <div class="setting-card password-policy">
+                    <div class="setting-header">
+                        <div class="setting-icon">
+                            <i class="fas fa-key"></i>
+                        </div>
+                        <div class="setting-title">Política de Senhas</div>
+                    </div>
+                    <div class="setting-content">
+                        <div class="setting-option">
+                            <label class="setting-label">
+                                <input checked="" class="setting-checkbox" type="checkbox" />
+                                <span class="checkmark"></span>
+                                Exigir senha forte (mínimo 8 caracteres)
+                            </label>
+                        </div>
+                        <div class="setting-option">
+                            <label class="setting-label">
+                                <input checked="" class="setting-checkbox" type="checkbox" />
+                                <span class="checkmark"></span>
+                                Incluir números e símbolos
+                            </label>
+                        </div>
+                        <div class="setting-option">
+                            <label class="setting-label">
+                                <input class="setting-checkbox" type="checkbox" />
+                                <span class="checkmark"></span>
+                                Expiração de senha (90 dias)
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Tentativas máximas de login</label>
+                            <select class="form-input">
+                                <option value="3">3 tentativas</option>
+                                <option selected="" value="5">5 tentativas</option>
+                                <option value="10">10 tentativas</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="setting-card session-config">
+                    <div class="setting-header">
+                        <div class="setting-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="setting-title">Sessões</div>
+                    </div>
+                    <div class="setting-content">
+                        <div class="form-group">
+                            <label class="form-label">Tempo de sessão (minutos)</label>
+                            <select class="form-input">
+                                <option value="30">30 minutos</option>
+                                <option selected="" value="60">1 hora</option>
+                                <option value="120">2 horas</option>
+                                <option value="480">8 horas</option>
+                            </select>
+                        </div>
+                        <div class="setting-option">
+                            <label class="setting-label">
+                                <input checked="" class="setting-checkbox" type="checkbox" />
+                                <span class="checkmark"></span>
+                                Lembrar login por 30 dias
+                            </label>
+                        </div>
+                        <div class="setting-option">
+                            <label class="setting-label">
+                                <input checked="" class="setting-checkbox" type="checkbox" />
+                                <span class="checkmark"></span>
+                                Logout automático por inatividade
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="setting-card audit-log">
+                    <div class="setting-header">
+                        <div class="setting-icon">
+                            <i class="fas fa-history"></i>
+                        </div>
+                        <div class="setting-title">Log de Auditoria</div>
+                    </div>
+                    <div class="setting-content">
+                        <div class="setting-option">
+                            <label class="setting-label">
+                                <input checked="" class="setting-checkbox" type="checkbox" />
+                                <span class="checkmark"></span>
+                                Registrar logins e logouts
+                            </label>
+                        </div>
+                        <div class="setting-option">
+                            <label class="setting-label">
+                                <input checked="" class="setting-checkbox" type="checkbox" />
+                                <span class="checkmark"></span>
+                                Registrar alterações de dados
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Manter logs por</label>
+                            <select class="form-input">
+                                <option value="30">30 dias</option>
+                                <option selected="" value="90">90 dias</option>
+                                <option value="180">6 meses</option>
+                                <option value="365">1 ano</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Settings Tab -->
+    <div class="settings-tab-content" id="system-settings">
+        <div class="settings-section">
+            <div class="section-title-bar">
+                <h3 class="section-heading">
+                    <i class="fas fa-server"></i>
+                    Configurações do Sistema
+                </h3>
+                <p class="section-description">Backup, manutenção e configurações técnicas</p>
+            </div>
+            <div class="settings-grid">
+                <div class="setting-card backup-config">
+                    <div class="setting-header">
+                        <div class="setting-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <div class="setting-title">Backup &amp; Restauração</div>
+                    </div>
+                    <div class="setting-content">
+                        <div class="backup-info">
+                            <div class="backup-status">
+                                <div class="status-indicator success"></div>
+                                <div class="status-text">
+                                    <div class="status-title">Último backup</div>
+                                    <div class="status-time">24/07/2024 02:00</div>
+                                </div>
+                            </div>
+                            <div class="backup-size">2.4 GB</div>
+                        </div>
+                        <div class="setting-option">
+                            <label class="setting-label">
+                                <input checked="" class="setting-checkbox" type="checkbox" />
+                                <span class="checkmark"></span>
+                                Backup automático diário
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Horário do backup</label>
+                            <input class="form-input" type="time" value="02:00" />
+                        </div>
+                        <div class="backup-actions">
+                            <button class="btn btn-primary" onclick="createBackup()">
+                                <i class="fas fa-save"></i>
+                                Criar Backup
+                            </button>
+                            <button class="btn btn-secondary" onclick="restoreBackup()">
+                                <i class="fas fa-upload"></i>
+                                Restaurar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="setting-card system-info">
+                    <div class="setting-header">
+                        <div class="setting-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <div class="setting-title">Informações do Sistema</div>
+                    </div>
+                    <div class="setting-content">
+                        <div class="info-item">
+                            <div class="info-label">Versão</div>
+                            <div class="info-value">2.1.0</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Banco de Dados</div>
+                            <div class="info-value">SQLite 3.39</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Espaço em Disco</div>
+                            <div class="info-value">
+                                <div class="disk-usage">
+                                    <div class="usage-bar">
+                                        <div class="usage-fill" style="width: 45%"></div>
+                                    </div>
+                                    <span>4.5 GB de 10 GB</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Última atualização</div>
+                            <div class="info-value">15/07/2024</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="setting-card maintenance">
+                    <div class="setting-header">
+                        <div class="setting-icon">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <div class="setting-title">Manutenção</div>
+                    </div>
+                    <div class="setting-content">
+                        <div class="maintenance-item">
+                            <div class="maintenance-info">
+                                <div class="maintenance-title">Otimizar Banco de Dados</div>
+                                <div class="maintenance-description">Remove dados desnecessários e otimiza
+                                    performance</div>
+                            </div>
+                            <button class="btn btn-secondary" onclick="optimizeDatabase()">
+                                <i class="fas fa-play"></i>
+                                Executar
+                            </button>
+                        </div>
+                        <div class="maintenance-item">
+                            <div class="maintenance-info">
+                                <div class="maintenance-title">Limpar Cache</div>
+                                <div class="maintenance-description">Remove arquivos temporários do sistema
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary" onclick="clearCache()">
+                                <i class="fas fa-play"></i>
+                                Executar
+                            </button>
+                        </div>
+                        <div class="maintenance-item">
+                            <div class="maintenance-info">
+                                <div class="maintenance-title">Verificar Integridade</div>
+                                <div class="maintenance-description">Verifica a integridade dos dados</div>
+                            </div>
+                            <button class="btn btn-secondary" onclick="checkIntegrity()">
+                                <i class="fas fa-play"></i>
+                                Executar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Appearance Settings Tab -->
+    <div class="settings-tab-content" id="appearance-settings">
+        <div class="settings-section">
+            <div class="section-title-bar">
+                <h3 class="section-heading">
+                    <i class="fas fa-palette"></i>
+                    Configurações de Aparência
+                </h3>
+                <p class="section-description">Personalize a interface do sistema</p>
+            </div>
+            <div class="settings-grid">
+                <div class="setting-card theme-config">
+                    <div class="setting-header">
+                        <div class="setting-icon">
+                            <i class="fas fa-paint-brush"></i>
+                        </div>
+                        <div class="setting-title">Tema</div>
+                    </div>
+                    <div class="setting-content">
+                        <div class="theme-options">
+                            <div class="theme-option active" onclick="selectTheme('dark')">
+                                <div class="theme-preview dark">
+                                    <div class="preview-bar"></div>
+                                    <div class="preview-content">
+                                        <div class="preview-sidebar"></div>
+                                        <div class="preview-main"></div>
+                                    </div>
+                                </div>
+                                <div class="theme-name">Escuro</div>
+                            </div>
+                            <div class="theme-option" onclick="selectTheme('light')">
+                                <div class="theme-preview light">
+                                    <div class="preview-bar"></div>
+                                    <div class="preview-content">
+                                        <div class="preview-sidebar"></div>
+                                        <div class="preview-main"></div>
+                                    </div>
+                                </div>
+                                <div class="theme-name">Claro</div>
+                            </div>
+                            <div class="theme-option" onclick="selectTheme('auto')">
+                                <div class="theme-preview auto">
+                                    <div class="preview-bar"></div>
+                                    <div class="preview-content">
+                                        <div class="preview-sidebar"></div>
+                                        <div class="preview-main"></div>
+                                    </div>
+                                </div>
+                                <div class="theme-name">Automático</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="setting-card interface-config">
+                    <div class="setting-header">
+                        <div class="setting-icon">
+                            <i class="fas fa-desktop"></i>
+                        </div>
+                        <div class="setting-title">Interface</div>
+                    </div>
+                    <div class="setting-content">
+                        <div class="setting-option">
+                            <label class="setting-label">
+                                <input checked="" class="setting-checkbox" type="checkbox" />
+                                <span class="checkmark"></span>
+                                Animações suaves
+                            </label>
+                        </div>
+                        <div class="setting-option">
+                            <label class="setting-label">
+                                <input checked="" class="setting-checkbox" type="checkbox" />
+                                <span class="checkmark"></span>
+                                Efeitos de transparência
+                            </label>
+                        </div>
+                        <div class="setting-option">
+                            <label class="setting-label">
+                                <input class="setting-checkbox" type="checkbox" />
+                                <span class="checkmark"></span>
+                                Modo compacto
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Tamanho da fonte</label>
+                            <select class="form-input">
+                                <option value="small">Pequena</option>
+                                <option selected="" value="medium">Média</option>
+                                <option value="large">Grande</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="setting-card logo-config">
+                    <div class="setting-header">
+                        <div class="setting-icon">
+                            <i class="fas fa-image"></i>
+                        </div>
+                        <div class="setting-title">Logo &amp; Marca</div>
+                    </div>
+                    <div class="setting-content">
+                        <div class="logo-preview">
+                            <img alt="Logo atual" class="current-logo" src="/assets/images/logo.png" />
+                        </div>
+                        <div class="logo-actions">
+                            <button class="btn btn-secondary" onclick="uploadLogo()">
+                                <i class="fas fa-upload"></i>
+                                Alterar Logo
+                            </button>
+                            <button class="btn btn-outline" onclick="resetLogo()">
+                                <i class="fas fa-undo"></i>
+                                Restaurar Padrão
+                            </button>
+                        </div>
+                        <div class="logo-requirements">
+                            <small>Formatos aceitos: PNG, SVG • Tamanho máximo: 2MB • Dimensões recomendadas:
+                                200x60px</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>

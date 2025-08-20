@@ -14,12 +14,12 @@ function initializeFirestore() {
       if (!firebase.apps.length) {
         firebase.initializeApp(window.firebaseConfig);
       }
-      
+
       db = firebase.firestore();
       auth = firebase.auth();
-      
+
       console.log('✅ Firestore inicializado com sucesso');
-      
+
       // Configurações do Firestore
       db.enablePersistence().catch((err) => {
         if (err.code == 'failed-precondition') {
@@ -28,7 +28,7 @@ function initializeFirestore() {
           console.warn('⚠️ Persistência offline não suportada neste navegador');
         }
       });
-      
+
       return true;
     } catch (error) {
       console.error('❌ Erro ao inicializar Firestore:', error);
@@ -109,7 +109,7 @@ async function addStudent(studentData) {
       isActive: true,
       createdBy: currentUser?.uid
     });
-    
+
     console.log('✅ Aluno adicionado:', docRef.id);
     return { id: docRef.id, ...studentData };
   } catch (error) {
@@ -121,19 +121,21 @@ async function addStudent(studentData) {
 /**
  * Buscar todos os alunos
  */
-async function getStudents(limit = 50) {
+async function getStudents(limit = 100) {
   try {
     const studentsSnapshot = await db.collection('students')
-      .where('isActive', '==', true)
-      .orderBy('createdAt', 'desc')
       .limit(limit)
       .get();
-    
+
     const students = [];
     studentsSnapshot.forEach((doc) => {
-      students.push({ id: doc.id, ...doc.data() });
+      const data = doc.data();
+      // Filter active students in JavaScript to avoid index requirements
+      if (data.isActive !== false) {
+        students.push({ id: doc.id, ...data });
+      }
     });
-    
+
     console.log('✅ Alunos carregados:', students.length);
     return students;
   } catch (error) {
@@ -205,7 +207,7 @@ async function addInstructor(instructorData) {
       isActive: true,
       createdBy: currentUser?.uid
     });
-    
+
     console.log('✅ Instrutor adicionado:', docRef.id);
     return { id: docRef.id, ...instructorData };
   } catch (error) {
@@ -217,18 +219,21 @@ async function addInstructor(instructorData) {
 /**
  * Buscar todos os instrutores
  */
-async function getInstructors() {
+async function getInstructors(limit = 50) {
   try {
     const instructorsSnapshot = await db.collection('instructors')
-      .where('isActive', '==', true)
-      .orderBy('createdAt', 'desc')
+      .limit(limit)
       .get();
-    
+
     const instructors = [];
     instructorsSnapshot.forEach((doc) => {
-      instructors.push({ id: doc.id, ...doc.data() });
+      const data = doc.data();
+      // Filter active instructors in JavaScript to avoid index requirements
+      if (data.isActive !== false) {
+        instructors.push({ id: doc.id, ...data });
+      }
     });
-    
+
     console.log('✅ Instrutores carregados:', instructors.length);
     return instructors;
   } catch (error) {
@@ -252,7 +257,7 @@ async function addVehicle(vehicleData) {
       isActive: true,
       createdBy: currentUser?.uid
     });
-    
+
     console.log('✅ Veículo adicionado:', docRef.id);
     return { id: docRef.id, ...vehicleData };
   } catch (error) {
@@ -264,18 +269,21 @@ async function addVehicle(vehicleData) {
 /**
  * Buscar todos os veículos
  */
-async function getVehicles() {
+async function getVehicles(limit = 50) {
   try {
     const vehiclesSnapshot = await db.collection('vehicles')
-      .where('isActive', '==', true)
-      .orderBy('createdAt', 'desc')
+      .limit(limit)
       .get();
-    
+
     const vehicles = [];
     vehiclesSnapshot.forEach((doc) => {
-      vehicles.push({ id: doc.id, ...doc.data() });
+      const data = doc.data();
+      // Filter active vehicles in JavaScript to avoid index requirements
+      if (data.isActive !== false) {
+        vehicles.push({ id: doc.id, ...data });
+      }
     });
-    
+
     console.log('✅ Veículos carregados:', vehicles.length);
     return vehicles;
   } catch (error) {
@@ -299,7 +307,7 @@ async function scheduleLesson(lessonData) {
       status: 'scheduled',
       createdBy: currentUser?.uid
     });
-    
+
     console.log('✅ Aula agendada:', docRef.id);
     return { id: docRef.id, ...lessonData };
   } catch (error) {
@@ -318,12 +326,12 @@ async function getLessonsByDateRange(startDate, endDate) {
       .where('date', '<=', endDate)
       .orderBy('date', 'asc')
       .get();
-    
+
     const lessons = [];
     lessonsSnapshot.forEach((doc) => {
       lessons.push({ id: doc.id, ...doc.data() });
     });
-    
+
     console.log('✅ Aulas carregadas:', lessons.length);
     return lessons;
   } catch (error) {
@@ -346,7 +354,7 @@ async function addPayment(paymentData) {
       updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       createdBy: currentUser?.uid
     });
-    
+
     console.log('✅ Pagamento registrado:', docRef.id);
     return { id: docRef.id, ...paymentData };
   } catch (error) {
@@ -364,12 +372,12 @@ async function getPaymentsByStudent(studentId) {
       .where('studentId', '==', studentId)
       .orderBy('createdAt', 'desc')
       .get();
-    
+
     const payments = [];
     paymentsSnapshot.forEach((doc) => {
       payments.push({ id: doc.id, ...doc.data() });
     });
-    
+
     console.log('✅ Pagamentos carregados para aluno:', studentId, payments.length);
     return payments;
   } catch (error) {
@@ -389,26 +397,26 @@ async function getGeneralStats() {
     const studentsSnapshot = await db.collection('students')
       .where('isActive', '==', true)
       .get();
-    
+
     // Contar instrutores ativos
     const instructorsSnapshot = await db.collection('instructors')
       .where('isActive', '==', true)
       .get();
-    
+
     // Contar veículos ativos
     const vehiclesSnapshot = await db.collection('vehicles')
       .where('isActive', '==', true)
       .get();
-    
+
     // Aulas do mês atual
     const currentMonth = new Date();
     currentMonth.setDate(1);
     currentMonth.setHours(0, 0, 0, 0);
-    
+
     const lessonsSnapshot = await db.collection('lessons')
       .where('date', '>=', currentMonth)
       .get();
-    
+
     const stats = {
       totalStudents: studentsSnapshot.size,
       totalInstructors: instructorsSnapshot.size,
@@ -416,7 +424,7 @@ async function getGeneralStats() {
       lessonsThisMonth: lessonsSnapshot.size,
       updatedAt: new Date()
     };
-    
+
     console.log('✅ Estatísticas carregadas:', stats);
     return stats;
   } catch (error) {
@@ -451,7 +459,7 @@ function listenToStudents(callback) {
 function listenToLessons(callback) {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  
+
   return db.collection('lessons')
     .where('date', '>=', today)
     .orderBy('date', 'asc')
@@ -469,14 +477,14 @@ function listenToLessons(callback) {
 // ===== INICIALIZAÇÃO =====
 
 // Inicializar quando o DOM estiver carregado
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   if (initializeFirestore()) {
     // Monitorar estado de autenticação
     auth.onAuthStateChanged((user) => {
       if (user) {
         currentUser = user;
         console.log('✅ Usuário autenticado para Firestore:', user.email);
-        
+
         // Carregar ou criar perfil do usuário
         getUserProfile(user.uid).then((profile) => {
           if (!profile) {
@@ -489,7 +497,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }).catch(console.error);
           }
         }).catch(console.error);
-        
+
       } else {
         currentUser = null;
         console.log('❌ Usuário não autenticado');
@@ -498,43 +506,95 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
+// === FUNÇÕES AUXILIARES PARA DASHBOARD ===
+
+async function getAllPayments(limit = 200) {
+  try {
+    if (!db) {
+      console.warn('⚠️ Firestore não inicializado');
+      return [];
+    }
+
+    const paymentsSnapshot = await db.collection('payments')
+      .limit(limit)
+      .get();
+
+    const payments = [];
+    paymentsSnapshot.forEach((doc) => {
+      payments.push({ id: doc.id, ...doc.data() });
+    });
+
+    console.log('✅ Todos os pagamentos carregados:', payments.length);
+    return payments;
+  } catch (error) {
+    console.error('❌ Erro ao carregar todos os pagamentos:', error);
+    throw error;
+  }
+}
+
+async function getAllLessons(limit = 300) {
+  try {
+    if (!db) {
+      console.warn('⚠️ Firestore não inicializado');
+      return [];
+    }
+
+    const lessonsSnapshot = await db.collection('lessons')
+      .limit(limit)
+      .get();
+
+    const lessons = [];
+    lessonsSnapshot.forEach((doc) => {
+      lessons.push({ id: doc.id, ...doc.data() });
+    });
+
+    console.log('✅ Todas as aulas carregadas:', lessons.length);
+    return lessons;
+  } catch (error) {
+    console.error('❌ Erro ao carregar todas as aulas:', error);
+    throw error;
+  }
+}
+
 // Exportar funções para uso global
 window.FirestoreManager = {
   // Usuários
   createUserProfile,
   getUserProfile,
   updateUserProfile,
-  
+
   // Alunos
   addStudent,
   getStudents,
   getStudent,
   updateStudent,
   deactivateStudent,
-  
+
   // Instrutores
   addInstructor,
   getInstructors,
-  
+
   // Veículos
   addVehicle,
   getVehicles,
-  
+
   // Aulas
   scheduleLesson,
   getLessonsByDateRange,
-  
+
   // Pagamentos
   addPayment,
   getPaymentsByStudent,
-  
+
   // Estatísticas
   getGeneralStats,
-  
+  getAllPayments,
+  getAllLessons,
+
   // Listeners
   listenToStudents,
   listenToLessons,
-  
+
   // Estado
   getCurrentUser: () => currentUser,
   getDB: () => db,

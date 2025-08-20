@@ -10,21 +10,21 @@
  */
 async function initializeDashboardData() {
     console.log('🔄 Inicializando dashboard com dados do Firestore...');
-    
+
     try {
-        // Aguardar autenticação
-        if (!window.FirestoreManager || !window.FirestoreManager.getCurrentUser()) {
-            console.log('⏳ Aguardando autenticação...');
+        // Verificar se FirestoreManager está disponível
+        if (!window.FirestoreManager) {
+            console.log('⏳ Aguardando FirestoreManager...');
             setTimeout(initializeDashboardData, 1000);
             return;
         }
-        
+
         // Carregar estatísticas gerais
         await loadDashboardStats();
-        
+
         // Configurar listeners em tempo real
         setupRealtimeListeners();
-        
+
         console.log('✅ Dashboard inicializado com sucesso!');
     } catch (error) {
         console.error('❌ Erro ao inicializar dashboard:', error);
@@ -38,13 +38,13 @@ async function initializeDashboardData() {
 async function loadDashboardStats() {
     try {
         const stats = await window.FirestoreManager.getGeneralStats();
-        
+
         // Atualizar cards do dashboard
         updateStatsCard('total-students', stats.totalStudents);
         updateStatsCard('total-instructors', stats.totalInstructors);
         updateStatsCard('total-vehicles', stats.totalVehicles);
         updateStatsCard('lessons-month', stats.lessonsThisMonth);
-        
+
         console.log('✅ Estatísticas atualizadas');
     } catch (error) {
         console.error('❌ Erro ao carregar estatísticas:', error);
@@ -73,7 +73,7 @@ function animateNumber(element, start, end) {
     const stepValue = (end - start) / steps;
     const stepTime = duration / steps;
     let current = start;
-    
+
     const timer = setInterval(() => {
         current += stepValue;
         if ((stepValue > 0 && current >= end) || (stepValue < 0 && current <= end)) {
@@ -88,17 +88,25 @@ function animateNumber(element, start, end) {
  * Configurar listeners em tempo real
  */
 function setupRealtimeListeners() {
+    // Temporarily disabled to avoid errors
+    console.log('✅ Realtime listeners setup (disabled for now)');
+    return;
+
     // Listener para alunos
-    window.FirestoreManager.listenToStudents((students) => {
-        updateStudentsList(students);
-        updateStatsCard('total-students', students.length);
-    });
-    
+    if (window.FirestoreManager.listenToStudents) {
+        window.FirestoreManager.listenToStudents((students) => {
+            updateStudentsList(students);
+            updateStatsCard('total-students', students.length);
+        });
+    }
+
     // Listener para aulas
-    window.FirestoreManager.listenToLessons((lessons) => {
-        updateLessonsList(lessons);
-        updateUpcomingLessons(lessons);
-    });
+    if (window.FirestoreManager.listenToLessons) {
+        window.FirestoreManager.listenToLessons((lessons) => {
+            updateLessonsList(lessons);
+            updateUpcomingLessons(lessons);
+        });
+    }
 }
 
 /**
@@ -109,13 +117,13 @@ function updateStudentsList(students) {
     const studentsTable = document.querySelector('#students-table tbody');
     if (studentsTable) {
         studentsTable.innerHTML = '';
-        
+
         students.forEach(student => {
             const row = createStudentRow(student);
             studentsTable.appendChild(row);
         });
     }
-    
+
     // Atualizar select de alunos em formulários
     updateStudentSelects(students);
 }
@@ -168,7 +176,7 @@ function updateStudentSelects(students) {
     selects.forEach(select => {
         // Manter valor selecionado
         const currentValue = select.value;
-        
+
         // Limpar e repovoar
         select.innerHTML = '<option value="">Selecione um aluno</option>';
         students.forEach(student => {
@@ -177,7 +185,7 @@ function updateStudentSelects(students) {
             option.textContent = student.name;
             select.appendChild(option);
         });
-        
+
         // Restaurar valor selecionado
         if (currentValue) {
             select.value = currentValue;
@@ -192,11 +200,11 @@ function updateUpcomingLessons(lessons) {
     const upcomingContainer = document.querySelector('.upcoming-lessons');
     if (upcomingContainer) {
         upcomingContainer.innerHTML = '';
-        
+
         const nextLessons = lessons
             .filter(lesson => new Date(lesson.date) > new Date())
             .slice(0, 5);
-        
+
         nextLessons.forEach(lesson => {
             const lessonElement = createLessonCard(lesson);
             upcomingContainer.appendChild(lessonElement);
@@ -254,7 +262,7 @@ async function submitStudentForm(event) {
     event.preventDefault();
     const form = event.target;
     const formData = new FormData(form);
-    
+
     const studentData = {
         name: formData.get('name'),
         email: formData.get('email'),
@@ -265,15 +273,15 @@ async function submitStudentForm(event) {
         category: formData.get('category') || 'B',
         status: 'active'
     };
-    
+
     try {
         showNotification('Cadastrando aluno...', 'info');
         const result = await window.FirestoreManager.addStudent(studentData);
-        
+
         showNotification('Aluno cadastrado com sucesso!', 'success');
         form.reset();
         closeModal('addStudentModal');
-        
+
         console.log('✅ Aluno cadastrado:', result);
     } catch (error) {
         console.error('❌ Erro ao cadastrar aluno:', error);
@@ -288,7 +296,7 @@ async function submitInstructorForm(event) {
     event.preventDefault();
     const form = event.target;
     const formData = new FormData(form);
-    
+
     const instructorData = {
         name: formData.get('name'),
         email: formData.get('email'),
@@ -298,15 +306,15 @@ async function submitInstructorForm(event) {
         specialties: formData.getAll('specialties'),
         status: 'active'
     };
-    
+
     try {
         showNotification('Cadastrando instrutor...', 'info');
         const result = await window.FirestoreManager.addInstructor(instructorData);
-        
+
         showNotification('Instrutor cadastrado com sucesso!', 'success');
         form.reset();
         closeModal('addInstructorModal');
-        
+
         console.log('✅ Instrutor cadastrado:', result);
     } catch (error) {
         console.error('❌ Erro ao cadastrar instrutor:', error);
@@ -321,7 +329,7 @@ async function submitVehicleForm(event) {
     event.preventDefault();
     const form = event.target;
     const formData = new FormData(form);
-    
+
     const vehicleData = {
         model: formData.get('model'),
         brand: formData.get('brand'),
@@ -331,15 +339,15 @@ async function submitVehicleForm(event) {
         category: formData.get('category'),
         status: 'available'
     };
-    
+
     try {
         showNotification('Cadastrando veículo...', 'info');
         const result = await window.FirestoreManager.addVehicle(vehicleData);
-        
+
         showNotification('Veículo cadastrado com sucesso!', 'success');
         form.reset();
         closeModal('addVehicleModal');
-        
+
         console.log('✅ Veículo cadastrado:', result);
     } catch (error) {
         console.error('❌ Erro ao cadastrar veículo:', error);
@@ -403,27 +411,27 @@ function populateEditForm(formId, data) {
 // ===== INICIALIZAÇÃO =====
 
 // Aguardar carregamento completo
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Aguardar Firebase estar disponível
     setTimeout(() => {
         initializeDashboardData();
-        
+
         // Conectar formulários
         const studentForm = document.getElementById('addStudentForm');
         if (studentForm) {
             studentForm.addEventListener('submit', submitStudentForm);
         }
-        
+
         const instructorForm = document.getElementById('addInstructorForm');
         if (instructorForm) {
             instructorForm.addEventListener('submit', submitInstructorForm);
         }
-        
+
         const vehicleForm = document.getElementById('addVehicleForm');
         if (vehicleForm) {
             vehicleForm.addEventListener('submit', submitVehicleForm);
         }
-        
+
     }, 2000);
 });
 

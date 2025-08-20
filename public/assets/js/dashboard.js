@@ -116,15 +116,14 @@ function showNotification(message, type = "info", duration = 3000) {
   notification.innerHTML = `
         <div class="notification-content">
             <div class="notification-icon">
-                <i class="fas ${
-                  type === "success"
-                    ? "fa-check-circle"
-                    : type === "error"
-                    ? "fa-exclamation-circle"
-                    : type === "warning"
-                    ? "fa-exclamation-triangle"
-                    : "fa-info-circle"
-                }"></i>
+                <i class="fas ${type === "success"
+      ? "fa-check-circle"
+      : type === "error"
+        ? "fa-exclamation-circle"
+        : type === "warning"
+          ? "fa-exclamation-triangle"
+          : "fa-info-circle"
+    }"></i>
             </div>
             <div class="notification-message">${message}</div>
             <button class="notification-close" onclick="closeNotification(this)">
@@ -322,19 +321,22 @@ function showSection(sectionId) {
     if (sectionId === "dashboard") {
       // Initialize dashboard charts if not already initialized
       if (!lessonsChart) initLessonsChart();
-      if (!studentsChart) initStudentsChart();
+      // Students chart initialization moved to students-section.js
     } else if (sectionId === "students") {
-      if (!studentsPerformanceChart) initStudentsPerformanceChart();
+      // Students performance chart initialization moved to students-section.js
     } else if (sectionId === "instructors") {
-      if (!instructorsChart) initInstructorsChart();
+      // Instructors chart initialization moved to instructors-section.js
     } else if (sectionId === "vehicles") {
-      if (!vehiclesChart) initVehiclesChart();
+      // Vehicles chart initialization moved to vehicles-section.js
     } else if (sectionId === "schedule") {
-      if (!scheduleChart) initScheduleChart();
+      // Chart initialization handled by schedule-section.js
+      // if (!scheduleChart) initScheduleChart();
     } else if (sectionId === "exams") {
-      if (!examsChart) initExamsChart();
+      // Chart initialization handled by exams-section.js
+      // if (!examsChart) initExamsChart();
     } else if (sectionId === "finance") {
-      if (!financeChart) initFinanceChart();
+      // Chart initialization handled by finance-section.js
+      // if (!financeChart) initFinanceChart();
     }
   }, 100);
 }
@@ -542,34 +544,34 @@ window.diagnosePage = diagnosePage;
 // Função de teste específica para o modal de usuário
 function testUserModal() {
   console.log("=== TESTE MODAL DE USUÁRIO ===");
-  
+
   // Verificar se o modal existe
   const modal = document.getElementById("addUserModal");
   console.log("Modal encontrado:", !!modal);
-  
+
   // Verificar se o formulário existe
   const form = document.getElementById("addUserForm");
   console.log("Formulário encontrado:", !!form);
-  
+
   // Verificar campos essenciais
   const fields = ['userName', 'userEmail', 'userCpf', 'userPassword', 'userPasswordConfirm', 'userRole'];
   fields.forEach(fieldId => {
     const field = document.getElementById(fieldId);
     console.log(`Campo ${fieldId}:`, !!field);
   });
-  
+
   // Testar abertura do modal
   if (modal && form) {
     console.log("Tentando abrir modal...");
     openModal("addUserModal");
     console.log("Modal possui classe 'show':", modal.classList.contains("show"));
-    
+
     setTimeout(() => {
       console.log("Fechando modal de teste...");
       closeModal("addUserModal");
     }, 2000);
   }
-  
+
   console.log("=== FIM DO TESTE ===");
 }
 
@@ -789,6 +791,74 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   }, 500);
 
+  // Load real data after animation
+  setTimeout(async () => {
+    try {
+      // Initialize Firestore first
+      if (typeof initializeFirestore === 'function') {
+        initializeFirestore();
+        console.log('🔥 Firestore initialized');
+
+        // Wait for Firestore to be ready
+        setTimeout(async () => {
+          try {
+            if (window.FirestoreManager) {
+              console.log('📊 Loading real data...');
+
+              // Get students
+              const students = await window.FirestoreManager.getStudents();
+              if (students && students.length > 0) {
+                document.getElementById("students-count").textContent = students.length;
+                console.log(`✅ Students: ${students.length}`);
+              }
+
+              // Get instructors
+              const instructors = await window.FirestoreManager.getInstructors();
+              if (instructors && instructors.length > 0) {
+                document.getElementById("lessons-count").textContent = instructors.length;
+                console.log(`✅ Instructors: ${instructors.length}`);
+              }
+
+              // Get vehicles
+              const vehicles = await window.FirestoreManager.getVehicles();
+              if (vehicles && vehicles.length > 0) {
+                document.getElementById("vehicles-count").textContent = vehicles.length;
+                console.log(`✅ Vehicles: ${vehicles.length}`);
+              }
+
+              // Get payments for revenue
+              try {
+                if (window.FirestoreManager.getAllPayments) {
+                  const payments = await window.FirestoreManager.getAllPayments();
+                  if (payments && payments.length > 0) {
+                    const revenue = payments
+                      .filter(p => p && p.status === 'Pago')
+                      .reduce((sum, p) => sum + (parseFloat(p.amount) || 0), 0);
+                    const revenueElement = document.getElementById("revenue-count");
+                    if (revenueElement) {
+                      revenueElement.textContent = `R$ ${revenue.toLocaleString()}`;
+                    }
+                    console.log(`✅ Revenue: R$ ${revenue}`);
+                  }
+                }
+              } catch (revenueError) {
+                console.warn('⚠️ Error loading revenue:', revenueError);
+              }
+
+              console.log('🎉 Real data loaded successfully!');
+            } else {
+              console.warn('⚠️ FirestoreManager not available');
+            }
+          } catch (error) {
+            console.error('❌ Error loading real data:', error);
+          }
+        }, 3000);
+      }
+    } catch (error) {
+      console.warn('⚠️ Firestore not available, using static data');
+    }
+  }, 2000);
+
   // Initialize charts
   initCharts();
 
@@ -855,29 +925,29 @@ function setupFormEventListeners() {
   if (addStudentForm) {
     addStudentForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-      
+
       // Mostrar loading no botão
       const submitBtn = addStudentForm.querySelector('button[type="submit"]');
       if (submitBtn) {
         LoadingManager.showButtonLoading('addStudentForm', 'Salvando...');
       }
-      
+
       try {
         // Aqui você pode adicionar a lógica real para salvar no Firestore
         // await FirestoreManager.addStudent(formData);
-        
+
         // Simular delay para demonstrar loading
         await new Promise(resolve => setTimeout(resolve, 1500));
-        
+
         showNotification("Novo aluno adicionado com sucesso!", "success");
         closeModal("addStudentModal");
         e.target.reset();
-        
+
         // Recarregar lista se estiver na seção de alunos
         if (document.querySelector('.menu-item[data-section="students"]').classList.contains('active')) {
           loadAllStudentsData();
         }
-        
+
       } catch (error) {
         showNotification("Erro ao adicionar aluno: " + error.message, "error");
       } finally {
@@ -1024,2022 +1094,6 @@ function initCharts() {
   }, 300);
 }
 
-// Initialize lessons chart
-function initLessonsChart() {
-  const lessonsCtx = document.getElementById("lessons-chart");
-  if (!lessonsCtx) return;
-
-  // Destroy existing chart
-  lessonsChart = destroyChart(lessonsChart);
-
-  lessonsChart = new Chart(lessonsCtx.getContext("2d"), {
-    type: "bar",
-    data: {
-      labels: [
-        "Jan",
-        "Fev",
-        "Mar",
-        "Abr",
-        "Mai",
-        "Jun",
-        "Jul",
-        "Ago",
-        "Set",
-        "Out",
-        "Nov",
-        "Dez",
-      ],
-      datasets: [
-        {
-          label: "Aulas Teóricas",
-          data: [120, 150, 180, 140, 200, 230, 250, 220, 240, 260, 280, 300],
-          backgroundColor: "rgba(67, 97, 238, 0.7)",
-          borderColor: "rgba(67, 97, 238, 1)",
-          borderWidth: 1,
-          borderRadius: 4,
-        },
-        {
-          label: "Aulas Práticas",
-          data: [80, 100, 120, 110, 150, 170, 200, 180, 190, 210, 230, 250],
-          backgroundColor: "rgba(76, 201, 240, 0.7)",
-          borderColor: "rgba(76, 201, 240, 1)",
-          borderWidth: 1,
-          borderRadius: 4,
-        },
-      ],
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      interaction: {
-        intersect: false,
-        mode: "index",
-      },
-      scales: {
-        y: {
-          beginAtZero: true,
-          grid: {
-            color: "rgba(255, 255, 255, 0.1)",
-            drawBorder: false,
-          },
-          ticks: {
-            color: "rgba(255, 255, 255, 0.7)",
-            font: {
-              size: 12,
-            },
-          },
-        },
-        x: {
-          grid: {
-            color: "rgba(255, 255, 255, 0.1)",
-            drawBorder: false,
-          },
-          ticks: {
-            color: "rgba(255, 255, 255, 0.7)",
-            font: {
-              size: 12,
-            },
-          },
-        },
-      },
-      plugins: {
-        legend: {
-          labels: {
-            color: "rgba(255, 255, 255, 0.8)",
-            usePointStyle: true,
-            padding: 20,
-            font: {
-              size: 13,
-            },
-          },
-        },
-        tooltip: {
-          backgroundColor: "rgba(30, 30, 46, 0.95)",
-          titleColor: "#fff",
-          bodyColor: "#ddd",
-          borderColor: "rgba(67, 97, 238, 0.5)",
-          borderWidth: 1,
-          cornerRadius: 8,
-          displayColors: true,
-        },
-      },
-    },
-  });
-}
-
-// Initialize students chart
-function initStudentsChart() {
-  const studentsCtx = document.getElementById("students-chart");
-  console.log("Initializing students chart:", studentsCtx);
-
-  if (studentsCtx) {
-    // Clear any existing chart
-    studentsChart = destroyChart(studentsChart);
-    // Garantir que o gráfico fique acessível globalmente
-    window.studentsChart = null;
-
-    const studentsData = {
-      6: {
-        labels: ["Mar", "Abr", "Mai", "Jun", "Jul", "Ago"],
-        novosAlunos: [28, 35, 42, 38, 45, 52],
-        aprovados: [22, 28, 35, 30, 38, 44],
-        emProgresso: [65, 72, 68, 75, 82, 88],
-        desistentes: [3, 4, 2, 5, 3, 4],
-        satisfacao: [4.5, 4.6, 4.7, 4.6, 4.8, 4.8],
-      },
-      12: {
-        labels: [
-          "Set/23",
-          "Out/23",
-          "Nov/23",
-          "Dez/23",
-          "Jan/24",
-          "Fev/24",
-          "Mar/24",
-          "Abr/24",
-          "Mai/24",
-          "Jun/24",
-          "Jul/24",
-          "Ago/24",
-        ],
-        novosAlunos: [25, 32, 29, 34, 41, 36, 28, 35, 42, 38, 45, 52],
-        aprovados: [18, 24, 26, 28, 32, 25, 22, 28, 35, 30, 38, 44],
-        emProgresso: [58, 62, 65, 69, 73, 68, 65, 72, 68, 75, 82, 88],
-        desistentes: [2, 3, 4, 2, 3, 5, 3, 4, 2, 5, 3, 4],
-        satisfacao: [
-          4.3, 4.4, 4.5, 4.4, 4.6, 4.5, 4.5, 4.6, 4.7, 4.6, 4.8, 4.8,
-        ],
-      },
-      24: {
-        labels: [
-          "Ago/22",
-          "Nov/22",
-          "Fev/23",
-          "Mai/23",
-          "Ago/23",
-          "Nov/23",
-          "Fev/24",
-          "Mai/24",
-          "Ago/24",
-        ],
-        novosAlunos: [22, 28, 31, 27, 29, 34, 36, 42, 52],
-        aprovados: [15, 21, 24, 20, 26, 28, 25, 35, 44],
-        emProgresso: [52, 58, 61, 55, 65, 69, 68, 68, 88],
-        desistentes: [4, 3, 2, 4, 4, 2, 5, 2, 4],
-        satisfacao: [4.1, 4.2, 4.3, 4.2, 4.5, 4.4, 4.5, 4.7, 4.8],
-      },
-    };
-
-    const currentPeriod =
-      document.getElementById("students-period-filter")?.value || "6";
-    const data = studentsData[currentPeriod];
-
-    studentsChart = new Chart(studentsCtx.getContext("2d"), {
-      type: "line",
-      data: {
-        labels: data.labels,
-        datasets: [
-          {
-            label: "Novos Alunos",
-            data: data.novosAlunos,
-            borderColor: "#22c55e",
-            backgroundColor: "rgba(34, 197, 94, 0.1)",
-            borderWidth: 3,
-            fill: true,
-            tension: 0.4,
-            pointBackgroundColor: "#22c55e",
-            pointBorderColor: "#ffffff",
-            pointBorderWidth: 2,
-            pointRadius: 6,
-            pointHoverRadius: 8,
-          },
-          {
-            label: "Formados",
-            data: data.aprovados,
-            borderColor: "#3b82f6",
-            backgroundColor: "rgba(59, 130, 246, 0.1)",
-            borderWidth: 3,
-            fill: true,
-            tension: 0.4,
-            pointBackgroundColor: "#3b82f6",
-            pointBorderColor: "#ffffff",
-            pointBorderWidth: 2,
-            pointRadius: 6,
-            pointHoverRadius: 8,
-          },
-          {
-            label: "Em Progresso",
-            data: data.emProgresso,
-            borderColor: "#f59e0b",
-            backgroundColor: "rgba(245, 158, 11, 0.1)",
-            borderWidth: 3,
-            fill: true,
-            tension: 0.4,
-            pointBackgroundColor: "#f59e0b",
-            pointBorderColor: "#ffffff",
-            pointBorderWidth: 2,
-            pointRadius: 6,
-            pointHoverRadius: 8,
-          },
-          {
-            label: "Desistências",
-            data: data.desistentes,
-            borderColor: "#ef4444",
-            backgroundColor: "rgba(239, 68, 68, 0.1)",
-            borderWidth: 2,
-            borderDash: [8, 4],
-            fill: false,
-            tension: 0.4,
-            pointBackgroundColor: "#ef4444",
-            pointBorderColor: "#ffffff",
-            pointBorderWidth: 2,
-            pointRadius: 4,
-            pointHoverRadius: 6,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        animation: {
-          duration: 2000,
-          easing: "easeInOutCubic",
-        },
-        interaction: {
-          mode: "index",
-          intersect: false,
-        },
-        scales: {
-          x: {
-            grid: {
-              color: "rgba(255, 255, 255, 0.1)",
-              drawBorder: false,
-            },
-            ticks: {
-              color: "rgba(255, 255, 255, 0.7)",
-              font: {
-                size: 11,
-                weight: 500,
-              },
-            },
-          },
-          y: {
-            beginAtZero: true,
-            max: Math.max(...data.emProgresso) + 15,
-            grid: {
-              color: "rgba(255, 255, 255, 0.1)",
-              drawBorder: false,
-            },
-            ticks: {
-              color: "rgba(255, 255, 255, 0.7)",
-              font: {
-                size: 11,
-              },
-              callback: function (value) {
-                return value + " alunos";
-              },
-            },
-            title: {
-              display: true,
-              text: "Quantidade de Alunos",
-              color: "#22c55e",
-              font: {
-                size: 12,
-                weight: 600,
-              },
-            },
-          },
-        },
-        plugins: {
-          legend: {
-            position: "top",
-            labels: {
-              color: "rgba(255, 255, 255, 0.9)",
-              padding: 20,
-              usePointStyle: true,
-              font: {
-                size: 13,
-                weight: 500,
-              },
-            },
-          },
-          tooltip: {
-            backgroundColor: "rgba(30, 30, 46, 0.95)",
-            titleColor: "#fff",
-            bodyColor: "#ddd",
-            borderColor: "rgba(34, 197, 94, 0.5)",
-            borderWidth: 1,
-            cornerRadius: 12,
-            displayColors: true,
-            callbacks: {
-              title: function (context) {
-                return "Período: " + context[0].label;
-              },
-              label: function (context) {
-                return (
-                  context.dataset.label + ": " + context.parsed.y + " alunos"
-                );
-              },
-              afterBody: function (context) {
-                const index = context[0].dataIndex;
-                return `Satisfação Média: ${data.satisfacao[index]}★`;
-              },
-            },
-          },
-        },
-      },
-    });
-    // Garantir que o gráfico fique acessível globalmente
-    window.studentsChart = studentsChart;
-
-    console.log("Students progress chart initialized successfully");
-  } else {
-    console.error("Canvas element not found: students-chart");
-  }
-}
-
-// Function to update students chart period
-function updateStudentsChartPeriod() {
-  initStudentsChart();
-  initStudentsPerformanceChart();
-}
-// Initialize finance chart
-function initFinanceChart() {
-  const financeCtx = document.getElementById("finance-chart");
-  if (!financeCtx) return;
-
-  // Dados mais realistas com variações mensais
-  const financeData = {
-    6: {
-      labels: ["Fev", "Mar", "Abr", "Mai", "Jun", "Jul"],
-      receitas: [18200, 22400, 19800, 24600, 21200, 22840],
-      despesas: [9400, 11200, 8900, 12100, 10400, 10860],
-      lucro: [8800, 11200, 10900, 12500, 10800, 11980],
-      detailsReceitas: {
-        matriculas: [7200, 8800, 7100, 9200, 7800, 8400],
-        aulasTradicoes: [6500, 7800, 6800, 8200, 7200, 7600],
-        exames: [2800, 3200, 3100, 3800, 3400, 3600],
-        renovacoes: [1700, 2600, 2800, 3400, 2800, 3240],
-      },
-      detailsDespesas: {
-        combustivel: [2200, 2600, 2100, 2800, 2400, 2860],
-        manutencao: [1800, 2200, 1600, 2400, 2000, 2500],
-        salarios: [4200, 4800, 4200, 5200, 4800, 5500],
-        outros: [1200, 1600, 1000, 1700, 1200, 1300],
-      },
-    },
-    12: {
-      labels: [
-        "Ago/23",
-        "Set/23",
-        "Out/23",
-        "Nov/23",
-        "Dez/23",
-        "Jan/24",
-        "Fev/24",
-        "Mar/24",
-        "Abr/24",
-        "Mai/24",
-        "Jun/24",
-        "Jul/24",
-      ],
-      receitas: [
-        16800, 19200, 21400, 18600, 15200, 17400, 18200, 22400, 19800, 24600,
-        21200, 22840,
-      ],
-      despesas: [
-        8600, 9800, 10200, 9400, 8200, 9000, 9400, 11200, 8900, 12100, 10400,
-        10860,
-      ],
-      lucro: [
-        8200, 9400, 11200, 9200, 7000, 8400, 8800, 11200, 10900, 12500, 10800,
-        11980,
-      ],
-    },
-    24: {
-      labels: [
-        "Jul/22",
-        "Out/22",
-        "Jan/23",
-        "Abr/23",
-        "Jul/23",
-        "Out/23",
-        "Jan/24",
-        "Abr/24",
-        "Jul/24",
-      ],
-      receitas: [14200, 16800, 18400, 19600, 17800, 21400, 17400, 19800, 22840],
-      despesas: [7800, 8600, 9200, 9800, 8800, 10200, 9000, 8900, 10860],
-      lucro: [6400, 8200, 9200, 9800, 9000, 11200, 8400, 10900, 11980],
-    },
-  };
-
-  const currentPeriod = 6;
-  const data = financeData[currentPeriod];
-
-  financeChart = new Chart(financeCtx.getContext("2d"), {
-    type: "line",
-    data: {
-      labels: data.labels,
-      datasets: [
-        {
-          label: "Receita Bruta",
-          data: data.receitas,
-          backgroundColor: "rgba(34, 197, 94, 0.15)",
-          borderColor: "rgba(34, 197, 94, 1)",
-          borderWidth: 3,
-          fill: true,
-          tension: 0.4,
-          pointBackgroundColor: "rgba(34, 197, 94, 1)",
-          pointBorderColor: "#ffffff",
-          pointBorderWidth: 2,
-          pointRadius: 6,
-          pointHoverRadius: 8,
-        },
-        {
-          label: "Despesas Operacionais",
-          data: data.despesas,
-          backgroundColor: "rgba(239, 68, 68, 0.15)",
-          borderColor: "rgba(239, 68, 68, 1)",
-          borderWidth: 3,
-          fill: true,
-          tension: 0.4,
-          pointBackgroundColor: "rgba(239, 68, 68, 1)",
-          pointBorderColor: "#ffffff",
-          pointBorderWidth: 2,
-          pointRadius: 6,
-          pointHoverRadius: 8,
-        },
-        {
-          label: "Lucro Líquido",
-          data: data.lucro,
-          backgroundColor: "rgba(59, 130, 246, 0.15)",
-          borderColor: "rgba(59, 130, 246, 1)",
-          borderWidth: 3,
-          fill: false,
-          tension: 0.4,
-          pointBackgroundColor: "rgba(59, 130, 246, 1)",
-          pointBorderColor: "#ffffff",
-          pointBorderWidth: 2,
-          pointRadius: 6,
-          pointHoverRadius: 8,
-          borderDash: [5, 5],
-        },
-      ],
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      interaction: {
-        intersect: false,
-        mode: "index",
-      },
-      animation: {
-        duration: 2000,
-        easing: "easeOutQuart",
-      },
-      scales: {
-        y: {
-          beginAtZero: true,
-          max: Math.max(...data.receitas) * 1.1,
-          grid: {
-            color: "rgba(255, 255, 255, 0.08)",
-            drawBorder: false,
-            lineWidth: 1,
-          },
-          ticks: {
-            color: "rgba(255, 255, 255, 0.7)",
-            font: {
-              size: 12,
-              family: "Inter, sans-serif",
-            },
-            callback: function (value) {
-              if (value >= 1000) {
-                return "R$ " + (value / 1000).toFixed(0) + "k";
-              }
-              return "R$ " + value.toLocaleString("pt-BR");
-            },
-          },
-        },
-        x: {
-          grid: {
-            color: "rgba(255, 255, 255, 0.05)",
-            drawBorder: false,
-          },
-          ticks: {
-            color: "rgba(255, 255, 255, 0.7)",
-            font: {
-              size: 12,
-              family: "Inter, sans-serif",
-            },
-          },
-        },
-      },
-      plugins: {
-        legend: {
-          position: "top",
-          align: "end",
-          labels: {
-            color: "rgba(255, 255, 255, 0.9)",
-            usePointStyle: true,
-            pointStyle: "circle",
-            padding: 25,
-            font: {
-              size: 13,
-              family: "Inter, sans-serif",
-              weight: "500",
-            },
-          },
-        },
-        tooltip: {
-          backgroundColor: "rgba(17, 24, 39, 0.95)",
-          titleColor: "#ffffff",
-          bodyColor: "#e5e7eb",
-          borderColor: "rgba(59, 130, 246, 0.3)",
-          borderWidth: 1,
-          cornerRadius: 12,
-          padding: 16,
-          titleFont: {
-            size: 14,
-            weight: "bold",
-          },
-          bodyFont: {
-            size: 13,
-          },
-          displayColors: true,
-          callbacks: {
-            title: function (context) {
-              return "Período: " + context[0].label;
-            },
-            label: function (context) {
-              const value = context.parsed.y;
-              const percentage =
-                context.datasetIndex === 2
-                  ? ((value / data.receitas[context.dataIndex]) * 100).toFixed(
-                      1
-                    ) + "%"
-                  : "";
-
-              return (
-                context.dataset.label +
-                ": R$ " +
-                value.toLocaleString("pt-BR", { minimumFractionDigits: 2 }) +
-                (percentage ? " (" + percentage + " de margem)" : "")
-              );
-            },
-            afterBody: function (context) {
-              if (context.length > 0) {
-                const index = context[0].dataIndex;
-                const receita = data.receitas[index];
-                const despesa = data.despesas[index];
-                const crescimento =
-                  index > 0
-                    ? (
-                        ((receita - data.receitas[index - 1]) /
-                          data.receitas[index - 1]) *
-                        100
-                      ).toFixed(1)
-                    : 0;
-
-                return [
-                  "",
-                  "Crescimento: " +
-                    (crescimento >= 0 ? "+" : "") +
-                    crescimento +
-                    "%",
-                  "Margem: " +
-                    (((receita - despesa) / receita) * 100).toFixed(1) +
-                    "%",
-                ];
-              }
-            },
-          },
-        },
-      },
-    },
-  });
-
-  // Adicionar controles de período
-  setupFinanceChartControls();
-}
-
-// Configurar controles do gráfico financeiro
-function setupFinanceChartControls() {
-  const chartFilter = document.querySelector(
-    ".finance-flow-chart .chart-filter"
-  );
-  if (chartFilter) {
-    chartFilter.addEventListener("change", function (e) {
-      updateFinanceChartPeriod(parseInt(e.target.value));
-    });
-  }
-}
-
-// Atualizar período do gráfico financeiro
-function updateFinanceChartPeriod(months) {
-  if (!financeChart) return;
-
-  const financeData = {
-    6: {
-      labels: ["Fev", "Mar", "Abr", "Mai", "Jun", "Jul"],
-      receitas: [18200, 22400, 19800, 24600, 21200, 22840],
-      despesas: [9400, 11200, 8900, 12100, 10400, 10860],
-      lucro: [8800, 11200, 10900, 12500, 10800, 11980],
-    },
-    12: {
-      labels: [
-        "Ago/23",
-        "Set/23",
-        "Out/23",
-        "Nov/23",
-        "Dez/23",
-        "Jan/24",
-        "Fev/24",
-        "Mar/24",
-        "Abr/24",
-        "Mai/24",
-        "Jun/24",
-        "Jul/24",
-      ],
-      receitas: [
-        16800, 19200, 21400, 18600, 15200, 17400, 18200, 22400, 19800, 24600,
-        21200, 22840,
-      ],
-      despesas: [
-        8600, 9800, 10200, 9400, 8200, 9000, 9400, 11200, 8900, 12100, 10400,
-        10860,
-      ],
-      lucro: [
-        8200, 9400, 11200, 9200, 7000, 8400, 8800, 11200, 10900, 12500, 10800,
-        11980,
-      ],
-    },
-    24: {
-      labels: [
-        "Jul/22",
-        "Set/22",
-        "Nov/22",
-        "Jan/23",
-        "Mar/23",
-        "Mai/23",
-        "Jul/23",
-        "Set/23",
-        "Nov/23",
-        "Jan/24",
-        "Mar/24",
-        "Mai/24",
-        "Jul/24",
-      ],
-      receitas: [
-        14200, 15600, 16800, 18400, 19200, 19600, 17800, 19200, 21400, 17400,
-        22400, 24600, 22840,
-      ],
-      despesas: [
-        7800, 8200, 8600, 9200, 9600, 9800, 8800, 9800, 10200, 9000, 11200,
-        12100, 10860,
-      ],
-      lucro: [
-        6400, 7400, 8200, 9200, 9600, 9800, 9000, 9400, 11200, 8400, 11200,
-        12500, 11980,
-      ],
-    },
-  };
-
-  const data = financeData[months];
-
-  // Atualizar dados do gráfico
-  financeChart.data.labels = data.labels;
-  financeChart.data.datasets[0].data = data.receitas;
-  financeChart.data.datasets[1].data = data.despesas;
-  financeChart.data.datasets[2].data = data.lucro;
-
-  // Ajustar escala Y
-  financeChart.options.scales.y.max = Math.max(...data.receitas) * 1.1;
-
-  // Atualizar com animação
-  financeChart.update("active");
-
-  // Mostrar notificação
-  const periodos = { 6: "6 meses", 12: "1 ano", 24: "2 anos" };
-  showNotification(`Gráfico atualizado para ${periodos[months]}`, "success");
-}
-
-// ===== FINANCE FUNCTIONS =====
-
-// Generate finance report
-function generateFinanceReport() {
-  showNotification("Gerando relatório financeiro...", "info");
-  setTimeout(() => {
-    showNotification("Relatório financeiro gerado com sucesso!", "success");
-  }, 2000);
-}
-
-// Export finance chart
-function exportFinanceChart() {
-  if (financeChart) {
-    const url = financeChart.toBase64Image();
-    const link = document.createElement("a");
-    link.download = "fluxo-caixa.png";
-    link.href = url;
-    link.click();
-    showNotification("Gráfico exportado com sucesso!", "success");
-  }
-}
-
-// Generate payment report
-function generatePaymentReport() {
-  showNotification("Gerando relatório de métodos de pagamento...", "info");
-  setTimeout(() => {
-    showNotification(
-      "Relatório de métodos de pagamento gerado com sucesso!",
-      "success"
-    );
-  }, 2000);
-}
-
-// View payment trends
-function viewPaymentTrends() {
-  showNotification("Carregando análise de tendências de pagamento...", "info");
-  setTimeout(() => {
-    showNotification("Análise de tendências carregada com sucesso!", "success");
-    // Aqui você poderia abrir um modal com análises detalhadas
-  }, 1500);
-}
-
-// View all transactions
-function viewAllTransactions() {
-  openModal("viewAllTransactionsModal");
-  loadAllTransactionsData();
-}
-
-// Sample transactions data for demonstration
-const allTransactionsData = [
-  {
-    id: 1,
-    studentName: "Ana Silva",
-    description: "Matrícula - Categoria B",
-    amount: 1200.0,
-    type: "income",
-    status: "completed",
-    date: "2024-08-20",
-    time: "09:15",
-    paymentMethod: "credit_card",
-    installments: 3,
-    currentInstallment: 1,
-    category: "enrollment",
-    reference: "MAT-2024-001",
-  },
-  {
-    id: 2,
-    studentName: "Bruno Costa",
-    description: "Aula Prática",
-    amount: 80.0,
-    type: "income",
-    status: "pending",
-    date: "2024-08-22",
-    time: "14:30",
-    paymentMethod: "pix",
-    installments: 1,
-    currentInstallment: 1,
-    category: "lesson",
-    reference: "AULA-2024-045",
-  },
-  {
-    id: 3,
-    studentName: "Auto Escola Ressaca",
-    description: "Combustível Veículos",
-    amount: 250.0,
-    type: "expense",
-    status: "completed",
-    date: "2024-08-23",
-    time: "16:45",
-    paymentMethod: "debit_card",
-    installments: 1,
-    currentInstallment: 1,
-    category: "fuel",
-    reference: "COMB-2024-012",
-  },
-  {
-    id: 4,
-    studentName: "Carla Mendes",
-    description: "Taxa de Exame - DETRAN",
-    amount: 150.0,
-    type: "income",
-    status: "completed",
-    date: "2024-08-24",
-    time: "10:20",
-    paymentMethod: "money",
-    installments: 1,
-    currentInstallment: 1,
-    category: "exam",
-    reference: "EXAM-2024-078",
-  },
-  {
-    id: 5,
-    studentName: "Auto Escola Ressaca",
-    description: "Manutenção Veículo ABC-1234",
-    amount: 450.0,
-    type: "expense",
-    status: "completed",
-    date: "2024-08-25",
-    time: "08:30",
-    paymentMethod: "transfer",
-    installments: 1,
-    currentInstallment: 1,
-    category: "maintenance",
-    reference: "MANUT-2024-003",
-  },
-  {
-    id: 6,
-    studentName: "Daniel Santos",
-    description: "Pacote Completo - Categoria B",
-    amount: 2500.0,
-    type: "income",
-    status: "partial",
-    date: "2024-08-26",
-    time: "15:00",
-    paymentMethod: "credit_card",
-    installments: 5,
-    currentInstallment: 2,
-    category: "package",
-    reference: "PAC-2024-015",
-  },
-];
-
-function loadAllTransactionsData() {
-  const container = document.getElementById("transactionsListContainer");
-
-  container.innerHTML = `
-        <div style="padding: 20px; text-align: center;">
-          <i class="fas fa-spinner fa-spin" style="font-size: 24px; color: var(--primary-color, #007bff);"></i>
-          <p style="margin-top: 10px;">Carregando lista de transações...</p>
-        </div>
-      `;
-
-  setTimeout(() => {
-    renderTransactionsList(allTransactionsData);
-  }, 800);
-}
-
-function renderTransactionsList(transactions) {
-  const container = document.getElementById("transactionsListContainer");
-
-  if (transactions.length === 0) {
-    container.innerHTML = `
-          <div style="padding: 40px; text-align: center;">
-            <i class="fas fa-dollar-sign" style="font-size: 48px; color: var(--text-muted, #6c757d); margin-bottom: 15px;"></i>
-            <h4 style="color: var(--text-muted, #6c757d); margin-bottom: 10px;">Nenhuma transação encontrada</h4>
-            <p style="color: var(--text-muted, #6c757d);">Tente ajustar os filtros de busca</p>
-          </div>
-        `;
-    return;
-  }
-
-  const transactionsHtml = transactions
-    .map((transaction) => {
-      const statusClass =
-        transaction.status === "completed"
-          ? "success"
-          : transaction.status === "pending"
-          ? "warning"
-          : transaction.status === "partial"
-          ? "info"
-          : "danger";
-      const statusText =
-        transaction.status === "completed"
-          ? "Concluída"
-          : transaction.status === "pending"
-          ? "Pendente"
-          : transaction.status === "partial"
-          ? "Parcial"
-          : "Cancelada";
-
-      const typeIcon =
-        transaction.type === "income" ? "fa-arrow-up" : "fa-arrow-down";
-      const typeClass = transaction.type === "income" ? "success" : "danger";
-      const typeText = transaction.type === "income" ? "Entrada" : "Saída";
-
-      const transactionDate = new Date(
-        transaction.date + "T" + transaction.time
-      );
-      const formattedDate = transactionDate.toLocaleDateString("pt-BR");
-      const formattedTime = transaction.time;
-
-      const paymentMethods = {
-        credit_card: "Cartão de Crédito",
-        debit_card: "Cartão de Débito",
-        pix: "PIX",
-        money: "Dinheiro",
-        transfer: "Transferência",
-      };
-
-      const categories = {
-        enrollment: "Matrícula",
-        lesson: "Aula",
-        exam: "Exame",
-        package: "Pacote",
-        fuel: "Combustível",
-        maintenance: "Manutenção",
-      };
-
-      return `
-          <div class="transaction-item" style="
-            display: flex; 
-            align-items: center; 
-            padding: 15px 20px; 
-            border-bottom: 1px solid var(--border-color, #e0e0e0);
-            transition: background-color 0.2s ease;
-          " onmouseover="this.style.backgroundColor='var(--background-hover, #f8f9fa)'" 
-             onmouseout="this.style.backgroundColor='transparent'">
-            
-            <div style="
-              width: 50px; 
-              height: 50px; 
-              background: ${
-                transaction.type === "income"
-                  ? "linear-gradient(135deg, var(--success-color, #28a745), #20c997)"
-                  : "linear-gradient(135deg, var(--danger-color, #dc3545), #fd7e14)"
-              }; 
-              border-radius: 50%; 
-              display: flex; 
-              align-items: center; 
-              justify-content: center; 
-              color: white; 
-              font-weight: bold; 
-              font-size: 18px;
-              margin-right: 15px;
-            ">
-              <i class="fas ${typeIcon}"></i>
-            </div>
-
-            <div style="flex: 1;">
-              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px;">
-                <h4 style="margin: 0; color: var(--text-primary, #333);">${
-                  transaction.description
-                }</h4>
-                <div style="display: flex; align-items: center; gap: 10px;">
-                  <span style="
-                    font-size: 18px; 
-                    font-weight: bold; 
-                    color: ${
-                      transaction.type === "income"
-                        ? "var(--success-color, #28a745)"
-                        : "var(--danger-color, #dc3545)"
-                    };
-                  ">
-                    ${
-                      transaction.type === "income" ? "+" : "-"
-                    } R$ ${transaction.amount.toFixed(2).replace(".", ",")}
-                  </span>
-                  <span class="status-badge status-${statusClass}" style="
-                    padding: 4px 8px; 
-                    border-radius: 12px; 
-                    font-size: 12px; 
-                    font-weight: 500;
-                    background-color: ${
-                      statusClass === "success"
-                        ? "#d4edda"
-                        : statusClass === "warning"
-                        ? "#fff3cd"
-                        : statusClass === "info"
-                        ? "#d1ecf1"
-                        : "#f8d7da"
-                    };
-                    color: ${
-                      statusClass === "success"
-                        ? "#155724"
-                        : statusClass === "warning"
-                        ? "#856404"
-                        : statusClass === "info"
-                        ? "#0c5460"
-                        : "#721c24"
-                    };
-                  ">
-                    ${statusText}
-                  </span>
-                </div>
-              </div>
-              
-              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 8px;">
-                <small style="color: var(--text-secondary, #6c757d);">
-                  <i class="fas fa-user" style="width: 16px;"></i> ${
-                    transaction.studentName
-                  }
-                </small>
-                <small style="color: var(--text-secondary, #6c757d);">
-                  <i class="fas fa-calendar" style="width: 16px;"></i> ${formattedDate}
-                </small>
-                <small style="color: var(--text-secondary, #6c757d);">
-                  <i class="fas fa-clock" style="width: 16px;"></i> ${formattedTime}
-                </small>
-                <small style="color: var(--text-secondary, #6c757d);">
-                  <i class="fas fa-credit-card" style="width: 16px;"></i> ${
-                    paymentMethods[transaction.paymentMethod]
-                  }
-                </small>
-              </div>
-
-              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px;">
-                <small style="color: var(--text-secondary, #6c757d);">
-                  <i class="fas fa-tag" style="width: 16px;"></i> ${
-                    categories[transaction.category]
-                  }
-                </small>
-                ${
-                  transaction.installments > 1
-                    ? `
-                  <small style="color: var(--text-secondary, #6c757d);">
-                    <i class="fas fa-list-ol" style="width: 16px;"></i> ${transaction.currentInstallment}/${transaction.installments}
-                  </small>
-                `
-                    : ""
-                }
-                <small style="color: var(--text-secondary, #6c757d);">
-                  <i class="fas fa-hashtag" style="width: 16px;"></i> ${
-                    transaction.reference
-                  }
-                </small>
-              </div>
-            </div>
-
-            <div style="display: flex; gap: 8px; margin-left: 15px;">
-              <button class="btn btn-sm btn-outline-primary" 
-                      onclick="viewTransactionDetails(${transaction.id})" 
-                      title="Ver Detalhes"
-                      style="padding: 6px 10px; border-radius: 6px;">
-                <i class="fas fa-eye"></i>
-              </button>
-              ${
-                transaction.status === "pending"
-                  ? `
-                <button class="btn btn-sm btn-outline-success" 
-                        onclick="markTransactionPaid(${transaction.id})" 
-                        title="Marcar como Pago"
-                        style="padding: 6px 10px; border-radius: 6px;">
-                  <i class="fas fa-check"></i>
-                </button>
-              `
-                  : ""
-              }
-              <button class="btn btn-sm btn-outline-info" 
-                      onclick="printTransactionReceipt(${transaction.id})" 
-                      title="Imprimir Recibo"
-                      style="padding: 6px 10px; border-radius: 6px;">
-                <i class="fas fa-print"></i>
-              </button>
-            </div>
-          </div>
-        `;
-    })
-    .join("");
-
-  container.innerHTML = transactionsHtml;
-}
-
-function filterTransactionsList() {
-  const searchTerm = document
-    .getElementById("transactionSearchInput")
-    .value.toLowerCase();
-  const statusFilter = document.getElementById("transactionStatusFilter").value;
-  const typeFilter = document.getElementById("transactionTypeFilter").value;
-
-  const filteredTransactions = allTransactionsData.filter((transaction) => {
-    const matchesSearch =
-      !searchTerm ||
-      transaction.studentName.toLowerCase().includes(searchTerm) ||
-      transaction.description.toLowerCase().includes(searchTerm) ||
-      transaction.reference.toLowerCase().includes(searchTerm);
-
-    const matchesStatus = !statusFilter || transaction.status === statusFilter;
-    const matchesType = !typeFilter || transaction.type === typeFilter;
-
-    return matchesSearch && matchesStatus && matchesType;
-  });
-
-  renderTransactionsList(filteredTransactions);
-}
-
-// View transaction details
-function viewTransactionDetails(id) {
-  showNotification(`Carregando detalhes da transação #${id}...`, "info");
-  // Here you would typically open a modal or navigate to details page
-}
-
-// Download receipt
-
-// Send payment reminder
-function sendReminder(id) {
-  showNotification("Enviando lembrete de pagamento...", "info");
-  setTimeout(() => {
-    showNotification("Lembrete enviado com sucesso!", "success");
-  }, 1500);
-}
-
-// Contact student for overdue payment
-function contactStudent(id) {
-  if (
-    confirm("Deseja entrar em contato com o aluno sobre o pagamento em atraso?")
-  ) {
-    showNotification("Iniciando contato com o aluno...", "info");
-    setTimeout(() => {
-      showNotification("Contato realizado com sucesso!", "success");
-    }, 2000);
-  }
-}
-
-// View expense details
-function viewExpenseDetails(id) {
-  showNotification(`Carregando detalhes da despesa #${id}...`, "info");
-}
-
-// Edit payment
-function editPayment(id) {
-  showNotification(`Carregando dados do pagamento #${id}...`, "info");
-  // Here you would typically open the payment modal with pre-filled data
-  setTimeout(() => {
-    openModal("paymentModal");
-  }, 500);
-}
-
-// Filter transactions
-function filterTransactions(filterType) {
-  const transactionItems = document.querySelectorAll(".transaction-item");
-
-  transactionItems.forEach((item) => {
-    if (filterType === "all") {
-      item.style.display = "flex";
-    } else {
-      if (item.classList.contains(filterType)) {
-        item.style.display = "flex";
-      } else {
-        item.style.display = "none";
-      }
-    }
-  });
-}
-
-// Add event listener for transaction filter
-document.addEventListener("DOMContentLoaded", function () {
-  const filterSelect = document.querySelector(
-    ".transactions-filters .filter-select"
-  );
-  if (filterSelect) {
-    filterSelect.addEventListener("change", function () {
-      const filterType = this.value;
-      filterTransactions(filterType);
-    });
-  }
-
-  // Add event listener for chart filter
-  const chartFilter = document.querySelector(".chart-filter");
-  if (chartFilter) {
-    chartFilter.addEventListener("change", function () {
-      const months = parseInt(this.value);
-      updateFinanceChart(months);
-    });
-  }
-});
-
-// Update finance chart based on period selection (legacy support)
-function updateFinanceChart(months) {
-  updateFinanceChartPeriod(months);
-}
-
-// ===== EXAMS FUNCTIONS =====
-
-// Generate exams report
-function generateExamsReport() {
-  showNotification("Gerando relatório de exames...", "info");
-  setTimeout(() => {
-    showNotification("Relatório de exames gerado com sucesso!", "success");
-  }, 2000);
-}
-
-// Export exams chart
-function exportExamsChart() {
-  showNotification("Exportando gráfico de performance...", "info");
-  setTimeout(() => {
-    showNotification("Gráfico exportado com sucesso!", "success");
-  }, 1500);
-}
-
-// Enhanced Exam Distribution Functions
-function viewExamDistributionDetails() {
-  showNotification("Carregando detalhes da distribuição de exames...", "info");
-  setTimeout(() => {
-    showNotification("Detalhes carregados com sucesso!", "success");
-  }, 1000);
-}
-
-function updateExamDistribution() {
-  const filter =
-    document.getElementById("exam-distribution-filter")?.value || "month";
-  showNotification(
-    `Atualizando distribuição para: ${getFilterLabel(filter)}`,
-    "info"
-  );
-
-  // Simulate data update
-  setTimeout(() => {
-    // Here you would update the distribution data based on the filter
-    showNotification("Distribuição atualizada com sucesso!", "success");
-  }, 800);
-}
-
-function getFilterLabel(filter) {
-  const labels = {
-    month: "Este Mês",
-    quarter: "Último Trimestre",
-    semester: "Último Semestre",
-    year: "Este Ano",
-  };
-  return labels[filter] || "Período selecionado";
-}
-
-// View all exams
-function viewAllExams() {
-  openModal("viewAllExamsModal");
-  loadAllExamsData();
-}
-
-// Sample exams data for demonstration
-const allExamsData = [
-  {
-    id: 1,
-    studentName: "Ana Silva",
-    examType: "theoretical",
-    category: "Categoria B",
-    date: "2024-08-25",
-    time: "09:00",
-    status: "approved",
-    score: 28,
-    maxScore: 30,
-    location: "Detran Central",
-    instructorName: "Carlos Santos",
-    attempts: 1,
-    validUntil: "2024-12-25",
-  },
-  {
-    id: 2,
-    studentName: "Bruno Costa",
-    examType: "practical",
-    category: "Categoria A",
-    date: "2024-08-26",
-    time: "14:00",
-    status: "failed",
-    score: 0,
-    maxScore: 100,
-    location: "Detran Norte",
-    instructorName: "Maria Oliveira",
-    attempts: 2,
-    validUntil: null,
-  },
-  {
-    id: 3,
-    studentName: "Carla Mendes",
-    examType: "theoretical",
-    category: "Categoria B",
-    date: "2024-08-27",
-    time: "10:30",
-    status: "scheduled",
-    score: null,
-    maxScore: 30,
-    location: "Detran Sul",
-    instructorName: "João Pereira",
-    attempts: 1,
-    validUntil: null,
-  },
-  {
-    id: 4,
-    studentName: "Daniel Santos",
-    examType: "practical",
-    category: "Categoria B",
-    date: "2024-08-28",
-    time: "16:00",
-    status: "approved",
-    score: 85,
-    maxScore: 100,
-    location: "Detran Central",
-    instructorName: "Ana Paula",
-    attempts: 1,
-    validUntil: "2024-12-28",
-  },
-  {
-    id: 5,
-    studentName: "Elena Rodrigues",
-    examType: "practical",
-    category: "Categoria A",
-    date: "2024-08-30",
-    time: "11:00",
-    status: "scheduled",
-    score: null,
-    maxScore: 100,
-    location: "Detran Norte",
-    instructorName: "Roberto Silva",
-    attempts: 1,
-    validUntil: null,
-  },
-];
-
-function loadAllExamsData() {
-  const container = document.getElementById("examsListContainer");
-
-  container.innerHTML = `
-        <div style="padding: 20px; text-align: center;">
-          <i class="fas fa-spinner fa-spin" style="font-size: 24px; color: var(--primary-color, #007bff);"></i>
-          <p style="margin-top: 10px;">Carregando lista de exames...</p>
-        </div>
-      `;
-
-  setTimeout(() => {
-    renderExamsList(allExamsData);
-  }, 800);
-}
-
-function renderExamsList(exams) {
-  const container = document.getElementById("examsListContainer");
-
-  if (exams.length === 0) {
-    container.innerHTML = `
-          <div style="padding: 40px; text-align: center;">
-            <i class="fas fa-clipboard-check" style="font-size: 48px; color: var(--text-muted, #6c757d); margin-bottom: 15px;"></i>
-            <h4 style="color: var(--text-muted, #6c757d); margin-bottom: 10px;">Nenhum exame encontrado</h4>
-            <p style="color: var(--text-muted, #6c757d);">Tente ajustar os filtros de busca</p>
-          </div>
-        `;
-    return;
-  }
-
-  const examsHtml = exams
-    .map((exam) => {
-      const statusClass =
-        exam.status === "approved"
-          ? "success"
-          : exam.status === "failed"
-          ? "danger"
-          : exam.status === "scheduled"
-          ? "warning"
-          : "info";
-      const statusText =
-        exam.status === "approved"
-          ? "Aprovado"
-          : exam.status === "failed"
-          ? "Reprovado"
-          : exam.status === "scheduled"
-          ? "Agendado"
-          : "Pendente";
-
-      const typeIcon = exam.examType === "theoretical" ? "fa-book" : "fa-car";
-      const typeText = exam.examType === "theoretical" ? "Teórico" : "Prático";
-
-      const examDate = new Date(exam.date + "T" + exam.time);
-      const formattedDate = examDate.toLocaleDateString("pt-BR");
-      const formattedTime = exam.time;
-
-      return `
-          <div class="exam-item" style="
-            display: flex; 
-            align-items: center; 
-            padding: 15px 20px; 
-            border-bottom: 1px solid var(--border-color, #e0e0e0);
-            transition: background-color 0.2s ease;
-          " onmouseover="this.style.backgroundColor='var(--background-hover, #f8f9fa)'" 
-             onmouseout="this.style.backgroundColor='transparent'">
-            
-            <div style="
-              width: 50px; 
-              height: 50px; 
-              background: linear-gradient(135deg, var(--primary-color, #007bff), var(--info-color, #17a2b8)); 
-              border-radius: 50%; 
-              display: flex; 
-              align-items: center; 
-              justify-content: center; 
-              color: white; 
-              font-weight: bold; 
-              font-size: 18px;
-              margin-right: 15px;
-            ">
-              <i class="fas ${typeIcon}"></i>
-            </div>
-
-            <div style="flex: 1;">
-              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px;">
-                <h4 style="margin: 0; color: var(--text-primary, #333);">${
-                  exam.studentName
-                } - ${typeText}</h4>
-                <span class="status-badge status-${statusClass}" style="
-                  padding: 4px 8px; 
-                  border-radius: 12px; 
-                  font-size: 12px; 
-                  font-weight: 500;
-                  background-color: ${
-                    statusClass === "success"
-                      ? "#d4edda"
-                      : statusClass === "danger"
-                      ? "#f8d7da"
-                      : statusClass === "warning"
-                      ? "#fff3cd"
-                      : "#d1ecf1"
-                  };
-                  color: ${
-                    statusClass === "success"
-                      ? "#155724"
-                      : statusClass === "danger"
-                      ? "#721c24"
-                      : statusClass === "warning"
-                      ? "#856404"
-                      : "#0c5460"
-                  };
-                ">
-                  ${statusText}
-                </span>
-              </div>
-              
-              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 8px;">
-                <small style="color: var(--text-secondary, #6c757d);">
-                  <i class="fas fa-id-card" style="width: 16px;"></i> ${
-                    exam.category
-                  }
-                </small>
-                <small style="color: var(--text-secondary, #6c757d);">
-                  <i class="fas fa-calendar" style="width: 16px;"></i> ${formattedDate}
-                </small>
-                <small style="color: var(--text-secondary, #6c757d);">
-                  <i class="fas fa-clock" style="width: 16px;"></i> ${formattedTime}
-                </small>
-                <small style="color: var(--text-secondary, #6c757d);">
-                  <i class="fas fa-map-marker-alt" style="width: 16px;"></i> ${
-                    exam.location
-                  }
-                </small>
-              </div>
-
-              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px;">
-                <small style="color: var(--text-secondary, #6c757d);">
-                  <i class="fas fa-user-tie" style="width: 16px;"></i> ${
-                    exam.instructorName
-                  }
-                </small>
-                ${
-                  exam.score !== null
-                    ? `
-                  <small style="color: var(--text-secondary, #6c757d);">
-                    <i class="fas fa-chart-line" style="width: 16px;"></i> ${exam.score}/${exam.maxScore}
-                  </small>
-                `
-                    : ""
-                }
-                <small style="color: var(--text-secondary, #6c757d);">
-                  <i class="fas fa-redo" style="width: 16px;"></i> ${
-                    exam.attempts
-                  }ª tentativa
-                </small>
-                ${
-                  exam.validUntil
-                    ? `
-                  <small style="color: var(--text-secondary, #6c757d);">
-                    <i class="fas fa-calendar-check" style="width: 16px;"></i> Válido até ${exam.validUntil}
-                  </small>
-                `
-                    : ""
-                }
-              </div>
-            </div>
-
-            <div style="display: flex; gap: 8px; margin-left: 15px;">
-              <button class="btn btn-sm btn-outline-primary" 
-                      onclick="viewExamDetails(${exam.id})" 
-                      title="Ver Detalhes"
-                      style="padding: 6px 10px; border-radius: 6px;">
-                <i class="fas fa-eye"></i>
-              </button>
-              ${
-                exam.status === "scheduled"
-                  ? `
-                <button class="btn btn-sm btn-outline-success" 
-                        onclick="editExam(${exam.id})" 
-                        title="Editar"
-                        style="padding: 6px 10px; border-radius: 6px;">
-                  <i class="fas fa-edit"></i>
-                </button>
-              `
-                  : ""
-              }
-              ${
-                exam.status === "approved"
-                  ? `
-                <button class="btn btn-sm btn-outline-info" 
-                        onclick="printCertificate(${exam.id})" 
-                        title="Imprimir Certificado"
-                        style="padding: 6px 10px; border-radius: 6px;">
-                  <i class="fas fa-certificate"></i>
-                </button>
-              `
-                  : ""
-              }
-            </div>
-          </div>
-        `;
-    })
-    .join("");
-
-  container.innerHTML = examsHtml;
-}
-
-function filterExamsList() {
-  const searchTerm = document
-    .getElementById("examSearchInput")
-    .value.toLowerCase();
-  const statusFilter = document.getElementById("examStatusFilter").value;
-  const typeFilter = document.getElementById("examTypeFilter").value;
-
-  const filteredExams = allExamsData.filter((exam) => {
-    const matchesSearch =
-      !searchTerm ||
-      exam.studentName.toLowerCase().includes(searchTerm) ||
-      exam.category.toLowerCase().includes(searchTerm) ||
-      exam.location.toLowerCase().includes(searchTerm) ||
-      exam.instructorName.toLowerCase().includes(searchTerm);
-
-    const matchesStatus = !statusFilter || exam.status === statusFilter;
-    const matchesType = !typeFilter || exam.examType === typeFilter;
-
-    return matchesSearch && matchesStatus && matchesType;
-  });
-
-  renderExamsList(filteredExams);
-}
-
-// View exam details
-function viewExamDetails(id) {
-  showNotification(`Carregando detalhes do exame #${id}...`, "info");
-  // Here you would typically open a modal or navigate to details page
-}
-
-// View exam results
-function viewExamResults(id) {
-  showNotification(`Carregando resultados do exame #${id}...`, "info");
-  // Here you would typically open a modal with exam results
-}
-
-// Generate certificate
-function generateCertificate(id) {
-  showNotification("Gerando certificado de aprovação...", "info");
-  setTimeout(() => {
-    showNotification("Certificado gerado com sucesso!", "success");
-  }, 2000);
-}
-
-// Send exam reminder
-function sendExamReminder(id) {
-  showNotification("Enviando lembrete de exame...", "info");
-  setTimeout(() => {
-    showNotification("Lembrete enviado com sucesso!", "success");
-  }, 1500);
-}
-
-// Schedule retake exam
-function scheduleRetake(id) {
-  if (confirm("Deseja agendar uma nova tentativa de exame para este aluno?")) {
-    showNotification("Agendando nova tentativa...", "info");
-    setTimeout(() => {
-      showNotification("Nova tentativa agendada com sucesso!", "success");
-      // Here you would typically open the exam scheduling modal
-    }, 2000);
-  }
-}
-
-// Check vehicle availability
-function checkVehicleAvailability(id) {
-  showNotification("Verificando disponibilidade do veículo...", "info");
-  setTimeout(() => {
-    showNotification("Veículo disponível para o exame!", "success");
-  }, 1000);
-}
-
-// Contact student for exam
-function contactStudent(id) {
-  if (confirm("Deseja entrar em contato com o aluno sobre o exame?")) {
-    showNotification("Iniciando contato com o aluno...", "info");
-    setTimeout(() => {
-      showNotification("Contato realizado com sucesso!", "success");
-    }, 2000);
-  }
-}
-
-// Edit exam
-function editExam(id) {
-  showNotification(`Carregando dados do exame #${id}...`, "info");
-  // Here you would typically open the exam modal with pre-filled data
-  setTimeout(() => {
-    openModal("examModal");
-  }, 500);
-}
-
-// Filter exams
-function filterExams(filterType) {
-  const examItems = document.querySelectorAll(".exam-item");
-
-  examItems.forEach((item) => {
-    if (filterType === "all") {
-      item.style.display = "flex";
-    } else {
-      let showItem = false;
-
-      switch (filterType) {
-        case "scheduled":
-          showItem = item.classList.contains("scheduled");
-          break;
-        case "completed":
-          showItem = item.classList.contains("completed");
-          break;
-        case "approved":
-          showItem = item.classList.contains("approved");
-          break;
-        case "failed":
-          showItem = item.classList.contains("failed");
-          break;
-      }
-
-      if (showItem) {
-        item.style.display = "flex";
-      } else {
-        item.style.display = "none";
-      }
-    }
-  });
-}
-
-// Initialize exams chart
-function initExamsChart() {
-  const examsCtx = document.getElementById("exams-chart");
-  if (!examsCtx) return;
-
-  // Dados realistas de performance de exames
-  const examsData = {
-    6: {
-      labels: ["Fev", "Mar", "Abr", "Mai", "Jun", "Jul"],
-      teorico: [73.5, 76.8, 81.2, 78.9, 75.3, 78.5],
-      pratico: [68.2, 70.1, 72.8, 69.5, 63.7, 65.8],
-      media: [70.8, 73.4, 77.0, 74.2, 69.5, 72.1],
-      tentativas: [1.5, 1.4, 1.3, 1.4, 1.6, 1.4],
-      totalExames: [42, 38, 45, 41, 48, 44],
-    },
-    12: {
-      labels: [
-        "Ago/23",
-        "Set/23",
-        "Out/23",
-        "Nov/23",
-        "Dez/23",
-        "Jan/24",
-        "Fev/24",
-        "Mar/24",
-        "Abr/24",
-        "Mai/24",
-        "Jun/24",
-        "Jul/24",
-      ],
-      teorico: [
-        71.2, 74.8, 85.2, 79.4, 68.9, 72.1, 73.5, 76.8, 81.2, 78.9, 75.3, 78.5,
-      ],
-      pratico: [
-        65.8, 67.2, 71.5, 68.9, 62.3, 66.1, 68.2, 70.1, 72.8, 69.5, 63.7, 65.8,
-      ],
-      media: [
-        68.5, 71.0, 78.3, 74.1, 65.6, 69.1, 70.8, 73.4, 77.0, 74.2, 69.5, 72.1,
-      ],
-      tentativas: [1.6, 1.5, 1.2, 1.4, 1.7, 1.5, 1.5, 1.4, 1.3, 1.4, 1.6, 1.4],
-      totalExames: [38, 41, 36, 43, 49, 40, 42, 38, 45, 41, 48, 44],
-    },
-    24: {
-      labels: [
-        "Jul/22",
-        "Out/22",
-        "Jan/23",
-        "Abr/23",
-        "Jul/23",
-        "Out/23",
-        "Jan/24",
-        "Abr/24",
-        "Jul/24",
-      ],
-      teorico: [69.5, 71.8, 73.2, 76.5, 74.1, 85.2, 72.1, 81.2, 78.5],
-      pratico: [62.1, 64.3, 66.8, 69.2, 67.4, 71.5, 66.1, 72.8, 65.8],
-      media: [65.8, 68.0, 70.0, 72.8, 70.7, 78.3, 69.1, 77.0, 72.1],
-      tentativas: [1.8, 1.7, 1.6, 1.5, 1.6, 1.2, 1.5, 1.3, 1.4],
-      totalExames: [35, 39, 41, 43, 38, 36, 40, 45, 44],
-    },
-  };
-
-  const currentPeriod = 6;
-  const data = examsData[currentPeriod];
-
-  examsChart = new Chart(examsCtx.getContext("2d"), {
-    type: "line",
-    data: {
-      labels: data.labels,
-      datasets: [
-        {
-          label: "Taxa Aprovação Teórico",
-          data: data.teorico,
-          backgroundColor: "rgba(59, 130, 246, 0.15)",
-          borderColor: "rgba(59, 130, 246, 1)",
-          borderWidth: 3,
-          fill: true,
-          tension: 0.4,
-          pointBackgroundColor: "rgba(59, 130, 246, 1)",
-          pointBorderColor: "#ffffff",
-          pointBorderWidth: 2,
-          pointRadius: 6,
-          pointHoverRadius: 8,
-        },
-        {
-          label: "Taxa Aprovação Prático",
-          data: data.pratico,
-          backgroundColor: "rgba(34, 197, 94, 0.15)",
-          borderColor: "rgba(34, 197, 94, 1)",
-          borderWidth: 3,
-          fill: true,
-          tension: 0.4,
-          pointBackgroundColor: "rgba(34, 197, 94, 1)",
-          pointBorderColor: "#ffffff",
-          pointBorderWidth: 2,
-          pointRadius: 6,
-          pointHoverRadius: 8,
-        },
-        {
-          label: "Média Geral",
-          data: data.media,
-          backgroundColor: "rgba(168, 85, 247, 0.1)",
-          borderColor: "rgba(168, 85, 247, 1)",
-          borderWidth: 3,
-          fill: false,
-          tension: 0.4,
-          borderDash: [8, 4],
-          pointBackgroundColor: "rgba(168, 85, 247, 1)",
-          pointBorderColor: "#ffffff",
-          pointBorderWidth: 2,
-          pointRadius: 5,
-          pointHoverRadius: 7,
-        },
-      ],
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      interaction: {
-        mode: "index",
-        intersect: false,
-      },
-      animation: {
-        duration: 2000,
-        easing: "easeOutQuart",
-      },
-      scales: {
-        y: {
-          beginAtZero: false,
-          min: 50,
-          max: 95,
-          grid: {
-            color: "rgba(255, 255, 255, 0.08)",
-            drawBorder: false,
-          },
-          ticks: {
-            color: "rgba(255, 255, 255, 0.7)",
-            font: {
-              size: 12,
-              family: "Inter, sans-serif",
-            },
-            callback: function (value) {
-              return value + "%";
-            },
-          },
-        },
-        x: {
-          grid: {
-            color: "rgba(255, 255, 255, 0.05)",
-            drawBorder: false,
-          },
-          ticks: {
-            color: "rgba(255, 255, 255, 0.7)",
-            font: {
-              size: 12,
-              family: "Inter, sans-serif",
-            },
-          },
-        },
-      },
-      plugins: {
-        legend: {
-          position: "top",
-          align: "end",
-          labels: {
-            color: "rgba(255, 255, 255, 0.9)",
-            usePointStyle: true,
-            pointStyle: "circle",
-            padding: 25,
-            font: {
-              size: 13,
-              family: "Inter, sans-serif",
-              weight: "500",
-            },
-          },
-        },
-        tooltip: {
-          backgroundColor: "rgba(30, 30, 46, 0.95)",
-          titleColor: "#fff",
-          bodyColor: "#ddd",
-          borderColor: "rgba(59, 130, 246, 0.5)",
-          borderWidth: 1,
-          cornerRadius: 10,
-          titleFont: {
-            size: 14,
-            weight: "bold",
-          },
-          bodyFont: {
-            size: 13,
-          },
-          callbacks: {
-            title: function (context) {
-              return "Performance em " + context[0].label;
-            },
-            label: function (context) {
-              return (
-                context.dataset.label + ": " + context.parsed.y.toFixed(1) + "%"
-              );
-            },
-            afterBody: function (context) {
-              const index = context[0].dataIndex;
-              return [
-                `Total de exames: ${data.totalExames[index]}`,
-                `Média de tentativas: ${data.tentativas[index]}x`,
-              ];
-            },
-          },
-        },
-      },
-    },
-  });
-
-  // Configurar controles de período
-  setupExamsChartControls();
-  return examsChart;
-}
-
-// Configurar controles do gráfico de exames
-function setupExamsChartControls() {
-  const chartFilter = document.querySelector("#exams-period-filter");
-  if (chartFilter) {
-    chartFilter.addEventListener("change", function (e) {
-      updateExamsChartPeriod(parseInt(e.target.value));
-    });
-  }
-}
-
-// Atualizar período do gráfico de exames
-function updateExamsChartPeriod(months) {
-  const examsCanvas = document.getElementById("exams-chart");
-  if (!examsCanvas) return;
-
-  const chart = Chart.getChart(examsCanvas);
-  if (!chart) return;
-
-  const examsData = {
-    6: {
-      labels: ["Fev", "Mar", "Abr", "Mai", "Jun", "Jul"],
-      teorico: [73.5, 76.8, 81.2, 78.9, 75.3, 78.5],
-      pratico: [68.2, 70.1, 72.8, 69.5, 63.7, 65.8],
-      media: [70.8, 73.4, 77.0, 74.2, 69.5, 72.1],
-      tentativas: [1.5, 1.4, 1.3, 1.4, 1.6, 1.4],
-      totalExames: [42, 38, 45, 41, 48, 44],
-    },
-    12: {
-      labels: [
-        "Ago/23",
-        "Set/23",
-        "Out/23",
-        "Nov/23",
-        "Dez/23",
-        "Jan/24",
-        "Fev/24",
-        "Mar/24",
-        "Abr/24",
-        "Mai/24",
-        "Jun/24",
-        "Jul/24",
-      ],
-      teorico: [
-        71.2, 74.8, 85.2, 79.4, 68.9, 72.1, 73.5, 76.8, 81.2, 78.9, 75.3, 78.5,
-      ],
-      pratico: [
-        65.8, 67.2, 71.5, 68.9, 62.3, 66.1, 68.2, 70.1, 72.8, 69.5, 63.7, 65.8,
-      ],
-      media: [
-        68.5, 71.0, 78.3, 74.1, 65.6, 69.1, 70.8, 73.4, 77.0, 74.2, 69.5, 72.1,
-      ],
-      tentativas: [1.6, 1.5, 1.2, 1.4, 1.7, 1.5, 1.5, 1.4, 1.3, 1.4, 1.6, 1.4],
-      totalExames: [38, 41, 36, 43, 49, 40, 42, 38, 45, 41, 48, 44],
-    },
-    24: {
-      labels: [
-        "Jul/22",
-        "Set/22",
-        "Nov/22",
-        "Jan/23",
-        "Mar/23",
-        "Mai/23",
-        "Jul/23",
-        "Set/23",
-        "Nov/23",
-        "Jan/24",
-        "Mar/24",
-        "Mai/24",
-        "Jul/24",
-      ],
-      teorico: [
-        69.5, 70.8, 71.8, 73.2, 75.1, 76.5, 74.1, 74.8, 85.2, 72.1, 76.8, 78.9,
-        78.5,
-      ],
-      pratico: [
-        62.1, 63.5, 64.3, 66.8, 68.1, 69.2, 67.4, 67.2, 71.5, 66.1, 70.1, 69.5,
-        65.8,
-      ],
-      media: [
-        65.8, 67.1, 68.0, 70.0, 71.6, 72.8, 70.7, 71.0, 78.3, 69.1, 73.4, 74.2,
-        72.1,
-      ],
-      tentativas: [
-        1.8, 1.7, 1.7, 1.6, 1.6, 1.5, 1.6, 1.5, 1.2, 1.5, 1.4, 1.4, 1.4,
-      ],
-      totalExames: [35, 37, 39, 41, 42, 43, 38, 41, 36, 40, 38, 41, 44],
-    },
-  };
-
-  const data = examsData[months];
-
-  // Atualizar dados do gráfico
-  chart.data.labels = data.labels;
-  chart.data.datasets[0].data = data.teorico;
-  chart.data.datasets[1].data = data.pratico;
-  chart.data.datasets[2].data = data.media;
-
-  // Atualizar com animação
-  chart.update("active");
-
-  // Mostrar notificação
-  const periodos = { 6: "6 meses", 12: "1 ano", 24: "2 anos" };
-  showNotification(
-    `Gráfico de exames atualizado para ${periodos[months]}`,
-    "success"
-  );
-}
-
-// Update exam countdown timers
-function updateExamCountdowns() {
-  const countdownElements = document.querySelectorAll(".countdown-value");
-  countdownElements.forEach((element) => {
-    // This would typically calculate real countdown based on exam date
-    // For demo purposes, we'll just show static values
-  });
-}
-
-// Add event listeners for exams section
-document.addEventListener("DOMContentLoaded", function () {
-  // Add event listener for exams filter
-  const examsFilterSelect = document.querySelector(
-    ".management-filters .filter-select"
-  );
-  if (examsFilterSelect) {
-    examsFilterSelect.addEventListener("change", function () {
-      const filterType = this.value;
-      filterExams(filterType);
-    });
-  }
-
-  // Initialize exams chart when exams section is shown
-  const examsMenuItem = document.querySelector('[data-section="exams"]');
-  if (examsMenuItem) {
-    examsMenuItem.addEventListener("click", function () {
-      setTimeout(() => {
-        if (
-          !document
-            .getElementById("exams-chart")
-            .hasAttribute("data-initialized")
-        ) {
-          initExamsChart();
-          document
-            .getElementById("exams-chart")
-            .setAttribute("data-initialized", "true");
-        }
-      }, 100);
-    });
-  }
-
-  // Update countdowns every minute
-  setInterval(updateExamCountdowns, 60000);
-});
-
 // Show notification
 function showNotification(message, type = "success") {
   const iconMap = {
@@ -3097,6 +1151,7 @@ function showNotification(message, type = "success") {
     }, 300);
   }, 5000);
 }
+
 // Form handlers
 // Toggle password visibility
 function togglePasswordVisibility(inputId) {
@@ -3510,564 +1565,16 @@ function exportStudentsChart() {
   }
 }
 
-function viewAllStudents() {
-  openModal("viewAllStudentsModal");
-  loadAllStudentsData();
-}
+// ========= STUDENTS FUNCTIONS MOVED TO students-section.js =========
 
-// Variável global para armazenar dados dos alunos
-let allStudentsData = [];
+// loadAllStudentsData function moved to students-section.js
+// } catch (error) {
+// Error handling moved to students-section.js
+// }
+// } - End of loadAllStudentsData function moved to students-section.js
 
-async function loadAllStudentsData() {
-  const container = document.getElementById("studentsListContainer");
+// renderStudentsList function moved to students-section.js
 
-  // Show modern loading state
-  LoadingManager.show('studentsListContainer', {
-    type: 'skeleton',
-    text: 'Carregando lista de alunos...',
-    rows: 5,
-    hasAvatar: true
-  });
-
-  try {
-    // Verificar se FirestoreManager está disponível
-    if (!window.FirestoreManager) {
-      throw new Error("Sistema de banco de dados não inicializado");
-    }
-    
-    // Carregar dados reais do Firestore
-    const students = await window.FirestoreManager.getStudents(100); // Carregar até 100 alunos
-    allStudentsData = students.map(student => ({
-      id: student.id,
-      name: student.name || 'Nome não informado',
-      cpf: student.cpf || 'CPF não informado',
-      email: student.email || 'Email não informado',
-      phone: student.phone || 'Telefone não informado',
-      category: student.category || 'B',
-      status: student.status || 'active',
-      birthDate: student.birthDate || '',
-      address: student.address || '',
-      notes: student.notes || '',
-      createdAt: student.createdAt,
-      progress: 0, // Progresso será calculado futuramente
-      lessonsCompleted: 0,
-      totalLessons: 20
-    }));
-    
-    renderStudentsList(allStudentsData);
-    
-    if (allStudentsData.length === 0) {
-      LoadingManager.hide('studentsListContainer', `
-        <div style="padding: 40px; text-align: center; color: var(--text-muted, #6c757d);">
-          <i class="fas fa-users" style="font-size: 48px; margin-bottom: 15px; opacity: 0.3;"></i>
-          <h4 style="margin-bottom: 10px;">Nenhum aluno cadastrado</h4>
-          <p>Clique em "Adicionar Aluno" para começar a cadastrar seus alunos.</p>
-          <button class="btn btn-primary" onclick="openStudentModal(); closeModal('viewAllStudentsModal')" style="margin-top: 15px;">
-            <i class="fas fa-plus"></i> Adicionar Primeiro Aluno
-          </button>
-        </div>
-      `);
-    }
-    
-  } catch (error) {
-    console.error('❌ Erro ao carregar alunos:', error);
-    LoadingManager.showError('studentsListContainer', {
-      title: 'Erro ao carregar alunos',
-      message: error.message || 'Ocorreu um erro inesperado ao carregar a lista de alunos',
-      icon: 'exclamation-triangle',
-      retry: 'loadAllStudentsData()',
-      retryText: 'Tentar Novamente'
-    });
-  }
-}
-
-function renderStudentsList(students) {
-  const container = document.getElementById("studentsListContainer");
-
-  if (students.length === 0) {
-    container.innerHTML = `
-          <div style="padding: 40px; text-align: center;">
-            <i class="fas fa-users" style="font-size: 48px; color: var(--text-muted, #6c757d); margin-bottom: 15px;"></i>
-            <h4 style="color: var(--text-muted, #6c757d); margin-bottom: 10px;">Nenhum aluno encontrado</h4>
-            <p style="color: var(--text-muted, #6c757d);">Tente ajustar os filtros de busca</p>
-          </div>
-        `;
-    return;
-  }
-
-  const studentsHtml = students
-    .map((student) => {
-      // Mapear status para classes e textos corretos
-      const statusMap = {
-        'active': { class: 'success', text: 'Ativo' },
-        'inactive': { class: 'secondary', text: 'Inativo' },
-        'suspended': { class: 'warning', text: 'Suspenso' },
-        'completed': { class: 'info', text: 'Concluído' }
-      };
-      
-      const statusInfo = statusMap[student.status] || { class: 'success', text: 'Ativo' };
-      
-      // Formatar data de criação
-      const createdDate = student.createdAt 
-        ? (student.createdAt.toDate ? student.createdAt.toDate() : new Date(student.createdAt))
-        : new Date();
-      
-      const formattedDate = createdDate.toLocaleDateString('pt-BR');
-
-      return `
-          <div class="student-item" style="
-            display: flex; 
-            align-items: center; 
-            padding: 15px 20px; 
-            border-bottom: 1px solid var(--border-color, #e0e0e0);
-            transition: background-color 0.2s ease;
-          " onmouseover="this.style.backgroundColor='var(--background-hover, #f8f9fa)'" 
-             onmouseout="this.style.backgroundColor='transparent'">
-            
-            <!-- Student Avatar -->
-            <div style="
-              width: 50px; 
-              height: 50px; 
-              border-radius: 50%; 
-              background: linear-gradient(135deg, var(--primary-color, #007bff), var(--secondary-color, #6c757d)); 
-              display: flex; 
-              align-items: center; 
-              justify-content: center; 
-              color: white; 
-              font-weight: bold; 
-              margin-right: 15px;
-              flex-shrink: 0;
-            ">
-              ${student.name ? student.name.charAt(0).toUpperCase() : 'A'}
-            </div>
-            
-            <!-- Student Info -->
-            <div style="flex: 1; min-width: 0;">
-              <div style="display: flex; justify-content: between; align-items: flex-start; margin-bottom: 5px;">
-                <h4 style="margin: 0; font-size: 16px; font-weight: 600; color: var(--text-primary, #333);">
-                  ${student.name}
-                </h4>
-                <span class="status-badge ${statusInfo.class}" style="
-                  padding: 4px 8px; 
-                  border-radius: 12px; 
-                  font-size: 12px; 
-                  font-weight: 500; 
-                  margin-left: 10px;
-                  flex-shrink: 0;
-                ">
-                  ${statusInfo.text}
-                </span>
-              </div>
-              
-              <div style="display: flex; gap: 20px; margin-bottom: 5px; font-size: 14px; color: var(--text-secondary, #666);">
-                <span><i class="fas fa-id-card" style="margin-right: 5px;"></i>${student.cpf}</span>
-                <span><i class="fas fa-envelope" style="margin-right: 5px;"></i>${student.email}</span>
-                <span><i class="fas fa-phone" style="margin-right: 5px;"></i>${student.phone}</span>
-              </div>
-              
-              <div style="display: flex; gap: 20px; font-size: 13px; color: var(--text-muted, #888);">
-                <span><i class="fas fa-car" style="margin-right: 5px;"></i>Categoria ${student.category}</span>
-                <span><i class="fas fa-calendar" style="margin-right: 5px;"></i>Cadastrado em ${formattedDate}</span>
-              </div>
-            </div>
-            
-            <!-- Action Buttons -->
-            <div style="display: flex; gap: 5px; margin-left: 15px; flex-shrink: 0;">
-              <button class="btn-icon" onclick="viewStudentProfile('${student.id}')" title="Ver Perfil" style="
-                background: var(--primary-color, #007bff); 
-                color: white; 
-                border: none; 
-                border-radius: 5px; 
-                padding: 8px; 
-                cursor: pointer; 
-                transition: opacity 0.2s;
-              " onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
-                <i class="fas fa-eye"></i>
-              </button>
-              <button class="btn-icon" onclick="editStudent('${student.id}')" title="Editar" style="
-                background: var(--warning-color, #ffc107); 
-                color: white; 
-                border: none; 
-                border-radius: 5px; 
-                padding: 8px; 
-                cursor: pointer; 
-                transition: opacity 0.2s;
-              " onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
-                <i class="fas fa-edit"></i>
-              </button>
-              <button class="btn-icon" onclick="contactStudent('${student.id}')" title="Contato" style="
-                background: var(--success-color, #28a745); 
-                color: white; 
-                border: none; 
-                border-radius: 5px; 
-                padding: 8px; 
-                cursor: pointer; 
-                transition: opacity 0.2s;
-              " onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
-                <i class="fas fa-phone"></i>
-              </button>
-            </div>
-          </div>
-        `;
-    })
-    .join("");
-
-  container.innerHTML = `
-        <div style="max-height: 500px; overflow-y: auto;">
-          ${studentsHtml}
-        </div>
-        <div style="padding: 15px 20px; border-top: 1px solid var(--border-color, #e0e0e0); background: var(--background-light, #f8f9fa); text-align: center; color: var(--text-muted, #666);">
-          Total de alunos: ${students.length}
-        </div>
-      `;
-} 
-
-function filterStudentsList() {
-  const searchTerm = document
-    .getElementById("studentSearchInput")
-    .value.toLowerCase();
-  const categoryFilter = document.getElementById("studentCategoryFilter").value;
-  const statusFilter = document.getElementById("studentStatusFilter").value;
-
-  const filteredStudents = allStudentsData.filter((student) => {
-    const matchesSearch =
-      !searchTerm ||
-      student.name.toLowerCase().includes(searchTerm) ||
-      student.cpf.includes(searchTerm) ||
-      student.email.toLowerCase().includes(searchTerm);
-
-    const matchesCategory =
-      !categoryFilter || student.category === categoryFilter;
-    const matchesStatus = !statusFilter || student.status === statusFilter;
-
-    return matchesSearch && matchesCategory && matchesStatus;
-  });
-
-  renderStudentsList(filteredStudents);
-}
-
-function viewStudentProfile(studentId) {
-  showNotification(`Carregando perfil do aluno ${studentId}...`, "info");
-  // Here you would open student profile modal/page
-}
-
-function editStudent(studentId) {
-  showNotification(`Editando dados do aluno ${studentId}...`, "info");
-  // Here you would open edit student modal
-}
-
-function viewStudentLessons(studentId) {
-  showNotification(`Carregando aulas do aluno ${studentId}...`, "info");
-  // Here you would show student's lessons
-}
-
-function viewStudentPayments(studentId) {
-  showNotification(`Carregando pagamentos do aluno ${studentId}...`, "info");
-  // Here you would show student's payment history
-}
-
-function requestDocuments(studentId) {
-  showNotification(`Solicitando documentos do aluno ${studentId}...`, "info");
-  // Here you would send document request
-}
-
-function contactStudent(studentId) {
-  showNotification(`Entrando em contato com aluno ${studentId}...`, "info");
-  // Here you would open contact options
-}
-
-function viewStudentCertificate(studentId) {
-  showNotification(`Carregando certificado do aluno ${studentId}...`, "info");
-  // Here you would show/download certificate
-}
-
-function scheduleExam(studentId) {
-  // Se um ID de aluno for fornecido, pré-selecionar no modal
-  if (studentId) {
-    setTimeout(() => {
-      const studentSelect = document.getElementById("examStudent");
-      if (studentSelect) {
-        studentSelect.value = studentId;
-      }
-    }, 100);
-  }
-  
-  // Abrir o modal de agendamento de exame
-  openModal("examModal");
-}
-
-// Initialize students performance chart
-function initStudentsPerformanceChart() {
-  const ctx = document.getElementById("students-performance-chart");
-  if (!ctx) return;
-
-  // Clear any existing chart
-  studentsPerformanceChart = destroyChart(studentsPerformanceChart);
-
-  const performanceData = {
-    6: {
-      labels: ["Mar", "Abr", "Mai", "Jun", "Jul", "Ago"],
-      aprovacao: [85, 88, 82, 90, 87, 91],
-      satisfacao: [4.2, 4.5, 4.3, 4.6, 4.4, 4.8],
-      progressoMedio: [75, 78, 73, 82, 79, 85],
-    },
-    12: {
-      labels: [
-        "Set/23",
-        "Out/23",
-        "Nov/23",
-        "Dez/23",
-        "Jan/24",
-        "Fev/24",
-        "Mar/24",
-        "Abr/24",
-        "Mai/24",
-        "Jun/24",
-        "Jul/24",
-        "Ago/24",
-      ],
-      aprovacao: [80, 83, 85, 87, 84, 86, 85, 88, 82, 90, 87, 91],
-      satisfacao: [4.0, 4.1, 4.2, 4.3, 4.2, 4.4, 4.2, 4.5, 4.3, 4.6, 4.4, 4.8],
-      progressoMedio: [68, 72, 75, 77, 74, 76, 75, 78, 73, 82, 79, 85],
-    },
-    24: {
-      labels: [
-        "Ago/22",
-        "Nov/22",
-        "Fev/23",
-        "Mai/23",
-        "Ago/23",
-        "Nov/23",
-        "Fev/24",
-        "Mai/24",
-        "Ago/24",
-      ],
-      aprovacao: [75, 78, 80, 83, 85, 87, 86, 82, 91],
-      satisfacao: [3.8, 3.9, 4.0, 4.1, 4.2, 4.3, 4.4, 4.3, 4.8],
-      progressoMedio: [62, 65, 68, 72, 75, 77, 76, 73, 85],
-    },
-  };
-
-  const currentPeriod =
-    document.getElementById("students-period-filter")?.value || "6";
-  const data = performanceData[currentPeriod];
-
-  studentsPerformanceChart = new Chart(ctx, {
-    type: "line",
-    data: {
-      labels: data.labels,
-      datasets: [
-        {
-          label: "Taxa de Aprovação (%)",
-          data: data.aprovacao,
-          borderColor: "#22c55e",
-          backgroundColor: "rgba(34, 197, 94, 0.1)",
-          borderWidth: 3,
-          tension: 0.4,
-          fill: true,
-          pointBackgroundColor: "#22c55e",
-          pointBorderColor: "#ffffff",
-          pointBorderWidth: 2,
-          pointRadius: 6,
-          pointHoverRadius: 8,
-        },
-        {
-          label: "Satisfação Média (★)",
-          data: data.satisfacao,
-          borderColor: "#f59e0b",
-          backgroundColor: "rgba(245, 158, 11, 0.1)",
-          borderWidth: 3,
-          tension: 0.4,
-          fill: true,
-          pointBackgroundColor: "#f59e0b",
-          pointBorderColor: "#ffffff",
-          pointBorderWidth: 2,
-          pointRadius: 6,
-          pointHoverRadius: 8,
-          yAxisID: "y1",
-        },
-        {
-          label: "Progresso Médio (%)",
-          data: data.progressoMedio,
-          borderColor: "#3b82f6",
-          backgroundColor: "rgba(59, 130, 246, 0.1)",
-          borderWidth: 3,
-          tension: 0.4,
-          fill: false,
-          pointBackgroundColor: "#3b82f6",
-          pointBorderColor: "#ffffff",
-          pointBorderWidth: 2,
-          pointRadius: 5,
-          pointHoverRadius: 7,
-        },
-      ],
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      animation: {
-        duration: 2000,
-        easing: "easeInOutCubic",
-      },
-      interaction: {
-        mode: "index",
-        intersect: false,
-      },
-      scales: {
-        x: {
-          grid: {
-            color: "rgba(255, 255, 255, 0.1)",
-            drawBorder: false,
-          },
-          ticks: {
-            color: "rgba(255, 255, 255, 0.7)",
-            font: {
-              size: 11,
-              weight: 500,
-            },
-          },
-        },
-        y: {
-          type: "linear",
-          display: true,
-          position: "left",
-          beginAtZero: true,
-          max: 100,
-          grid: {
-            color: "rgba(255, 255, 255, 0.1)",
-            drawBorder: false,
-          },
-          ticks: {
-            color: "rgba(255, 255, 255, 0.7)",
-            font: {
-              size: 11,
-            },
-            callback: function (value) {
-              return value + "%";
-            },
-          },
-          title: {
-            display: true,
-            text: "Percentual (%)",
-            color: "#22c55e",
-            font: {
-              size: 12,
-              weight: 600,
-            },
-          },
-        },
-        y1: {
-          type: "linear",
-          display: true,
-          position: "right",
-          min: 0,
-          max: 5,
-          grid: {
-            drawOnChartArea: false,
-          },
-          ticks: {
-            color: "rgba(255, 255, 255, 0.7)",
-            font: {
-              size: 11,
-            },
-            callback: function (value) {
-              return value + "★";
-            },
-          },
-          title: {
-            display: true,
-            text: "Satisfação (★)",
-            color: "#f59e0b",
-            font: {
-              size: 12,
-              weight: 600,
-            },
-          },
-        },
-      },
-      plugins: {
-        legend: {
-          position: "top",
-          labels: {
-            color: "rgba(255, 255, 255, 0.9)",
-            padding: 20,
-            usePointStyle: true,
-            font: {
-              size: 13,
-              weight: 500,
-            },
-          },
-        },
-        tooltip: {
-          backgroundColor: "rgba(30, 30, 46, 0.95)",
-          titleColor: "#fff",
-          bodyColor: "#ddd",
-          borderColor: "rgba(34, 197, 94, 0.5)",
-          borderWidth: 1,
-          cornerRadius: 12,
-          displayColors: true,
-          callbacks: {
-            title: function (context) {
-              return "Período: " + context[0].label;
-            },
-            label: function (context) {
-              const suffix = context.dataset.label.includes("Satisfação")
-                ? "★"
-                : "%";
-              return context.dataset.label + ": " + context.parsed.y + suffix;
-            },
-          },
-        },
-      },
-    },
-  });
-
-  console.log("Students performance chart initialized successfully");
-}
-
-// Filter students function
-function filterStudents(filter) {
-  const students = document.querySelectorAll(".student-item");
-  students.forEach((student) => {
-    if (filter === "all") {
-      student.style.display = "flex";
-    } else {
-      if (student.classList.contains(filter)) {
-        student.style.display = "flex";
-      } else {
-        student.style.display = "none";
-      }
-    }
-  });
-}
-
-// Search students function
-function searchStudents(query) {
-  const students = document.querySelectorAll(".student-item");
-  const searchTerm = query.toLowerCase();
-
-  students.forEach((student) => {
-    const studentName = student
-      .querySelector(".student-name strong")
-      .textContent.toLowerCase();
-    const studentCpf = student
-      .querySelector(".student-cpf")
-      .textContent.toLowerCase();
-    const studentEnrollment = student
-      .querySelector(".student-enrollment")
-      .textContent.toLowerCase();
-
-    if (
-      studentName.includes(searchTerm) ||
-      studentCpf.includes(searchTerm) ||
-      studentEnrollment.includes(searchTerm)
-    ) {
-      student.style.display = "flex";
-    } else {
-      student.style.display = "none";
-    }
-  });
-}
 
 // Add event listeners for students section
 document.addEventListener("DOMContentLoaded", function () {
@@ -4095,8 +1602,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (chartFilter) {
     chartFilter.addEventListener("change", function (e) {
       showNotification(
-        `Atualizando gráfico para ${
-          e.target.options[e.target.selectedIndex].text
+        `Atualizando gráfico para ${e.target.options[e.target.selectedIndex].text
         }...`,
         "info"
       );
@@ -4105,679 +1611,9 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
-// Instructors management functions
-function generateInstructorsReport() {
-  showNotification("Gerando relatório de instrutores...", "info");
-  setTimeout(() => {
-    showNotification("Relatório de instrutores gerado com sucesso!", "success");
-  }, 2000);
-}
-
-function exportInstructorsChart() {
-  showNotification("Exportando gráfico de performance...", "info");
-  setTimeout(() => {
-    showNotification("Gráfico exportado com sucesso!", "success");
-  }, 1500);
-}
-
-function viewAllInstructors() {
-  openModal("viewAllInstructorsModal");
-  loadAllInstructorsData();
-}
-
-// Sample instructor data for demonstration
-const allInstructorsData = [
-  {
-    id: 1,
-    name: "Carlos Mendes",
-    cpf: "123.456.789-00",
-    email: "carlos.mendes@escola.com",
-    phone: "(11) 99999-1111",
-    specialty: "practical",
-    status: "available",
-    experience: 8,
-    studentsAssigned: 12,
-    rating: 4.8,
-    lessonsTaught: 156,
-    joinDate: "2020-03-15",
-  },
-  {
-    id: 2,
-    name: "Ana Costa",
-    cpf: "987.654.321-00",
-    email: "ana.costa@escola.com",
-    phone: "(11) 88888-2222",
-    specialty: "theoretical",
-    status: "available",
-    experience: 5,
-    studentsAssigned: 18,
-    rating: 4.9,
-    lessonsTaught: 89,
-    joinDate: "2021-07-20",
-  },
-  {
-    id: 3,
-    name: "Roberto Silva",
-    cpf: "456.789.123-00",
-    email: "roberto.silva@escola.com",
-    phone: "(11) 77777-3333",
-    specialty: "mixed",
-    status: "busy",
-    experience: 12,
-    studentsAssigned: 15,
-    rating: 4.7,
-    lessonsTaught: 234,
-    joinDate: "2018-11-10",
-  },
-  {
-    id: 4,
-    name: "Marina Oliveira",
-    cpf: "789.123.456-00",
-    email: "marina.oliveira@escola.com",
-    phone: "(11) 66666-4444",
-    specialty: "practical",
-    status: "vacation",
-    experience: 6,
-    studentsAssigned: 8,
-    rating: 4.6,
-    lessonsTaught: 112,
-    joinDate: "2021-01-05",
-  },
-  {
-    id: 5,
-    name: "Fernando Santos",
-    cpf: "321.654.987-00",
-    email: "fernando.santos@escola.com",
-    phone: "(11) 55555-5555",
-    specialty: "theoretical",
-    status: "available",
-    experience: 10,
-    studentsAssigned: 20,
-    rating: 4.9,
-    lessonsTaught: 178,
-    joinDate: "2019-05-22",
-  },
-  {
-    id: 6,
-    name: "Juliana Lima",
-    cpf: "654.987.321-00",
-    email: "juliana.lima@escola.com",
-    phone: "(11) 44444-6666",
-    specialty: "practical",
-    status: "busy",
-    experience: 4,
-    studentsAssigned: 10,
-    rating: 4.5,
-    lessonsTaught: 67,
-    joinDate: "2022-02-14",
-  },
-];
-
-function loadAllInstructorsData() {
-  const container = document.getElementById("instructorsListContainer");
-
-  // Show loading state initially
-  container.innerHTML = `
-        <div style="padding: 20px; text-align: center;">
-          <i class="fas fa-spinner fa-spin" style="font-size: 24px; color: var(--primary-color, #007bff);"></i>
-          <p style="margin-top: 10px;">Carregando lista de instrutores...</p>
-        </div>
-      `;
-
-  // Simulate loading delay
-  setTimeout(() => {
-    renderInstructorsList(allInstructorsData);
-  }, 800);
-}
-
-function renderInstructorsList(instructors) {
-  const container = document.getElementById("instructorsListContainer");
-
-  if (instructors.length === 0) {
-    container.innerHTML = `
-          <div style="padding: 40px; text-align: center;">
-            <i class="fas fa-chalkboard-teacher" style="font-size: 48px; color: var(--text-muted, #6c757d); margin-bottom: 15px;"></i>
-            <h4 style="color: var(--text-muted, #6c757d); margin-bottom: 10px;">Nenhum instrutor encontrado</h4>
-            <p style="color: var(--text-muted, #6c757d);">Tente ajustar os filtros de busca</p>
-          </div>
-        `;
-    return;
-  }
-
-  const instructorsHtml = instructors
-    .map((instructor) => {
-      const statusClass =
-        instructor.status === "available"
-          ? "success"
-          : instructor.status === "busy"
-          ? "warning"
-          : "info";
-      const statusText =
-        instructor.status === "available"
-          ? "Disponível"
-          : instructor.status === "busy"
-          ? "Ocupado"
-          : "Férias";
-
-      const specialtyText =
-        instructor.specialty === "theoretical"
-          ? "Teórica"
-          : instructor.specialty === "practical"
-          ? "Prática"
-          : "Misto";
-
-      const specialtyIcon =
-        instructor.specialty === "theoretical"
-          ? "fa-book"
-          : instructor.specialty === "practical"
-          ? "fa-car"
-          : "fa-graduation-cap";
-
-      return `
-          <div class="instructor-item" style="
-            display: flex; 
-            align-items: center; 
-            padding: 15px 20px; 
-            border-bottom: 1px solid var(--border-color, #e0e0e0);
-            transition: background-color 0.2s ease;
-          " onmouseover="this.style.backgroundColor='var(--background-hover, #f8f9fa)'" 
-             onmouseout="this.style.backgroundColor='transparent'">
-            
-            <!-- Instructor Avatar -->
-            <div style="
-              width: 50px; 
-              height: 50px; 
-              background: linear-gradient(135deg, var(--success-color, #28a745), var(--info-color, #17a2b8)); 
-              border-radius: 50%; 
-              display: flex; 
-              align-items: center; 
-              justify-content: center; 
-              color: white; 
-              font-weight: bold; 
-              font-size: 18px;
-              margin-right: 15px;
-            ">
-              ${instructor.name.charAt(0).toUpperCase()}
-            </div>
-
-            <!-- Instructor Info -->
-            <div style="flex: 1;">
-              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px;">
-                <h4 style="margin: 0; color: var(--text-primary, #333);">${
-                  instructor.name
-                }</h4>
-                <span class="status-badge status-${statusClass}" style="
-                  padding: 4px 8px; 
-                  border-radius: 12px; 
-                  font-size: 12px; 
-                  font-weight: 500;
-                  background-color: ${
-                    statusClass === "success"
-                      ? "#d4edda"
-                      : statusClass === "warning"
-                      ? "#fff3cd"
-                      : "#d1ecf1"
-                  };
-                  color: ${
-                    statusClass === "success"
-                      ? "#155724"
-                      : statusClass === "warning"
-                      ? "#856404"
-                      : "#0c5460"
-                  };
-                ">
-                  ${statusText}
-                </span>
-              </div>
-              
-              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 8px;">
-                <small style="color: var(--text-secondary, #6c757d);">
-                  <i class="fas fa-id-card" style="width: 16px;"></i> ${
-                    instructor.cpf
-                  }
-                </small>
-                <small style="color: var(--text-secondary, #6c757d);">
-                  <i class="fas fa-envelope" style="width: 16px;"></i> ${
-                    instructor.email
-                  }
-                </small>
-                <small style="color: var(--text-secondary, #6c757d);">
-                  <i class="fas fa-phone" style="width: 16px;"></i> ${
-                    instructor.phone
-                  }
-                </small>
-                <small style="color: var(--text-secondary, #6c757d);">
-                  <i class="fas ${specialtyIcon}" style="width: 16px;"></i> ${specialtyText}
-                </small>
-              </div>
-
-              <!-- Stats Row -->
-              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 8px;">
-                <small style="color: var(--text-secondary, #6c757d);">
-                  <i class="fas fa-clock" style="width: 16px;"></i> ${
-                    instructor.experience
-                  } anos exp.
-                </small>
-                <small style="color: var(--text-secondary, #6c757d);">
-                  <i class="fas fa-users" style="width: 16px;"></i> ${
-                    instructor.studentsAssigned
-                  } alunos
-                </small>
-                <small style="color: var(--text-secondary, #6c757d);">
-                  <i class="fas fa-star" style="width: 16px; color: #ffc107;"></i> ${
-                    instructor.rating
-                  } avaliação
-                </small>
-                <small style="color: var(--text-secondary, #6c757d);">
-                  <i class="fas fa-chalkboard" style="width: 16px;"></i> ${
-                    instructor.lessonsTaught
-                  } aulas
-                </small>
-              </div>
-            </div>
-
-            <!-- Action Buttons -->
-            <div style="display: flex; gap: 8px; margin-left: 15px;">
-              <button class="btn btn-sm btn-outline-primary" 
-                      onclick="viewInstructorProfile(${instructor.id})" 
-                      title="Ver Perfil"
-                      style="padding: 6px 10px; border-radius: 6px;">
-                <i class="fas fa-eye"></i>
-              </button>
-              <button class="btn btn-sm btn-outline-success" 
-                      onclick="editInstructor(${instructor.id})" 
-                      title="Editar"
-                      style="padding: 6px 10px; border-radius: 6px;">
-                <i class="fas fa-edit"></i>
-              </button>
-              <button class="btn btn-sm btn-outline-info" 
-                      onclick="viewInstructorSchedule(${instructor.id})" 
-                      title="Ver Agenda"
-                      style="padding: 6px 10px; border-radius: 6px;">
-                <i class="fas fa-calendar-alt"></i>
-              </button>
-            </div>
-          </div>
-        `;
-    })
-    .join("");
-
-  container.innerHTML = instructorsHtml;
-}
-
-function filterInstructorsList() {
-  const searchTerm = document
-    .getElementById("instructorSearchInput")
-    .value.toLowerCase();
-  const specialtyFilter = document.getElementById(
-    "instructorSpecialtyFilter"
-  ).value;
-  const statusFilter = document.getElementById("instructorStatusFilter").value;
-
-  const filteredInstructors = allInstructorsData.filter((instructor) => {
-    const matchesSearch =
-      !searchTerm ||
-      instructor.name.toLowerCase().includes(searchTerm) ||
-      instructor.cpf.includes(searchTerm) ||
-      instructor.email.toLowerCase().includes(searchTerm);
-
-    const matchesSpecialty =
-      !specialtyFilter || instructor.specialty === specialtyFilter;
-    const matchesStatus = !statusFilter || instructor.status === statusFilter;
-
-    return matchesSearch && matchesSpecialty && matchesStatus;
-  });
-
-  renderInstructorsList(filteredInstructors);
-}
-
-function viewInstructorProfile(instructorId) {
-  showNotification(`Carregando perfil do instrutor ${instructorId}...`, "info");
-  // Here you would open instructor profile modal/page
-}
-
-function editInstructor(instructorId) {
-  showNotification(`Editando dados do instrutor ${instructorId}...`, "info");
-  // Here you would open edit instructor modal
-}
-
-function viewInstructorSchedule(instructorId) {
-  showNotification(`Carregando agenda do instrutor ${instructorId}...`, "info");
-  // Here you would show instructor's schedule
-}
-
-function viewInstructorStats(instructorId) {
-  showNotification(
-    `Carregando estatísticas do instrutor ${instructorId}...`,
-    "info"
-  );
-  // Here you would show instructor's statistics
-}
-
-function contactInstructor(instructorId) {
-  showNotification(
-    `Entrando em contato com instrutor ${instructorId}...`,
-    "info"
-  );
-  // Here you would open contact options
-}
-
 function assignLesson(instructorId) {
   showNotification(`Agendando aula para instrutor ${instructorId}...`, "info");
   // Here you would open lesson assignment modal
-}
-
-// Initialize instructors chart
-function initInstructorsChart() {
-  const ctx = document.getElementById("instructors-chart");
-  if (!ctx) return;
-
-  // Clear any existing chart
-  const existingChart = Chart.getChart(ctx);
-  if (existingChart) {
-    existingChart.destroy();
-  }
-
-  const instructorsData = {
-    6: {
-      labels: ["Mar", "Abr", "Mai", "Jun", "Jul", "Ago"],
-      lessons: [95, 124, 108, 142, 135, 128],
-      ratings: [4.5, 4.6, 4.7, 4.8, 4.6, 4.7],
-      approval: [78, 82, 85, 88, 86, 87],
-      students: [45, 52, 48, 58, 54, 56],
-    },
-    12: {
-      labels: [
-        "Set",
-        "Out",
-        "Nov",
-        "Dez",
-        "Jan",
-        "Fev",
-        "Mar",
-        "Abr",
-        "Mai",
-        "Jun",
-        "Jul",
-        "Ago",
-      ],
-      lessons: [89, 102, 95, 118, 125, 132, 95, 124, 108, 142, 135, 128],
-      ratings: [4.3, 4.4, 4.5, 4.6, 4.5, 4.6, 4.5, 4.6, 4.7, 4.8, 4.6, 4.7],
-      approval: [75, 76, 78, 80, 79, 81, 78, 82, 85, 88, 86, 87],
-      students: [38, 42, 39, 46, 48, 51, 45, 52, 48, 58, 54, 56],
-    },
-    24: {
-      labels: [
-        "Ago 2023",
-        "Set",
-        "Out",
-        "Nov",
-        "Dez",
-        "Jan 2024",
-        "Fev",
-        "Mar",
-        "Abr",
-        "Mai",
-        "Jun",
-        "Jul",
-        "Ago 2024",
-        "Set",
-        "Out",
-        "Nov",
-        "Dez",
-        "Jan 2025",
-        "Fev",
-        "Mar",
-        "Abr",
-        "Mai",
-        "Jun",
-        "Jul",
-        "Ago",
-      ],
-      lessons: [
-        82, 88, 94, 89, 102, 95, 118, 125, 132, 95, 124, 108, 142, 135, 128,
-        134, 129, 138, 145, 142, 148, 152, 149, 156, 158,
-      ],
-      ratings: [
-        4.2, 4.2, 4.3, 4.3, 4.4, 4.5, 4.6, 4.5, 4.6, 4.5, 4.6, 4.7, 4.8, 4.6,
-        4.7, 4.7, 4.8, 4.8, 4.9, 4.8, 4.9, 4.9, 4.8, 4.9, 4.9,
-      ],
-      approval: [
-        72, 73, 75, 74, 76, 78, 80, 79, 81, 78, 82, 85, 88, 86, 87, 87, 88, 89,
-        90, 89, 91, 92, 90, 91, 92,
-      ],
-      students: [
-        32, 35, 38, 36, 42, 39, 46, 48, 51, 45, 52, 48, 58, 54, 56, 57, 55, 59,
-        62, 60, 64, 66, 63, 67, 68,
-      ],
-    },
-  };
-
-  const currentPeriod =
-    document.getElementById("instructors-period-filter")?.value || "6";
-  const data = instructorsData[currentPeriod];
-
-  instructorsChart = new Chart(ctx, {
-    type: "line",
-    data: {
-      labels: data.labels,
-      datasets: [
-        {
-          label: "Aulas Ministradas",
-          data: data.lessons,
-          borderColor: "#4361ee",
-          backgroundColor: "rgba(67, 97, 238, 0.1)",
-          tension: 0.4,
-          fill: true,
-          borderWidth: 3,
-          pointRadius: 6,
-          pointHoverRadius: 8,
-          pointBackgroundColor: "#4361ee",
-          pointBorderColor: "#ffffff",
-          pointBorderWidth: 2,
-        },
-        {
-          label: "Avaliação Média (x20)",
-          data: data.ratings.map((r) => r * 20),
-          borderColor: "#f72585",
-          backgroundColor: "rgba(247, 37, 133, 0.1)",
-          tension: 0.4,
-          fill: true,
-          borderWidth: 3,
-          pointRadius: 5,
-          pointHoverRadius: 7,
-          pointBackgroundColor: "#f72585",
-          pointBorderColor: "#ffffff",
-          pointBorderWidth: 2,
-          yAxisID: "y1",
-        },
-        {
-          label: "Taxa de Aprovação (%)",
-          data: data.approval,
-          borderColor: "#43e97b",
-          backgroundColor: "rgba(67, 233, 123, 0.1)",
-          tension: 0.4,
-          fill: true,
-          borderWidth: 2,
-          borderDash: [8, 4],
-          pointRadius: 4,
-          pointHoverRadius: 6,
-          pointBackgroundColor: "#43e97b",
-          pointBorderColor: "#ffffff",
-          pointBorderWidth: 2,
-          yAxisID: "y2",
-        },
-      ],
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      animation: {
-        duration: 2000,
-        easing: "easeInOutCubic",
-      },
-      interaction: {
-        mode: "index",
-        intersect: false,
-      },
-      plugins: {
-        legend: {
-          position: "top",
-          labels: {
-            color: "#ffffff",
-            usePointStyle: true,
-            padding: 20,
-            font: {
-              size: 13,
-              weight: 500,
-            },
-          },
-        },
-        tooltip: {
-          backgroundColor: "rgba(30, 30, 46, 0.95)",
-          titleColor: "#fff",
-          bodyColor: "#ddd",
-          borderColor: "rgba(67, 97, 238, 0.5)",
-          borderWidth: 1,
-          cornerRadius: 12,
-          displayColors: true,
-          callbacks: {
-            afterBody: function (context) {
-              const index = context[0].dataIndex;
-              return `Alunos Ativos: ${data.students[index]}`;
-            },
-          },
-        },
-      },
-      scales: {
-        x: {
-          grid: {
-            color: "rgba(255, 255, 255, 0.1)",
-            drawBorder: false,
-          },
-          ticks: {
-            color: "rgba(255, 255, 255, 0.7)",
-            font: {
-              size: 11,
-              weight: 500,
-            },
-          },
-        },
-        y: {
-          type: "linear",
-          display: true,
-          position: "left",
-          beginAtZero: true,
-          max: Math.max(...data.lessons) + 20,
-          grid: {
-            color: "rgba(255, 255, 255, 0.1)",
-            drawBorder: false,
-          },
-          ticks: {
-            color: "rgba(255, 255, 255, 0.7)",
-            font: {
-              size: 11,
-            },
-            callback: function (value) {
-              return value + " aulas";
-            },
-          },
-          title: {
-            display: true,
-            text: "Aulas Ministradas",
-            color: "#4361ee",
-            font: {
-              size: 12,
-              weight: 600,
-            },
-          },
-        },
-        y1: {
-          type: "linear",
-          display: true,
-          position: "right",
-          min: 80,
-          max: 100,
-          grid: {
-            drawOnChartArea: false,
-          },
-          ticks: {
-            color: "rgba(255, 255, 255, 0.7)",
-            font: {
-              size: 11,
-            },
-            callback: function (value) {
-              return (value / 20).toFixed(1) + "★";
-            },
-          },
-          title: {
-            display: true,
-            text: "Avaliação",
-            color: "#f72585",
-            font: {
-              size: 12,
-              weight: 600,
-            },
-          },
-        },
-        y2: {
-          type: "linear",
-          display: false,
-          min: 70,
-          max: 95,
-        },
-      },
-    },
-  });
-}
-
-// Function to update instructors chart period
-function updateInstructorsChartPeriod() {
-  initInstructorsChart();
-}
-
-// Filter instructors function
-function filterInstructors(filter) {
-  const instructors = document.querySelectorAll(".instructor-item");
-  instructors.forEach((instructor) => {
-    if (filter === "all") {
-      instructor.style.display = "flex";
-    } else {
-      if (instructor.classList.contains(filter)) {
-        instructor.style.display = "flex";
-      } else {
-        instructor.style.display = "none";
-      }
-    }
-  });
-}
-
-// Search instructors function
-function searchInstructors(query) {
-  const instructors = document.querySelectorAll(".instructor-item");
-  const searchTerm = query.toLowerCase();
-
-  instructors.forEach((instructor) => {
-    const instructorName = instructor
-      .querySelector(".instructor-name strong")
-      .textContent.toLowerCase();
-    const instructorCpf = instructor
-      .querySelector(".instructor-cpf")
-      .textContent.toLowerCase();
-    const instructorId = instructor
-      .querySelector(".instructor-id")
-      .textContent.toLowerCase();
-
-    if (
-      instructorName.includes(searchTerm) ||
-      instructorCpf.includes(searchTerm) ||
-      instructorId.includes(searchTerm)
-    ) {
-      instructor.style.display = "flex";
-    } else {
-      instructor.style.display = "none";
-    }
-  });
 }
 
 // Add event listeners for instructors section
@@ -4812,8 +1648,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (instructorChartFilter) {
     instructorChartFilter.addEventListener("change", function (e) {
       showNotification(
-        `Atualizando gráfico de instrutores para ${
-          e.target.options[e.target.selectedIndex].text
+        `Atualizando gráfico de instrutores para ${e.target.options[e.target.selectedIndex].text
         }...`,
         "info"
       );
@@ -4931,14 +1766,14 @@ function renderUsersList(users) {
         user.role === "admin"
           ? "Administrador"
           : user.role === "instructor"
-          ? "Instrutor"
-          : "Funcionário";
+            ? "Instrutor"
+            : "Funcionário";
       const roleClass =
         user.role === "admin"
           ? "admin"
           : user.role === "instructor"
-          ? "instructor"
-          : "staff";
+            ? "instructor"
+            : "staff";
 
       return `
           <div class="user-item" style="
@@ -4981,9 +1816,8 @@ function renderUsersList(users) {
             <!-- User Info -->
             <div style="flex: 1; min-width: 0;">
               <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
-                <strong style="color: var(--text-primary, #333); font-size: 16px;">${
-                  user.name
-                }</strong>
+                <strong style="color: var(--text-primary, #333); font-size: 16px;">${user.name
+        }</strong>
                 <span class="badge ${roleClass}" style="
                   padding: 4px 8px;
                   border-radius: 12px;
@@ -4992,9 +1826,8 @@ function renderUsersList(users) {
                 ">${roleText}</span>
               </div>
               <div style="color: var(--text-secondary, #6c757d); font-size: 14px; margin-bottom: 3px;">
-                <i class="fas fa-envelope" style="width: 14px;"></i> ${
-                  user.email
-                }
+                <i class="fas fa-envelope" style="width: 14px;"></i> ${user.email
+        }
               </div>
               <div style="color: var(--text-secondary, #6c757d); font-size: 14px;">
                 <i class="fas fa-phone" style="width: 14px;"></i> ${user.phone}
@@ -5006,8 +1839,8 @@ function renderUsersList(users) {
               <div style="font-size: 12px; color: var(--text-secondary, #6c757d); margin-bottom: 5px;">Permissões:</div>
               <div style="display: flex; flex-wrap: wrap; gap: 4px;">
                 ${user.permissions
-                  .map(
-                    (perm) => `
+          .map(
+            (perm) => `
                   <span style="
                     background: var(--background-secondary, #f8f9fa);
                     color: var(--text-primary, #333);
@@ -5017,17 +1850,16 @@ function renderUsersList(users) {
                     border: 1px solid var(--border-color, #e0e0e0);
                   ">${perm}</span>
                 `
-                  )
-                  .join("")}
+          )
+          .join("")}
               </div>
             </div>
 
             <!-- Last Access -->
             <div style="min-width: 120px; margin-right: 20px; text-align: center;">
               <div style="font-size: 12px; color: var(--text-secondary, #6c757d); margin-bottom: 5px;">Último acesso:</div>
-              <div style="font-size: 13px; color: var(--text-primary, #333);">${
-                user.lastAccess
-              }</div>
+              <div style="font-size: 13px; color: var(--text-primary, #333);">${user.lastAccess
+        }</div>
             </div>
 
             <!-- Status -->
@@ -5042,9 +1874,8 @@ function renderUsersList(users) {
 
             <!-- Actions -->
             <div style="display: flex; gap: 8px;">
-              <button onclick="viewUserProfile(${
-                user.id
-              })" class="btn-icon" title="Ver perfil" style="
+              <button onclick="viewUserProfile(${user.id
+        })" class="btn-icon" title="Ver perfil" style="
                 width: 32px;
                 height: 32px;
                 border: none;
@@ -5061,9 +1892,8 @@ function renderUsersList(users) {
                 <i class="fas fa-user"></i>
               </button>
               
-              <button onclick="editUser(${
-                user.id
-              })" class="btn-icon" title="Editar usuário" style="
+              <button onclick="editUser(${user.id
+        })" class="btn-icon" title="Editar usuário" style="
                 width: 32px;
                 height: 32px;
                 border: none;
@@ -5080,9 +1910,8 @@ function renderUsersList(users) {
                 <i class="fas fa-edit"></i>
               </button>
               
-              <button onclick="resetUserPassword(${
-                user.id
-              })" class="btn-icon" title="Redefinir senha" style="
+              <button onclick="resetUserPassword(${user.id
+        })" class="btn-icon" title="Redefinir senha" style="
                 width: 32px;
                 height: 32px;
                 border: none;
@@ -5099,34 +1928,30 @@ function renderUsersList(users) {
                 <i class="fas fa-key"></i>
               </button>
               
-              <button onclick="toggleUserStatus(${
-                user.id
-              })" class="btn-icon" title="Ativar/Desativar" style="
+              <button onclick="toggleUserStatus(${user.id
+        })" class="btn-icon" title="Ativar/Desativar" style="
                 width: 32px;
                 height: 32px;
                 border: none;
                 border-radius: 6px;
                 background: var(--background-secondary, #f8f9fa);
-                color: ${
-                  user.status === "active"
-                    ? "var(--danger-color, #dc3545)"
-                    : "var(--success-color, #28a745)"
-                };
+                color: ${user.status === "active"
+          ? "var(--danger-color, #dc3545)"
+          : "var(--success-color, #28a745)"
+        };
                 cursor: pointer;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 transition: all 0.2s ease;
-              " onmouseover="this.style.background='${
-                user.status === "active"
-                  ? "var(--danger-color, #dc3545)"
-                  : "var(--success-color, #28a745)"
-              }'; this.style.color='white';"
-                 onmouseout="this.style.background='var(--background-secondary, #f8f9fa)'; this.style.color='${
-                   user.status === "active"
-                     ? "var(--danger-color, #dc3545)"
-                     : "var(--success-color, #28a745)"
-                 }';">
+              " onmouseover="this.style.background='${user.status === "active"
+          ? "var(--danger-color, #dc3545)"
+          : "var(--success-color, #28a745)"
+        }'; this.style.color='white';"
+                 onmouseout="this.style.background='var(--background-secondary, #f8f9fa)'; this.style.color='${user.status === "active"
+          ? "var(--danger-color, #dc3545)"
+          : "var(--success-color, #28a745)"
+        }';">
                 <i class="fas fa-power-off"></i>
               </button>
             </div>
@@ -5196,8 +2021,7 @@ function toggleUserStatus(userId) {
     setTimeout(() => {
       user.status = user.status === "active" ? "inactive" : "active";
       showNotification(
-        `Usuário ${
-          action === "desativar" ? "desativado" : "ativado"
+        `Usuário ${action === "desativar" ? "desativado" : "ativado"
         } com sucesso!`,
         "success"
       );
@@ -5210,1169 +2034,6 @@ function toggleUserStatus(userId) {
       }
     }, 1500);
   }
-}
-
-// Vehicles Section JavaScript Functions
-function initVehiclesChart() {
-  const ctx = document.getElementById("vehicles-chart");
-  if (!ctx) return;
-
-  // Clear any existing chart
-  const existingChart = Chart.getChart(ctx);
-  if (existingChart) {
-    existingChart.destroy();
-  }
-
-  const vehiclesData = {
-    all: {
-      labels: ["Mar", "Abr", "Mai", "Jun", "Jul", "Ago"],
-      utilization: [85, 88, 92, 87, 91, 89.2],
-      consumption: [9.8, 10.2, 10.8, 10.1, 10.6, 10.8],
-      maintenance: [8.5, 7.2, 12.3, 9.8, 6.4, 8.1],
-      distance: [1240, 1380, 1450, 1320, 1520, 1560],
-    },
-    available: {
-      labels: ["Mar", "Abr", "Mai", "Jun", "Jul", "Ago"],
-      utilization: [88, 92, 95, 89, 94, 92.5],
-      consumption: [9.9, 10.3, 11.0, 10.2, 10.7, 10.9],
-      maintenance: [5.2, 4.8, 6.1, 5.5, 4.2, 5.3],
-      distance: [1180, 1320, 1390, 1260, 1450, 1480],
-    },
-    maintenance: {
-      labels: ["Mar", "Abr", "Mai", "Jun", "Jul", "Ago"],
-      utilization: [45, 52, 48, 58, 61, 55],
-      consumption: [8.5, 8.8, 9.2, 8.9, 9.1, 9.3],
-      maintenance: [85.2, 78.3, 92.1, 88.5, 75.8, 82.4],
-      distance: [520, 580, 610, 590, 630, 650],
-    },
-    "category-a": {
-      labels: ["Mar", "Abr", "Mai", "Jun", "Jul", "Ago"],
-      utilization: [78, 82, 85, 80, 84, 82.5],
-      consumption: [15.2, 15.8, 16.1, 15.5, 16.0, 16.2],
-      maintenance: [12.1, 10.5, 15.2, 13.8, 9.8, 11.5],
-      distance: [890, 950, 1020, 940, 1080, 1120],
-    },
-    "category-b": {
-      labels: ["Mar", "Abr", "Mai", "Jun", "Jul", "Ago"],
-      utilization: [88, 91, 95, 90, 94, 92.1],
-      consumption: [9.1, 9.5, 9.8, 9.3, 9.7, 9.9],
-      maintenance: [7.2, 6.1, 10.8, 8.5, 5.2, 6.8],
-      distance: [1350, 1430, 1520, 1380, 1590, 1620],
-    },
-  };
-
-  const currentFilter =
-    document.getElementById("vehicles-filter")?.value || "all";
-  const data = vehiclesData[currentFilter];
-
-  vehiclesChart = new Chart(ctx, {
-    type: "line",
-    data: {
-      labels: data.labels,
-      datasets: [
-        {
-          label: "Utilização (%)",
-          data: data.utilization,
-          borderColor: "#667eea",
-          backgroundColor: "rgba(102, 126, 234, 0.1)",
-          borderWidth: 3,
-          fill: true,
-          tension: 0.4,
-          pointBackgroundColor: "#667eea",
-          pointBorderColor: "#fff",
-          pointBorderWidth: 2,
-          pointRadius: 6,
-          pointHoverRadius: 8,
-        },
-        {
-          label: "Consumo Médio (km/L)",
-          data: data.consumption,
-          borderColor: "#43e97b",
-          backgroundColor: "rgba(67, 233, 123, 0.1)",
-          borderWidth: 3,
-          fill: true,
-          tension: 0.4,
-          pointBackgroundColor: "#43e97b",
-          pointBorderColor: "#fff",
-          pointBorderWidth: 2,
-          pointRadius: 6,
-          pointHoverRadius: 8,
-          yAxisID: "y1",
-        },
-        {
-          label: "Tempo Manutenção (h)",
-          data: data.maintenance,
-          borderColor: "#f72585",
-          backgroundColor: "rgba(247, 37, 133, 0.1)",
-          borderWidth: 2,
-          borderDash: [8, 4],
-          fill: false,
-          tension: 0.4,
-          pointBackgroundColor: "#f72585",
-          pointBorderColor: "#fff",
-          pointBorderWidth: 2,
-          pointRadius: 5,
-          pointHoverRadius: 7,
-          yAxisID: "y2",
-        },
-      ],
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      animation: {
-        duration: 2000,
-        easing: "easeInOutCubic",
-      },
-      interaction: {
-        mode: "index",
-        intersect: false,
-      },
-      plugins: {
-        legend: {
-          labels: {
-            color: "#e0e0e0",
-            font: {
-              size: 13,
-              weight: 500,
-            },
-            usePointStyle: true,
-            padding: 20,
-          },
-        },
-        tooltip: {
-          backgroundColor: "rgba(30, 30, 46, 0.95)",
-          titleColor: "#fff",
-          bodyColor: "#ddd",
-          borderColor: "rgba(102, 126, 234, 0.5)",
-          borderWidth: 1,
-          cornerRadius: 12,
-          displayColors: true,
-          callbacks: {
-            afterBody: function (context) {
-              const index = context[0].dataIndex;
-              return `Km Percorridos: ${data.distance[index]} km`;
-            },
-          },
-        },
-      },
-      scales: {
-        x: {
-          grid: {
-            color: "rgba(255, 255, 255, 0.1)",
-            drawBorder: false,
-          },
-          ticks: {
-            color: "rgba(255, 255, 255, 0.7)",
-            font: {
-              size: 11,
-              weight: 500,
-            },
-          },
-        },
-        y: {
-          type: "linear",
-          display: true,
-          position: "left",
-          beginAtZero: true,
-          max: 100,
-          grid: {
-            color: "rgba(255, 255, 255, 0.1)",
-            drawBorder: false,
-          },
-          ticks: {
-            color: "rgba(255, 255, 255, 0.7)",
-            font: {
-              size: 11,
-            },
-            callback: function (value) {
-              return value + "%";
-            },
-          },
-          title: {
-            display: true,
-            text: "Utilização (%)",
-            color: "#667eea",
-            font: {
-              size: 12,
-              weight: 600,
-            },
-          },
-        },
-        y1: {
-          type: "linear",
-          display: true,
-          position: "right",
-          min: 8,
-          max: 18,
-          grid: {
-            drawOnChartArea: false,
-          },
-          ticks: {
-            color: "rgba(255, 255, 255, 0.7)",
-            font: {
-              size: 11,
-            },
-            callback: function (value) {
-              return value + " km/L";
-            },
-          },
-          title: {
-            display: true,
-            text: "Consumo (km/L)",
-            color: "#43e97b",
-            font: {
-              size: 12,
-              weight: 600,
-            },
-          },
-        },
-        y2: {
-          type: "linear",
-          display: false,
-          min: 0,
-          max: 100,
-        },
-      },
-    },
-  });
-}
-
-// Function to update vehicles chart filter
-function updateVehiclesChart() {
-  initVehiclesChart();
-}
-
-function searchVehicles(searchTerm) {
-  const vehicleItems = document.querySelectorAll(".vehicle-item");
-  const lowerSearchTerm = searchTerm.toLowerCase();
-
-  vehicleItems.forEach((item) => {
-    const model =
-      item.querySelector(".vehicle-model strong")?.textContent?.toLowerCase() ||
-      "";
-    const plate =
-      item.querySelector(".vehicle-plate")?.textContent?.toLowerCase() || "";
-    const category =
-      item.querySelector(".vehicle-category")?.textContent?.toLowerCase() || "";
-
-    const matches =
-      model.includes(lowerSearchTerm) ||
-      plate.includes(lowerSearchTerm) ||
-      category.includes(lowerSearchTerm);
-
-    item.style.display = matches ? "flex" : "none";
-  });
-
-  // Show notification if no results
-  const visibleItems = document.querySelectorAll(
-    '.vehicle-item[style*="flex"]'
-  );
-  if (visibleItems.length === 0 && searchTerm.length > 0) {
-    showNotification(
-      "Nenhum veículo encontrado com os critérios de busca.",
-      "warning"
-    );
-  }
-}
-
-function filterVehicles(filterValue) {
-  const vehicleItems = document.querySelectorAll(".vehicle-item");
-
-  vehicleItems.forEach((item) => {
-    let shouldShow = true;
-
-    if (filterValue === "all") {
-      shouldShow = true;
-    } else if (filterValue === "available") {
-      shouldShow = item.classList.contains("available");
-    } else if (filterValue === "busy") {
-      shouldShow = item.classList.contains("busy");
-    } else if (filterValue === "maintenance") {
-      shouldShow = item.classList.contains("maintenance");
-    } else if (filterValue.startsWith("category-")) {
-      const category = filterValue.replace("category-", "");
-      shouldShow = item.classList.contains(`category-${category}`);
-    }
-
-    item.style.display = shouldShow ? "flex" : "none";
-  });
-}
-
-// Vehicle management functions
-function viewVehicleDetails(vehicleId) {
-  showNotification(`Carregando detalhes do veículo ${vehicleId}...`, "info");
-  // Here you would open a modal or navigate to vehicle details page
-}
-
-function editVehicle(vehicleId) {
-  showNotification(`Editando veículo ${vehicleId}...`, "info");
-  // Here you would open edit modal
-}
-
-function scheduleVehicleMaintenance(vehicleId) {
-  showNotification(`Agendando manutenção para veículo ${vehicleId}...`, "info");
-  // Here you would open maintenance scheduling modal
-}
-
-function viewVehicleHistory(vehicleId) {
-  showNotification(`Carregando histórico do veículo ${vehicleId}...`, "info");
-  // Here you would show vehicle history
-}
-
-function updateMaintenanceStatus(vehicleId) {
-  showNotification(
-    `Atualizando status de manutenção do veículo ${vehicleId}...`,
-    "info"
-  );
-  // Here you would update maintenance status
-}
-
-function contactMechanic(vehicleId) {
-  showNotification(
-    `Entrando em contato com a oficina sobre o veículo ${vehicleId}...`,
-    "info"
-  );
-  // Here you would initiate contact with mechanic
-}
-
-function viewCurrentLesson(vehicleId) {
-  showNotification(
-    `Visualizando aula atual do veículo ${vehicleId}...`,
-    "info"
-  );
-  // Here you would show current lesson details
-}
-
-function trackVehicle(vehicleId) {
-  showNotification(`Rastreando localização do veículo ${vehicleId}...`, "info");
-  // Here you would show vehicle tracking
-}
-
-function assignVehicleToLesson(vehicleId) {
-  showNotification(`Agendando veículo ${vehicleId} para nova aula...`, "info");
-  // Here you would open lesson assignment modal
-}
-
-function generateVehiclesReport() {
-  showNotification("Gerando relatório de veículos...", "info");
-  // Here you would generate and download vehicles report
-}
-
-function exportVehiclesChart() {
-  showNotification("Exportando gráfico de utilização da frota...", "info");
-  // Here you would export the chart
-}
-
-function fullscreenVehiclesChart() {
-  showNotification("Expandindo gráfico em tela cheia...", "info");
-  // Here you would show chart in fullscreen
-}
-
-function viewAllVehicles() {
-  openModal("viewAllVehiclesModal");
-  loadAllVehiclesData();
-}
-
-function viewVehicleCategoryDetails() {
-  console.log("Opening vehicle category details...");
-  showNotification("Abrindo detalhes das categorias de veículos...", "info");
-  // Here you would open a modal with detailed category information
-}
-
-// Sample vehicle data for demonstration
-const allVehiclesData = [
-  {
-    id: 1,
-    plate: "ABC-1234",
-    brand: "Volkswagen",
-    model: "Gol",
-    year: 2022,
-    type: "car",
-    status: "available",
-    mileage: 25000,
-    fuelType: "Flex",
-    lastMaintenance: "2024-06-15",
-    nextMaintenance: "2024-09-15",
-  },
-  {
-    id: 2,
-    plate: "DEF-5678",
-    brand: "Hyundai",
-    model: "HB20",
-    year: 2023,
-    type: "car",
-    status: "in-use",
-    mileage: 15000,
-    fuelType: "Flex",
-    lastMaintenance: "2024-07-20",
-    nextMaintenance: "2024-10-20",
-  },
-  {
-    id: 3,
-    plate: "GHI-9012",
-    brand: "Honda",
-    model: "CG 160",
-    year: 2021,
-    type: "motorcycle",
-    status: "maintenance",
-    mileage: 18000,
-    fuelType: "Gasolina",
-    lastMaintenance: "2024-08-01",
-    nextMaintenance: "2024-11-01",
-  },
-  {
-    id: 4,
-    plate: "JKL-3456",
-    brand: "Toyota",
-    model: "Corolla",
-    year: 2023,
-    type: "car",
-    status: "available",
-    mileage: 12000,
-    fuelType: "Flex",
-    lastMaintenance: "2024-05-10",
-    nextMaintenance: "2024-08-10",
-  },
-];
-
-function loadAllVehiclesData() {
-  const container = document.getElementById("vehiclesListContainer");
-
-  container.innerHTML = `
-        <div style="padding: 20px; text-align: center;">
-          <i class="fas fa-spinner fa-spin" style="font-size: 24px; color: var(--primary-color, #007bff);"></i>
-          <p style="margin-top: 10px;">Carregando lista de veículos...</p>
-        </div>
-      `;
-
-  setTimeout(() => {
-    renderVehiclesList(allVehiclesData);
-  }, 800);
-}
-
-function renderVehiclesList(vehicles) {
-  const container = document.getElementById("vehiclesListContainer");
-
-  if (vehicles.length === 0) {
-    container.innerHTML = `
-          <div style="padding: 40px; text-align: center;">
-            <i class="fas fa-car" style="font-size: 48px; color: var(--text-muted, #6c757d); margin-bottom: 15px;"></i>
-            <h4 style="color: var(--text-muted, #6c757d); margin-bottom: 10px;">Nenhum veículo encontrado</h4>
-            <p style="color: var(--text-muted, #6c757d);">Tente ajustar os filtros de busca</p>
-          </div>
-        `;
-    return;
-  }
-
-  const vehiclesHtml = vehicles
-    .map((vehicle) => {
-      const statusClass =
-        vehicle.status === "available"
-          ? "success"
-          : vehicle.status === "in-use"
-          ? "warning"
-          : "danger";
-      const statusText =
-        vehicle.status === "available"
-          ? "Disponível"
-          : vehicle.status === "in-use"
-          ? "Em uso"
-          : "Manutenção";
-
-      const typeIcon = vehicle.type === "car" ? "fa-car" : "fa-motorcycle";
-      const typeText = vehicle.type === "car" ? "Carro" : "Moto";
-
-      return `
-          <div class="vehicle-item" style="
-            display: flex; 
-            align-items: center; 
-            padding: 15px 20px; 
-            border-bottom: 1px solid var(--border-color, #e0e0e0);
-            transition: background-color 0.2s ease;
-          " onmouseover="this.style.backgroundColor='var(--background-hover, #f8f9fa)'" 
-             onmouseout="this.style.backgroundColor='transparent'">
-            
-            <div style="
-              width: 50px; 
-              height: 50px; 
-              background: linear-gradient(135deg, var(--warning-color, #ffc107), var(--info-color, #17a2b8)); 
-              border-radius: 50%; 
-              display: flex; 
-              align-items: center; 
-              justify-content: center; 
-              color: white; 
-              font-weight: bold; 
-              font-size: 18px;
-              margin-right: 15px;
-            ">
-              <i class="fas ${typeIcon}"></i>
-            </div>
-
-            <div style="flex: 1;">
-              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px;">
-                <h4 style="margin: 0; color: var(--text-primary, #333);">${
-                  vehicle.plate
-                } - ${vehicle.brand} ${vehicle.model}</h4>
-                <span class="status-badge status-${statusClass}" style="
-                  padding: 4px 8px; 
-                  border-radius: 12px; 
-                  font-size: 12px; 
-                  font-weight: 500;
-                  background-color: ${
-                    statusClass === "success"
-                      ? "#d4edda"
-                      : statusClass === "warning"
-                      ? "#fff3cd"
-                      : "#f8d7da"
-                  };
-                  color: ${
-                    statusClass === "success"
-                      ? "#155724"
-                      : statusClass === "warning"
-                      ? "#856404"
-                      : "#721c24"
-                  };
-                ">
-                  ${statusText}
-                </span>
-              </div>
-              
-              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 8px;">
-                <small style="color: var(--text-secondary, #6c757d);">
-                  <i class="fas ${typeIcon}" style="width: 16px;"></i> ${typeText}
-                </small>
-                <small style="color: var(--text-secondary, #6c757d);">
-                  <i class="fas fa-calendar" style="width: 16px;"></i> ${
-                    vehicle.year
-                  }
-                </small>
-                <small style="color: var(--text-secondary, #6c757d);">
-                  <i class="fas fa-tachometer-alt" style="width: 16px;"></i> ${vehicle.mileage.toLocaleString()} km
-                </small>
-                <small style="color: var(--text-secondary, #6c757d);">
-                  <i class="fas fa-gas-pump" style="width: 16px;"></i> ${
-                    vehicle.fuelType
-                  }
-                </small>
-              </div>
-
-              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px;">
-                <small style="color: var(--text-secondary, #6c757d);">
-                  <i class="fas fa-wrench" style="width: 16px;"></i> Últ. manutenção: ${
-                    vehicle.lastMaintenance
-                  }
-                </small>
-                <small style="color: var(--text-secondary, #6c757d);">
-                  <i class="fas fa-clock" style="width: 16px;"></i> Próx. manutenção: ${
-                    vehicle.nextMaintenance
-                  }
-                </small>
-              </div>
-            </div>
-
-            <div style="display: flex; gap: 8px; margin-left: 15px;">
-              <button class="btn btn-sm btn-outline-primary" 
-                      onclick="viewVehicleDetails(${vehicle.id})" 
-                      title="Ver Detalhes"
-                      style="padding: 6px 10px; border-radius: 6px;">
-                <i class="fas fa-eye"></i>
-              </button>
-              <button class="btn btn-sm btn-outline-success" 
-                      onclick="editVehicle(${vehicle.id})" 
-                      title="Editar"
-                      style="padding: 6px 10px; border-radius: 6px;">
-                <i class="fas fa-edit"></i>
-              </button>
-              <button class="btn btn-sm btn-outline-info" 
-                      onclick="scheduleVehicleMaintenance(${vehicle.id})" 
-                      title="Agendar Manutenção"
-                      style="padding: 6px 10px; border-radius: 6px;">
-                <i class="fas fa-wrench"></i>
-              </button>
-            </div>
-          </div>
-        `;
-    })
-    .join("");
-
-  container.innerHTML = vehiclesHtml;
-}
-
-function filterVehiclesList() {
-  const searchTerm = document
-    .getElementById("vehicleSearchInput")
-    .value.toLowerCase();
-  const statusFilter = document.getElementById("vehicleStatusFilter").value;
-  const typeFilter = document.getElementById("vehicleTypeFilter").value;
-
-  const filteredVehicles = allVehiclesData.filter((vehicle) => {
-    const matchesSearch =
-      !searchTerm ||
-      vehicle.plate.toLowerCase().includes(searchTerm) ||
-      vehicle.brand.toLowerCase().includes(searchTerm) ||
-      vehicle.model.toLowerCase().includes(searchTerm);
-
-    const matchesStatus = !statusFilter || vehicle.status === statusFilter;
-    const matchesType = !typeFilter || vehicle.type === typeFilter;
-
-    return matchesSearch && matchesStatus && matchesType;
-  });
-
-  renderVehiclesList(filteredVehicles);
-}
-
-// Schedule Section JavaScript Functions
-function initScheduleChart() {
-  const ctx = document.getElementById("schedule-chart");
-  if (!ctx) return;
-
-  scheduleChart = new Chart(ctx, {
-    type: "bar",
-    data: {
-      labels: ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
-      datasets: [
-        {
-          label: "Aulas Teóricas",
-          data: [8, 6, 7, 9, 8, 5],
-          backgroundColor: "rgba(79, 172, 254, 0.8)",
-          borderColor: "#4facfe",
-          borderWidth: 2,
-          borderRadius: 4,
-        },
-        {
-          label: "Aulas Práticas",
-          data: [12, 10, 11, 13, 12, 8],
-          backgroundColor: "rgba(67, 233, 123, 0.8)",
-          borderColor: "#43e97b",
-          borderWidth: 2,
-          borderRadius: 4,
-        },
-      ],
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          labels: {
-            color: "#e0e0e0",
-            font: {
-              size: 11,
-              weight: 500,
-            },
-          },
-        },
-      },
-      scales: {
-        x: {
-          grid: {
-            color: "rgba(255, 255, 255, 0.1)",
-          },
-          ticks: {
-            color: "#e0e0e0",
-            font: {
-              size: 10,
-            },
-          },
-        },
-        y: {
-          grid: {
-            color: "rgba(255, 255, 255, 0.1)",
-          },
-          ticks: {
-            color: "#e0e0e0",
-            font: {
-              size: 10,
-            },
-            stepSize: 2,
-          },
-        },
-      },
-    },
-  });
-}
-
-function searchLessons(searchTerm) {
-  const lessonItems = document.querySelectorAll(".lesson-item");
-  const lowerSearchTerm = searchTerm.toLowerCase();
-
-  lessonItems.forEach((item) => {
-    const studentName =
-      item
-        .querySelector(".lesson-student-name strong")
-        ?.textContent?.toLowerCase() || "";
-    const instructorName =
-      item
-        .querySelector(".lesson-instructor-info span")
-        ?.textContent?.toLowerCase() || "";
-    const category =
-      item.querySelector(".lesson-category")?.textContent?.toLowerCase() || "";
-
-    const matches =
-      studentName.includes(lowerSearchTerm) ||
-      instructorName.includes(lowerSearchTerm) ||
-      category.includes(lowerSearchTerm);
-
-    item.style.display = matches ? "flex" : "none";
-  });
-
-  // Show notification if no results
-  const visibleItems = document.querySelectorAll('.lesson-item[style*="flex"]');
-  if (visibleItems.length === 0 && searchTerm.length > 0) {
-    showNotification(
-      "Nenhuma aula encontrada com os critérios de busca.",
-      "warning"
-    );
-  }
-}
-
-function filterLessons(filterValue) {
-  const lessonItems = document.querySelectorAll(".lesson-item");
-
-  lessonItems.forEach((item) => {
-    let shouldShow = true;
-
-    if (filterValue === "all") {
-      shouldShow = true;
-    } else if (filterValue === "today") {
-      const dateElement = item.querySelector(".lesson-date");
-      shouldShow =
-        dateElement && dateElement.textContent.toLowerCase().includes("hoje");
-    } else if (filterValue === "theoretical") {
-      shouldShow = item.classList.contains("theoretical");
-    } else if (filterValue === "practical") {
-      shouldShow = item.classList.contains("practical");
-    } else if (filterValue === "scheduled") {
-      shouldShow = item.classList.contains("scheduled");
-    } else if (filterValue === "in-progress") {
-      shouldShow = item.classList.contains("in-progress");
-    } else if (filterValue === "completed") {
-      shouldShow = item.classList.contains("completed");
-    }
-
-    item.style.display = shouldShow ? "flex" : "none";
-  });
-}
-
-// Lesson management functions
-function startLesson(lessonId) {
-  showNotification(`Iniciando aula ${lessonId}...`, "info");
-  // Here you would start the lesson
-}
-
-function endLesson(lessonId) {
-  showNotification(`Finalizando aula ${lessonId}...`, "info");
-  // Here you would end the lesson
-}
-
-function pauseLesson(lessonId) {
-  showNotification(`Pausando aula ${lessonId}...`, "info");
-  // Here you would pause the lesson
-}
-
-function editLesson(lessonId) {
-  showNotification(`Editando aula ${lessonId}...`, "info");
-  // Here you would open edit modal
-}
-
-function cancelLesson(lessonId) {
-  if (confirm("Tem certeza que deseja cancelar esta aula?")) {
-    showNotification(`Cancelando aula ${lessonId}...`, "warning");
-    // Here you would cancel the lesson
-  }
-}
-
-function rescheduleLesson(lessonId) {
-  showNotification(`Reagendando aula ${lessonId}...`, "info");
-  // Here you would open reschedule modal
-}
-
-function viewLessonDetails(lessonId) {
-  showNotification(`Carregando detalhes da aula ${lessonId}...`, "info");
-  // Here you would show lesson details
-}
-
-function viewLessonReport(lessonId) {
-  showNotification(`Carregando relatório da aula ${lessonId}...`, "info");
-  // Here you would show lesson report
-}
-
-function scheduleNextLesson(lessonId) {
-  showNotification(
-    `Agendando próxima aula para o aluno da aula ${lessonId}...`,
-    "info"
-  );
-  // Here you would schedule next lesson
-}
-
-function downloadCertificate(lessonId) {
-  showNotification(`Baixando certificado da aula ${lessonId}...`, "info");
-  // Here you would download certificate
-}
-
-function prepareExam(lessonId) {
-  showNotification(
-    `Preparando exame para o aluno da aula ${lessonId}...`,
-    "info"
-  );
-  // Here you would prepare exam
-}
-
-function contactInstructor(lessonId) {
-  showNotification(
-    `Entrando em contato com o instrutor da aula ${lessonId}...`,
-    "info"
-  );
-  // Here you would contact instructor
-}
-
-function generateScheduleReport() {
-  showNotification("Gerando relatório de agenda...", "info");
-  // Here you would generate and download schedule report
-}
-
-function printSchedule() {
-  showNotification("Preparando impressão da agenda...", "info");
-  // Here you would print the schedule
-}
-
-function viewAllLessons() {
-  openModal("viewAllLessonsModal");
-  loadAllLessonsData();
-}
-
-// Sample lessons data for demonstration
-const allLessonsData = [
-  {
-    id: 1,
-    studentName: "Ana Silva",
-    instructorName: "Carlos Santos",
-    date: "2024-08-30",
-    time: "08:00",
-    duration: 60,
-    type: "practical",
-    vehicle: "ABC-1234",
-    location: "Centro",
-    status: "scheduled",
-    category: "Categoria B",
-    notes: "Primeira aula prática",
-  },
-  {
-    id: 2,
-    studentName: "Bruno Costa",
-    instructorName: "Maria Oliveira",
-    date: "2024-08-30",
-    time: "10:00",
-    duration: 45,
-    type: "theoretical",
-    vehicle: null,
-    location: "Sala 2",
-    status: "in-progress",
-    category: "Categoria A",
-    notes: "Legislação de trânsito",
-  },
-  {
-    id: 3,
-    studentName: "Carla Mendes",
-    instructorName: "João Pereira",
-    date: "2024-08-30",
-    time: "14:00",
-    duration: 60,
-    type: "practical",
-    vehicle: "DEF-5678",
-    location: "Rua das Flores",
-    status: "completed",
-    category: "Categoria B",
-    notes: "Aula de baliza",
-  },
-  {
-    id: 4,
-    studentName: "Daniel Santos",
-    instructorName: "Carlos Santos",
-    date: "2024-08-31",
-    time: "09:00",
-    duration: 60,
-    type: "practical",
-    vehicle: "ABC-1234",
-    location: "Centro",
-    status: "scheduled",
-    category: "Categoria B",
-    notes: "Aula de direção defensiva",
-  },
-  {
-    id: 5,
-    studentName: "Elena Rodrigues",
-    instructorName: "Ana Paula",
-    date: "2024-08-31",
-    time: "11:00",
-    duration: 30,
-    type: "exam",
-    vehicle: "GHI-9012",
-    location: "Detran",
-    status: "scheduled",
-    category: "Categoria A",
-    notes: "Exame prático",
-  },
-  {
-    id: 6,
-    studentName: "Felipe Lima",
-    instructorName: "Roberto Silva",
-    date: "2024-08-31",
-    time: "16:00",
-    duration: 45,
-    type: "theoretical",
-    vehicle: null,
-    location: "Sala 1",
-    status: "cancelled",
-    category: "Categoria B",
-    notes: "Primeiros socorros",
-  },
-];
-
-function loadAllLessonsData() {
-  const container = document.getElementById("lessonsListContainer");
-
-  container.innerHTML = `
-        <div style="padding: 20px; text-align: center;">
-          <i class="fas fa-spinner fa-spin" style="font-size: 24px; color: var(--primary-color, #007bff);"></i>
-          <p style="margin-top: 10px;">Carregando lista de aulas...</p>
-        </div>
-      `;
-
-  setTimeout(() => {
-    renderLessonsList(allLessonsData);
-  }, 800);
-}
-
-function renderLessonsList(lessons) {
-  const container = document.getElementById("lessonsListContainer");
-
-  if (lessons.length === 0) {
-    container.innerHTML = `
-          <div style="padding: 40px; text-align: center;">
-            <i class="fas fa-graduation-cap" style="font-size: 48px; color: var(--text-muted, #6c757d); margin-bottom: 15px;"></i>
-            <h4 style="color: var(--text-muted, #6c757d); margin-bottom: 10px;">Nenhuma aula encontrada</h4>
-            <p style="color: var(--text-muted, #6c757d);">Tente ajustar os filtros de busca</p>
-          </div>
-        `;
-    return;
-  }
-
-  const lessonsHtml = lessons
-    .map((lesson) => {
-      const statusClass =
-        lesson.status === "completed"
-          ? "success"
-          : lesson.status === "in-progress"
-          ? "info"
-          : lesson.status === "scheduled"
-          ? "warning"
-          : "danger";
-      const statusText =
-        lesson.status === "completed"
-          ? "Concluída"
-          : lesson.status === "in-progress"
-          ? "Em andamento"
-          : lesson.status === "scheduled"
-          ? "Agendada"
-          : "Cancelada";
-
-      const typeIcon =
-        lesson.type === "practical"
-          ? "fa-car"
-          : lesson.type === "theoretical"
-          ? "fa-book"
-          : "fa-clipboard-check";
-      const typeText =
-        lesson.type === "practical"
-          ? "Prática"
-          : lesson.type === "theoretical"
-          ? "Teórica"
-          : "Exame";
-
-      const lessonDate = new Date(lesson.date + "T" + lesson.time);
-      const formattedDate = lessonDate.toLocaleDateString("pt-BR");
-      const formattedTime = lesson.time;
-
-      return `
-          <div class="lesson-item" style="
-            display: flex; 
-            align-items: center; 
-            padding: 15px 20px; 
-            border-bottom: 1px solid var(--border-color, #e0e0e0);
-            transition: background-color 0.2s ease;
-          " onmouseover="this.style.backgroundColor='var(--background-hover, #f8f9fa)'" 
-             onmouseout="this.style.backgroundColor='transparent'">
-            
-            <div style="
-              width: 50px; 
-              height: 50px; 
-              background: linear-gradient(135deg, var(--success-color, #28a745), var(--info-color, #17a2b8)); 
-              border-radius: 50%; 
-              display: flex; 
-              align-items: center; 
-              justify-content: center; 
-              color: white; 
-              font-weight: bold; 
-              font-size: 18px;
-              margin-right: 15px;
-            ">
-              <i class="fas ${typeIcon}"></i>
-            </div>
-
-            <div style="flex: 1;">
-              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px;">
-                <h4 style="margin: 0; color: var(--text-primary, #333);">${
-                  lesson.studentName
-                } - ${typeText}</h4>
-                <span class="status-badge status-${statusClass}" style="
-                  padding: 4px 8px; 
-                  border-radius: 12px; 
-                  font-size: 12px; 
-                  font-weight: 500;
-                  background-color: ${
-                    statusClass === "success"
-                      ? "#d4edda"
-                      : statusClass === "info"
-                      ? "#d1ecf1"
-                      : statusClass === "warning"
-                      ? "#fff3cd"
-                      : "#f8d7da"
-                  };
-                  color: ${
-                    statusClass === "success"
-                      ? "#155724"
-                      : statusClass === "info"
-                      ? "#0c5460"
-                      : statusClass === "warning"
-                      ? "#856404"
-                      : "#721c24"
-                  };
-                ">
-                  ${statusText}
-                </span>
-              </div>
-              
-              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 8px;">
-                <small style="color: var(--text-secondary, #6c757d);">
-                  <i class="fas fa-user-tie" style="width: 16px;"></i> ${
-                    lesson.instructorName
-                  }
-                </small>
-                <small style="color: var(--text-secondary, #6c757d);">
-                  <i class="fas fa-calendar" style="width: 16px;"></i> ${formattedDate}
-                </small>
-                <small style="color: var(--text-secondary, #6c757d);">
-                  <i class="fas fa-clock" style="width: 16px;"></i> ${formattedTime}
-                </small>
-                <small style="color: var(--text-secondary, #6c757d);">
-                  <i class="fas fa-hourglass-half" style="width: 16px;"></i> ${
-                    lesson.duration
-                  } min
-                </small>
-              </div>
-
-              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px;">
-                <small style="color: var(--text-secondary, #6c757d);">
-                  <i class="fas fa-id-card" style="width: 16px;"></i> ${
-                    lesson.category
-                  }
-                </small>
-                <small style="color: var(--text-secondary, #6c757d);">
-                  <i class="fas fa-map-marker-alt" style="width: 16px;"></i> ${
-                    lesson.location
-                  }
-                </small>
-                ${
-                  lesson.vehicle
-                    ? `
-                  <small style="color: var(--text-secondary, #6c757d);">
-                    <i class="fas fa-car" style="width: 16px;"></i> ${lesson.vehicle}
-                  </small>
-                `
-                    : ""
-                }
-                ${
-                  lesson.notes
-                    ? `
-                  <small style="color: var(--text-secondary, #6c757d);">
-                    <i class="fas fa-sticky-note" style="width: 16px;"></i> ${lesson.notes}
-                  </small>
-                `
-                    : ""
-                }
-              </div>
-            </div>
-
-            <div style="display: flex; gap: 8px; margin-left: 15px;">
-              <button class="btn btn-sm btn-outline-primary" 
-                      onclick="viewLessonDetails(${lesson.id})" 
-                      title="Ver Detalhes"
-                      style="padding: 6px 10px; border-radius: 6px;">
-                <i class="fas fa-eye"></i>
-              </button>
-              <button class="btn btn-sm btn-outline-success" 
-                      onclick="editLesson(${lesson.id})" 
-                      title="Editar"
-                      style="padding: 6px 10px; border-radius: 6px;">
-                <i class="fas fa-edit"></i>
-              </button>
-              ${
-                lesson.status === "scheduled"
-                  ? `
-                <button class="btn btn-sm btn-outline-warning" 
-                        onclick="startLesson(${lesson.id})" 
-                        title="Iniciar Aula"
-                        style="padding: 6px 10px; border-radius: 6px;">
-                  <i class="fas fa-play"></i>
-                </button>
-              `
-                  : ""
-              }
-              ${
-                lesson.status === "in-progress"
-                  ? `
-                <button class="btn btn-sm btn-outline-danger" 
-                        onclick="completeLesson(${lesson.id})" 
-                        title="Finalizar Aula"
-                        style="padding: 6px 10px; border-radius: 6px;">
-                  <i class="fas fa-stop"></i>
-                </button>
-              `
-                  : ""
-              }
-            </div>
-          </div>
-        `;
-    })
-    .join("");
-
-  container.innerHTML = lessonsHtml;
-}
-
-function filterLessonsList() {
-  const searchTerm = document
-    .getElementById("lessonSearchInput")
-    .value.toLowerCase();
-  const statusFilter = document.getElementById("lessonStatusFilter").value;
-  const typeFilter = document.getElementById("lessonTypeFilter").value;
-
-  const filteredLessons = allLessonsData.filter((lesson) => {
-    const matchesSearch =
-      !searchTerm ||
-      lesson.studentName.toLowerCase().includes(searchTerm) ||
-      lesson.instructorName.toLowerCase().includes(searchTerm) ||
-      lesson.category.toLowerCase().includes(searchTerm) ||
-      lesson.location.toLowerCase().includes(searchTerm);
-
-    const matchesStatus = !statusFilter || lesson.status === statusFilter;
-    const matchesType = !typeFilter || lesson.type === typeFilter;
-
-    return matchesSearch && matchesStatus && matchesType;
-  });
-
-  renderLessonsList(filteredLessons);
 }
 
 // Add event listeners for schedule section
@@ -6407,8 +2068,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (dateSelector) {
     dateSelector.addEventListener("change", function (e) {
       showNotification(
-        `Carregando cronograma para ${
-          e.target.options[e.target.selectedIndex].text
+        `Carregando cronograma para ${e.target.options[e.target.selectedIndex].text
         }...`,
         "info"
       );
@@ -6462,8 +2122,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (vehicleChartFilter) {
     vehicleChartFilter.addEventListener("change", function (e) {
       showNotification(
-        `Atualizando gráfico de veículos para ${
-          e.target.options[e.target.selectedIndex].text
+        `Atualizando gráfico de veículos para ${e.target.options[e.target.selectedIndex].text
         }...`,
         "info"
       );
@@ -6765,18 +2424,18 @@ function renderReportsList(reports) {
         report.status === "completed"
           ? "success"
           : report.status === "processing"
-          ? "info"
-          : report.status === "scheduled"
-          ? "warning"
-          : "danger";
+            ? "info"
+            : report.status === "scheduled"
+              ? "warning"
+              : "danger";
       const statusText =
         report.status === "completed"
           ? "Concluído"
           : report.status === "processing"
-          ? "Processando"
-          : report.status === "scheduled"
-          ? "Agendado"
-          : "Erro";
+            ? "Processando"
+            : report.status === "scheduled"
+              ? "Agendado"
+              : "Erro";
 
       const typeIcons = {
         financial: "fa-dollar-sign",
@@ -6822,32 +2481,29 @@ function renderReportsList(reports) {
 
             <div style="flex: 1;">
               <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px;">
-                <h4 style="margin: 0; color: var(--text-primary, #333);">${
-                  report.title
-                }</h4>
+                <h4 style="margin: 0; color: var(--text-primary, #333);">${report.title
+        }</h4>
                 <span class="status-badge status-${statusClass}" style="
                   padding: 4px 8px; 
                   border-radius: 12px; 
                   font-size: 12px; 
                   font-weight: 500;
-                  background-color: ${
-                    statusClass === "success"
-                      ? "#d4edda"
-                      : statusClass === "info"
-                      ? "#d1ecf1"
-                      : statusClass === "warning"
-                      ? "#fff3cd"
-                      : "#f8d7da"
-                  };
-                  color: ${
-                    statusClass === "success"
-                      ? "#155724"
-                      : statusClass === "info"
-                      ? "#0c5460"
-                      : statusClass === "warning"
-                      ? "#856404"
-                      : "#721c24"
-                  };
+                  background-color: ${statusClass === "success"
+          ? "#d4edda"
+          : statusClass === "info"
+            ? "#d1ecf1"
+            : statusClass === "warning"
+              ? "#fff3cd"
+              : "#f8d7da"
+        };
+                  color: ${statusClass === "success"
+          ? "#155724"
+          : statusClass === "info"
+            ? "#0c5460"
+            : statusClass === "warning"
+              ? "#856404"
+              : "#721c24"
+        };
                 ">
                   ${statusText}
                 </span>
@@ -6859,9 +2515,8 @@ function renderReportsList(reports) {
               
               <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 8px;">
                 <small style="color: var(--text-secondary, #6c757d);">
-                  <i class="fas fa-user" style="width: 16px;"></i> ${
-                    report.generatedBy
-                  }
+                  <i class="fas fa-user" style="width: 16px;"></i> ${report.generatedBy
+        }
                 </small>
                 <small style="color: var(--text-secondary, #6c757d);">
                   <i class="fas fa-calendar" style="width: 16px;"></i> ${formattedDate}
@@ -6870,48 +2525,42 @@ function renderReportsList(reports) {
                   <i class="fas fa-clock" style="width: 16px;"></i> ${formattedTime}
                 </small>
                 <small style="color: var(--text-secondary, #6c757d);">
-                  <i class="fas fa-file" style="width: 16px;"></i> ${
-                    report.format
-                  }
+                  <i class="fas fa-file" style="width: 16px;"></i> ${report.format
+        }
                 </small>
               </div>
 
               <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px;">
                 <small style="color: var(--text-secondary, #6c757d);">
-                  <i class="fas fa-calendar-alt" style="width: 16px;"></i> ${
-                    report.period
-                  }
+                  <i class="fas fa-calendar-alt" style="width: 16px;"></i> ${report.period
+        }
                 </small>
-                ${
-                  report.size
-                    ? `
+                ${report.size
+          ? `
                   <small style="color: var(--text-secondary, #6c757d);">
                     <i class="fas fa-hdd" style="width: 16px;"></i> ${report.size}
                   </small>
                 `
-                    : ""
-                }
+          : ""
+        }
                 <small style="color: var(--text-secondary, #6c757d);">
-                  <i class="fas fa-download" style="width: 16px;"></i> ${
-                    report.downloads
-                  } downloads
+                  <i class="fas fa-download" style="width: 16px;"></i> ${report.downloads
+        } downloads
                 </small>
-                ${
-                  report.lastAccess
-                    ? `
+                ${report.lastAccess
+          ? `
                   <small style="color: var(--text-secondary, #6c757d);">
                     <i class="fas fa-eye" style="width: 16px;"></i> Último acesso: ${report.lastAccess}
                   </small>
                 `
-                    : ""
-                }
+          : ""
+        }
               </div>
             </div>
 
             <div style="display: flex; gap: 8px; margin-left: 15px;">
-              ${
-                report.status === "completed"
-                  ? `
+              ${report.status === "completed"
+          ? `
                 <button class="btn btn-sm btn-outline-primary" 
                         onclick="viewReport(${report.id})" 
                         title="Visualizar"
@@ -6925,11 +2574,10 @@ function renderReportsList(reports) {
                   <i class="fas fa-share"></i>
                 </button>
               `
-                  : ""
-              }
-              ${
-                report.status === "processing"
-                  ? `
+          : ""
+        }
+              ${report.status === "processing"
+          ? `
                 <button class="btn btn-sm btn-outline-warning" 
                         onclick="cancelReportGeneration(${report.id})" 
                         title="Cancelar"
@@ -6937,11 +2585,10 @@ function renderReportsList(reports) {
                   <i class="fas fa-times"></i>
                 </button>
               `
-                  : ""
-              }
-              ${
-                report.status === "scheduled"
-                  ? `
+          : ""
+        }
+              ${report.status === "scheduled"
+          ? `
                 <button class="btn btn-sm btn-outline-secondary" 
                         onclick="editReportSchedule(${report.id})" 
                         title="Editar Agendamento"
@@ -6949,8 +2596,8 @@ function renderReportsList(reports) {
                   <i class="fas fa-edit"></i>
                 </button>
               `
-                  : ""
-              }
+          : ""
+        }
             </div>
           </div>
         `;
@@ -7264,8 +2911,7 @@ function selectTheme(theme) {
   localStorage.setItem("selected-theme", theme);
 
   showNotification(
-    `Tema alterado para: ${
-      theme === "light" ? "Claro" : theme === "dark" ? "Escuro" : "Automático"
+    `Tema alterado para: ${theme === "light" ? "Claro" : theme === "dark" ? "Escuro" : "Automático"
     }`,
     "success"
   );
@@ -7788,13 +3434,12 @@ function showNotification(message, type = "info") {
   notification.className = `notification notification-${type}`;
   notification.innerHTML = `
         <div class="notification-content">
-          <i class="fas ${
-            type === "success"
-              ? "fa-check-circle"
-              : type === "warning"
-              ? "fa-exclamation-triangle"
-              : "fa-info-circle"
-          }"></i>
+          <i class="fas ${type === "success"
+      ? "fa-check-circle"
+      : type === "warning"
+        ? "fa-exclamation-triangle"
+        : "fa-info-circle"
+    }"></i>
           <span>${message}</span>
         </div>
       `;
@@ -8073,16 +3718,15 @@ function updateStudentsChart(period) {
         period == 6
           ? "Últimos 6 Meses"
           : period == 12
-          ? "Último Ano"
-          : "Últimos 2 Anos";
+            ? "Último Ano"
+            : "Últimos 2 Anos";
       cardTitle.innerHTML = `<i class="fas fa-chart-area"></i> Progresso de Alunos - ${periodText}`;
     }
 
     showNotification(
-      `Gráfico atualizado para ${
-        period == 6
-          ? "últimos 6 meses"
-          : period == 12
+      `Gráfico atualizado para ${period == 6
+        ? "últimos 6 meses"
+        : period == 12
           ? "último ano"
           : "últimos 2 anos"
       }`,
@@ -8608,20 +4252,20 @@ async function submitInstructor() {
 
   try {
     showNotification("Cadastrando instrutor...", "info");
-    
+
     // Verificar se FirestoreManager está disponível
     if (!window.FirestoreManager) {
       throw new Error("Sistema de banco de dados não inicializado");
     }
-    
+
     const result = await window.FirestoreManager.addInstructor(instructorData);
-    
+
     showNotification("Instrutor cadastrado com sucesso!", "success");
     closeModal("addInstructorModal");
     form.reset();
-    
+
     console.log('✅ Instrutor cadastrado:', result);
-    
+
   } catch (error) {
     console.error("❌ Erro ao cadastrar instrutor:", error);
     showNotification("Erro ao cadastrar instrutor: " + error.message, "error");
@@ -8657,20 +4301,20 @@ async function submitVehicle() {
 
   try {
     showNotification("Cadastrando veículo...", "info");
-    
+
     // Verificar se FirestoreManager está disponível
     if (!window.FirestoreManager) {
       throw new Error("Sistema de banco de dados não inicializado");
     }
-    
+
     const result = await window.FirestoreManager.addVehicle(vehicleData);
-    
+
     showNotification("Veículo cadastrado com sucesso!", "success");
     closeModal("addVehicleModal");
     form.reset();
-    
+
     console.log('✅ Veículo cadastrado:', result);
-    
+
   } catch (error) {
     console.error("❌ Erro ao cadastrar veículo:", error);
     showNotification("Erro ao cadastrar veículo: " + error.message, "error");
@@ -8705,20 +4349,20 @@ async function submitStudent() {
 
   try {
     showNotification("Cadastrando aluno...", "info");
-    
+
     // Verificar se FirestoreManager está disponível
     if (!window.FirestoreManager) {
       throw new Error("Sistema de banco de dados não inicializado");
     }
-    
+
     const result = await window.FirestoreManager.addStudent(studentData);
-    
+
     showNotification("Aluno cadastrado com sucesso!", "success");
     closeModal("addStudentModal");
     form.reset();
-    
+
     console.log('✅ Aluno cadastrado:', result);
-    
+
   } catch (error) {
     console.error("❌ Erro ao cadastrar aluno:", error);
     showNotification("Erro ao cadastrar aluno: " + error.message, "error");
@@ -8854,136 +4498,7 @@ function openPaymentModal() {
   }
 }
 
-// ===== LESSON MANAGEMENT FUNCTIONS =====
-
-// Função para carregar e exibir aulas
-async function loadLessons() {
-  try {
-    const response = await fetch("/api/lessons");
-    const data = await response.json();
-
-    if (data.success) {
-      displayLessons(data.lessons);
-    }
-  } catch (error) {
-    console.error("Erro ao carregar aulas:", error);
-  }
-}
-
-// Função para exibir aulas na interface
-function displayLessons(lessons) {
-  const container = document.querySelector(".lessons-list");
-  if (!container) return;
-
-  // Limpar lista atual
-  container.innerHTML = "";
-
-  if (lessons.length === 0) {
-    container.innerHTML = `
-      <div class="no-lessons">
-        <i class="fas fa-calendar-times"></i>
-        <p>Nenhuma aula encontrada</p>
-        <button class="btn btn-primary" onclick="openScheduleLessonModal()">
-          Agendar Primeira Aula
-        </button>
-      </div>
-    `;
-    return;
-  }
-
-  lessons.forEach((lesson) => {
-    const lessonElement = createLessonElement(lesson);
-    container.appendChild(lessonElement);
-  });
-}
-
-// Criar elemento HTML para uma aula
-function createLessonElement(lesson) {
-  const div = document.createElement("div");
-  div.className = `lesson-item ${lesson.status} ${lesson.type}`;
-
-  const statusText = {
-    scheduled: "Agendada",
-    "in-progress": "Em Andamento",
-    completed: "Concluída",
-    cancelled: "Cancelada",
-  };
-
-  const typeIcon = lesson.type === "practical" ? "fas fa-car" : "fas fa-book";
-
-  div.innerHTML = `
-    <div class="lesson-time-block">
-      <div class="lesson-time">${lesson.start_time}</div>
-      <div class="lesson-duration">1h</div>
-      <div class="lesson-date">${formatDate(lesson.date)}</div>
-    </div>
-    <div class="lesson-type-indicator ${lesson.type}">
-      <i class="${typeIcon}"></i>
-    </div>
-    <div class="lesson-details">
-      <div class="lesson-main-info">
-        <div class="lesson-student-name">
-          <strong>${lesson.student_name}</strong>
-          <span class="lesson-category">Categoria ${lesson.category}</span>
-        </div>
-        <div class="lesson-instructor-info">
-          <i class="fas fa-chalkboard-teacher"></i>
-          <span>${lesson.instructor_name}</span>
-        </div>
-      </div>
-      <div class="lesson-additional-info">
-        ${
-          lesson.vehicle
-            ? `
-        <span class="lesson-vehicle">
-          <i class="fas fa-car"></i>
-          ${lesson.vehicle}
-        </span>
-        `
-            : `
-        <span class="lesson-topic">
-          <i class="fas fa-book-open"></i>
-          Aula Teórica
-        </span>
-        `
-        }
-        <span class="lesson-location">
-          <i class="fas fa-map-marker-alt"></i>
-          ${lesson.location}
-        </span>
-      </div>
-    </div>
-    <div class="lesson-status-badge">
-      <span class="status-badge status-${lesson.status}">${
-    statusText[lesson.status]
-  }</span>
-    </div>
-    <div class="lesson-actions">
-      ${
-        lesson.status === "scheduled"
-          ? `
-      <button aria-label="Iniciar aula" class="btn-icon" onclick="startLesson(${lesson.id})">
-        <i class="fas fa-play"></i>
-      </button>
-      <button aria-label="Editar" class="btn-icon" onclick="editLesson(${lesson.id})">
-        <i class="fas fa-edit"></i>
-      </button>
-      <button aria-label="Cancelar" class="btn-icon" onclick="cancelLesson(${lesson.id})">
-        <i class="fas fa-times"></i>
-      </button>
-      `
-          : ""
-      }
-      <button aria-label="Ver detalhes" class="btn-icon" onclick="viewLessonDetails(${
-        lesson.id
-      })">
-        <i class="fas fa-eye"></i>
-      </button>
-    </div>
-  `;
-
-  return div;
-}
+// ------------------------------------------------------
 
 // Formatear data para exibição
 function formatDate(dateString) {

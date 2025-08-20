@@ -1,0 +1,598 @@
+<!-- Vehicles Content -->
+<section class="content-section" id="vehicles-content">
+    <div class="section-content">
+
+        <!-- Vehicles Overview Cards -->
+        <div class="vehicles-overview">
+            <div class="overview-card finance-status-card">
+                <div class="overview-card-header">
+                    <div class="overview-card-icon fleet">
+                        <i class="fas fa-car"></i>
+                    </div>
+                    <div class="overview-card-info">
+                        <h3 class="overview-card-title">Frota Total</h3>
+                        <p class="overview-card-subtitle">Veículos cadastrados</p>
+                    </div>
+                </div>
+                <div class="overview-card-content">
+                    <div class="overview-value">12</div>
+                    <div class="overview-subtitle">Veículos na frota</div>
+                    <div class="overview-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">
+                                <i class="fas fa-check-circle"></i>
+                                Disponíveis
+                            </div>
+                            <div class="stat-value success">8 veículos</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">
+                                <i class="fas fa-clock"></i>
+                                Em uso
+                            </div>
+                            <div class="stat-value info">2 veículos</div>
+                        </div>
+                    </div>
+                    <div class="growth-bar">
+                        <div class="growth-fill fleet" style="width: 67%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="overview-card danger-card">
+                <div class="overview-card-header">
+                    <div class="overview-card-icon maintenance">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <div class="overview-card-info">
+                        <h3 class="overview-card-title">Manutenção</h3>
+                        <p class="overview-card-subtitle">Status dos veículos</p>
+                    </div>
+                </div>
+                <div class="overview-card-content">
+                    <div class="overview-value">2</div>
+                    <div class="overview-subtitle">Em manutenção</div>
+                    <div class="overview-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">
+                                <i class="fas fa-tools"></i>
+                                Preventiva
+                            </div>
+                            <div class="stat-value info">1 veículo</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                Corretiva
+                            </div>
+                            <div class="stat-value warning">1 veículo</div>
+                        </div>
+                    </div>
+                    <div class="growth-bar">
+                        <div class="growth-fill maintenance" style="width: 17%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="overview-card cyan-card">
+                <div class="overview-card-header">
+                    <div class="overview-card-icon consumption">
+                        <i class="fas fa-gas-pump"></i>
+                    </div>
+                    <div class="overview-card-info">
+                        <h3 class="overview-card-title">Consumo</h3>
+                        <p class="overview-card-subtitle">Eficiência da frota</p>
+                    </div>
+                </div>
+                <div class="overview-card-content">
+                    <div class="overview-value">10.5</div>
+                    <div class="overview-subtitle">km/L média</div>
+                    <div class="overview-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">
+                                <i class="fas fa-arrow-up"></i>
+                                Melhor
+                            </div>
+                            <div class="stat-value success">12.2 km/L</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">
+                                <i class="fas fa-arrow-down"></i>
+                                Menor
+                            </div>
+                            <div class="stat-value warning">8.9 km/L</div>
+                        </div>
+                    </div>
+                    <div class="growth-bar">
+                        <div class="growth-fill consumption" style="width: 85%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="overview-card performance-purple-card">
+                <div class="overview-card-header">
+                    <div class="overview-card-icon performance">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="overview-card-info">
+                        <h3 class="overview-card-title">Performance</h3>
+                        <p class="overview-card-subtitle">Utilização mensal</p>
+                    </div>
+                </div>
+                <div class="overview-card-content">
+                    <div class="overview-value">89%</div>
+                    <div class="overview-subtitle">Taxa de utilização</div>
+                    <div class="overview-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">
+                                <i class="fas fa-clock"></i>
+                                Horas ativas
+                            </div>
+                            <div class="stat-value success">156h</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">
+                                <i class="fas fa-road"></i>
+                                Km rodados
+                            </div>
+                            <div class="stat-value info">2,340 km</div>
+                        </div>
+                    </div>
+                    <div class="growth-bar">
+                        <div class="growth-fill performance" style="width: 89%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="vehicles-charts">
+            <div class="chart-card vehicles-usage-chart">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fas fa-chart-area"></i>
+                        Utilização da Frota - Últimos 6 Meses
+                    </div>
+                    <div class="card-actions">
+                        <select class="chart-filter" id="period-filter">
+                            <option value="all">Todos os veículos</option>
+                            <option value="available">Disponíveis</option>
+                            <option value="maintenance">Em manutenção</option>
+                            <option value="category-a">Categoria A</option>
+                            <option value="category-b">Categoria B</option>
+                        </select>
+                        <button aria-label="Exportar gráfico" class="card-action">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button aria-label="Tela cheia" class="card-action">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                        <button aria-label="Tela normal" class="card-action">
+                            <i class="fas fa-compress"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="vehicles-chart"></canvas>
+                </div>
+                <!-- Fleet Metrics Section -->
+                <div class="metrics-detailed vehicles">
+                    <div class="metrics-header">
+                        <h4>Métricas Detalhadas da Frota</h4>
+                    </div>
+                    <div class="metrics-row">
+                        <div class="metric-card utilization-metric">
+                            <div class="metric-icon">
+                                <i class="fas fa-tachometer-alt"></i>
+                            </div>
+                            <div class="metric-info">
+                                <div class="metric-label">Taxa Utilização</div>
+                                <div class="metric-value">89.2%</div>
+                                <div class="metric-change positive">+2.8%</div>
+                            </div>
+                        </div>
+                        <div class="metric-card consumption-metric">
+                            <div class="metric-icon">
+                                <i class="fas fa-gas-pump"></i>
+                            </div>
+                            <div class="metric-info">
+                                <div class="metric-label">Consumo Médio</div>
+                                <div class="metric-value">10.8 km/L</div>
+                                <div class="metric-change positive">+0.3</div>
+                            </div>
+                        </div>
+                        <div class="metric-card maintenance-metric">
+                            <div class="metric-icon">
+                                <i class="fas fa-tools"></i>
+                            </div>
+                            <div class="metric-info">
+                                <div class="metric-label">Manutenção</div>
+                                <div class="metric-value">2 veículos</div>
+                                <div class="metric-change neutral">16.7%</div>
+                            </div>
+                        </div>
+                        <div class="metric-card efficiency-metric">
+                            <div class="metric-icon">
+                                <i class="fas fa-leaf"></i>
+                            </div>
+                            <div class="metric-info">
+                                <div class="metric-label">Eficiência</div>
+                                <div class="metric-value">94.5%</div>
+                                <div class="metric-change positive">+1.2%</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="vehicle-insights">
+                        <div class="insight-item">
+                            <div class="insight-label">Melhor Desempenho</div>
+                            <div class="insight-value">ABC-1234 - 98.2%</div>
+                        </div>
+                        <div class="insight-item">
+                            <div class="insight-label">Maior Economia</div>
+                            <div class="insight-value">DEF-5678 - 12.1 km/L</div>
+                        </div>
+                        <div class="insight-item">
+                            <div class="insight-label">Próxima Revisão</div>
+                            <div class="insight-value">GHI-9012 - 8 dias</div>
+                        </div>
+                        <div class="insight-item">
+                            <div class="insight-label">Km Médio/Dia</div>
+                            <div class="insight-value">156 km por veículo</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="chart-card categories-distribution">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fas fa-layer-group"></i>
+                        Distribuição por Categoria de Veículos
+                    </div>
+                    <div class="card-actions">
+                        <button aria-label="Atualizar categorias" class="card-action">
+                            <i class="fas fa-sync"></i>
+                        </button>
+                        <button aria-label="Ver detalhes das categorias" class="card-action"
+                            onclick="viewVehicleCategoryDetails()">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="categories-grid">
+                    <div class="dashboard-item large popular">
+                        <div class="category-icon category-b">
+                            <i class="fas fa-car"></i>
+                        </div>
+                        <div class="category-info">
+                            <div class="category-label">Categoria B <span class="badge-popular"
+                                    title="Mais utilizada"><i class="fas fa-crown"></i></span></div>
+                            <div class="category-count">8 veículos</div>
+                            <div class="category-rating">
+                                <i class="fas fa-star"></i>
+                                <span>4.2★</span>
+                            </div>
+                        </div>
+                        <div class="category-bar wide">
+                            <div class="category-fill category-b" style="width: 66.7%"></div>
+                        </div>
+                        <div class="category-percentage">66.7%</div>
+                        <div class="category-details always-visible">
+                            <div class="detail-item">
+                                <span class="detail-label">Utilização:</span>
+                                <span class="detail-value success">92.1%</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Consumo médio:</span>
+                                <span class="detail-value">9.8 km/L</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dashboard-item large">
+                        <div class="category-icon category-a">
+                            <i class="fas fa-motorcycle"></i>
+                        </div>
+                        <div class="category-info">
+                            <div class="category-label">Categoria A</div>
+                            <div class="category-count">3 veículos</div>
+                            <div class="category-rating">
+                                <i class="fas fa-star"></i>
+                                <span>4.6★</span>
+                            </div>
+                        </div>
+                        <div class="category-bar wide">
+                            <div class="category-fill category-a" style="width: 25.0%"></div>
+                        </div>
+                        <div class="category-percentage">25.0%</div>
+                        <div class="category-details always-visible">
+                            <div class="detail-item">
+                                <span class="detail-label">Utilização:</span>
+                                <span class="detail-value success">82.5%</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Consumo médio:</span>
+                                <span class="detail-value">16.2 km/L</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dashboard-item large">
+                        <div class="category-icon category-ab">
+                            <i class="fas fa-truck"></i>
+                        </div>
+                        <div class="category-info">
+                            <div class="category-label">Categoria AB</div>
+                            <div class="category-count">1 veículo</div>
+                            <div class="category-rating">
+                                <i class="fas fa-star"></i>
+                                <span>4.1★</span>
+                            </div>
+                        </div>
+                        <div class="category-bar wide">
+                            <div class="category-fill category-ab" style="width: 8.3%"></div>
+                        </div>
+                        <div class="category-percentage">8.3%</div>
+                        <div class="category-details always-visible">
+                            <div class="detail-item">
+                                <span class="detail-label">Utilização:</span>
+                                <span class="detail-value warning">75.2%</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Consumo médio:</span>
+                                <span class="detail-value">8.1 km/L</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vehicles Management -->
+        <div class="vehicles-management">
+            <div class="management-header">
+                <h3 class="management-title">
+                    <i class="fas fa-list-alt"></i>
+                    Lista de Veículos
+                </h3>
+                <div class="management-filters">
+                    <input class="search-input" placeholder="Buscar veículo..." type="text" />
+                    <select class="filter-select">
+                        <option value="all">Todos</option>
+                        <option value="available">Disponíveis</option>
+                        <option value="busy">Em uso</option>
+                        <option value="maintenance">Manutenção</option>
+                        <option value="category-b">Categoria B</option>
+                        <option value="category-a">Categoria A</option>
+                    </select>
+                    <button class="btn btn-secondary" onclick="viewAllVehicles()">
+                        Ver Todos
+                    </button>
+                </div>
+            </div>
+            <div class="vehicles-list">
+                <div class="vehicle-item available category-b">
+                    <div class="vehicle-image">
+                        <div class="vehicle-placeholder">
+                            <i class="fas fa-car"></i>
+                        </div>
+                        <div class="vehicle-status available"></div>
+                    </div>
+                    <div class="vehicle-details">
+                        <div class="vehicle-main-info">
+                            <div class="vehicle-model">
+                                <strong>Volkswagen Gol</strong>
+                                <span class="vehicle-year">2020</span>
+                            </div>
+                            <div class="vehicle-plate">ABC-1234</div>
+                        </div>
+                        <div class="vehicle-specs">
+                            <span class="vehicle-category">Categoria B</span>
+                            <span class="vehicle-fuel">Flex</span>
+                            <span class="vehicle-transmission">Manual</span>
+                        </div>
+                    </div>
+                    <div class="vehicle-metrics">
+                        <div class="metric-item">
+                            <div class="metric-label">Quilometragem</div>
+                            <div class="metric-value">45,230 km</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-label">Consumo Médio</div>
+                            <div class="metric-value">12.2 km/L</div>
+                        </div>
+                    </div>
+                    <div class="vehicle-usage">
+                        <div class="usage-label">Uso Mensal</div>
+                        <div class="usage-bar">
+                            <div class="usage-fill" style="width: 85%"></div>
+                        </div>
+                        <div class="usage-value">85%</div>
+                    </div>
+                    <div class="vehicle-status-badge">
+                        <span class="status-badge status-available">Disponível</span>
+                    </div>
+                    <div class="vehicle-actions">
+                        <button aria-label="Ver detalhes" class="btn-icon" onclick="viewVehicleDetails(1)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button aria-label="Editar" class="btn-icon" onclick="editVehicle(1)">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button aria-label="Agendar manutenção" class="btn-icon"
+                            onclick="scheduleVehicleMaintenance(1)">
+                            <i class="fas fa-tools"></i>
+                        </button>
+                        <button aria-label="Ver histórico" class="btn-icon" onclick="viewVehicleHistory(1)">
+                            <i class="fas fa-history"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="vehicle-item maintenance category-b">
+                    <div class="vehicle-image">
+                        <div class="vehicle-placeholder">
+                            <i class="fas fa-car"></i>
+                        </div>
+                        <div class="vehicle-status maintenance"></div>
+                    </div>
+                    <div class="vehicle-details">
+                        <div class="vehicle-main-info">
+                            <div class="vehicle-model">
+                                <strong>Hyundai HB20</strong>
+                                <span class="vehicle-year">2021</span>
+                            </div>
+                            <div class="vehicle-plate">DEF-5678</div>
+                        </div>
+                        <div class="vehicle-specs">
+                            <span class="vehicle-category">Categoria B</span>
+                            <span class="vehicle-fuel">Flex</span>
+                            <span class="vehicle-transmission">Automático</span>
+                        </div>
+                    </div>
+                    <div class="vehicle-metrics">
+                        <div class="metric-item">
+                            <div class="metric-label">Quilometragem</div>
+                            <div class="metric-value">32,150 km</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-label">Previsão Retorno</div>
+                            <div class="metric-value">3 dias</div>
+                        </div>
+                    </div>
+                    <div class="vehicle-maintenance-info">
+                        <div class="maintenance-type">
+                            <i class="fas fa-wrench"></i>
+                            <span>Manutenção Preventiva</span>
+                        </div>
+                        <div class="maintenance-details">Troca de óleo e filtros</div>
+                    </div>
+                    <div class="vehicle-status-badge">
+                        <span class="status-badge status-maintenance">Em Manutenção</span>
+                    </div>
+                    <div class="vehicle-actions">
+                        <button aria-label="Ver detalhes" class="btn-icon" onclick="viewVehicleDetails(2)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button aria-label="Editar" class="btn-icon" onclick="editVehicle(2)">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button aria-label="Atualizar manutenção" class="btn-icon" onclick="updateMaintenanceStatus(2)">
+                            <i class="fas fa-sync"></i>
+                        </button>
+                        <button aria-label="Contatar oficina" class="btn-icon" onclick="contactMechanic(2)">
+                            <i class="fas fa-phone"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="vehicle-item busy category-b">
+                    <div class="vehicle-image">
+                        <div class="vehicle-placeholder">
+                            <i class="fas fa-car"></i>
+                        </div>
+                        <div class="vehicle-status busy"></div>
+                    </div>
+                    <div class="vehicle-details">
+                        <div class="vehicle-main-info">
+                            <div class="vehicle-model">
+                                <strong>Chevrolet Onix</strong>
+                                <span class="vehicle-year">2022</span>
+                            </div>
+                            <div class="vehicle-plate">GHI-9012</div>
+                        </div>
+                        <div class="vehicle-specs">
+                            <span class="vehicle-category">Categoria B</span>
+                            <span class="vehicle-fuel">Flex</span>
+                            <span class="vehicle-transmission">Manual</span>
+                        </div>
+                    </div>
+                    <div class="vehicle-metrics">
+                        <div class="metric-item">
+                            <div class="metric-label">Quilometragem</div>
+                            <div class="metric-value">18,750 km</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-label">Consumo Médio</div>
+                            <div class="metric-value">11.8 km/L</div>
+                        </div>
+                    </div>
+                    <div class="vehicle-current-lesson">
+                        <div class="lesson-info">
+                            <i class="fas fa-user"></i>
+                            <span class="lesson-student">João Silva</span>
+                            <span class="lesson-instructor">com Carlos Mendes</span>
+                        </div>
+                        <div class="lesson-time">Aula até: 16:00</div>
+                    </div>
+                    <div class="vehicle-status-badge">
+                        <span class="status-badge status-busy">Em Aula</span>
+                    </div>
+                    <div class="vehicle-actions">
+                        <button aria-label="Ver detalhes" class="btn-icon" onclick="viewVehicleDetails(3)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button aria-label="Editar" class="btn-icon" onclick="editVehicle(3)">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button aria-label="Ver aula atual" class="btn-icon" onclick="viewCurrentLesson(3)">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </button>
+                        <button aria-label="Rastrear veículo" class="btn-icon" onclick="trackVehicle(3)">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="vehicle-item available category-a">
+                    <div class="vehicle-image">
+                        <div class="vehicle-placeholder">
+                            <i class="fas fa-motorcycle"></i>
+                        </div>
+                        <div class="vehicle-status available"></div>
+                    </div>
+                    <div class="vehicle-details">
+                        <div class="vehicle-main-info">
+                            <div class="vehicle-model">
+                                <strong>Honda CG 160</strong>
+                                <span class="vehicle-year">2023</span>
+                            </div>
+                            <div class="vehicle-plate">JKL-3456</div>
+                        </div>
+                        <div class="vehicle-specs">
+                            <span class="vehicle-category">Categoria A</span>
+                            <span class="vehicle-fuel">Gasolina</span>
+                            <span class="vehicle-transmission">Manual</span>
+                        </div>
+                    </div>
+                    <div class="vehicle-metrics">
+                        <div class="metric-item">
+                            <div class="metric-label">Quilometragem</div>
+                            <div class="metric-value">8,420 km</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-label">Consumo Médio</div>
+                            <div class="metric-value">35.2 km/L</div>
+                        </div>
+                    </div>
+                    <div class="vehicle-usage">
+                        <div class="usage-label">Uso Mensal</div>
+                        <div class="usage-bar">
+                            <div class="usage-fill" style="width: 62%"></div>
+                        </div>
+                        <div class="usage-value">62%</div>
+                    </div>
+                    <div class="vehicle-status-badge">
+                        <span class="status-badge status-available">Disponível</span>
+                    </div>
+                    <div class="vehicle-actions">
+                        <button aria-label="Ver detalhes" class="btn-icon" onclick="viewVehicleDetails(4)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button aria-label="Editar" class="btn-icon" onclick="editVehicle(4)">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button aria-label="Agendar manutenção" class="btn-icon"
+                            onclick="scheduleVehicleMaintenance(4)">
+                            <i class="fas fa-tools"></i>
+                        </button>
+                        <button aria-label="Agendar para aula" class="btn-icon" onclick="assignVehicleToLesson(4)">
+                            <i class="fas fa-calendar-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

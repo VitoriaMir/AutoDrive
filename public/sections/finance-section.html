@@ -1,0 +1,769 @@
+<section class="content-section" id="finance-content">
+    <div class="section-content">
+
+        <!-- Financial Overview Cards -->
+        <div class="finance-overview">
+            <div class="overview-card success-card">
+                <div class="overview-card-header">
+                    <div class="overview-card-icon revenue">
+                        <i class="fas fa-trending-up"></i>
+                    </div>
+                    <div class="overview-card-info">
+                        <h3 class="overview-card-title">Receita Total</h3>
+                        <p class="overview-card-subtitle">Este mês</p>
+                    </div>
+                </div>
+                <div class="overview-card-content">
+                    <div class="overview-value">R$ 22.840</div>
+                    <div class="overview-subtitle">Receita mensal</div>
+                    <div class="overview-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">
+                                <i class="fas fa-arrow-up"></i>
+                                Crescimento
+                            </div>
+                            <div class="stat-value success">+14.2%</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">
+                                <i class="fas fa-calendar"></i>
+                                Mês anterior
+                            </div>
+                            <div class="stat-value info">R$ 20.000</div>
+                        </div>
+                    </div>
+                    <div class="growth-bar">
+                        <div class="growth-fill revenue" style="width: 88%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="overview-card danger-card">
+                <div class="overview-card-header">
+                    <div class="overview-card-icon danger">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <div class="overview-card-info">
+                        <h3 class="overview-card-title">Despesas</h3>
+                        <p class="overview-card-subtitle">Este mês</p>
+                    </div>
+                </div>
+                <div class="overview-card-content">
+                    <div class="overview-value">R$ 10.860</div>
+                    <div class="overview-subtitle">Despesas mensais</div>
+                    <div class="overview-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">
+                                <i class="fas fa-gas-pump"></i>
+                                Combustível
+                            </div>
+                            <div class="stat-value warning">R$ 2.860</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">
+                                <i class="fas fa-tools"></i>
+                                Manutenção
+                            </div>
+                            <div class="stat-value info">R$ 2.500</div>
+                        </div>
+                    </div>
+                    <div class="growth-bar">
+                        <div class="growth-fill expenses" style="width: 42%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="overview-card cyan-card">
+                <div class="overview-card-header">
+                    <div class="overview-card-icon pending">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="overview-card-info">
+                        <h3 class="overview-card-title">Pendências</h3>
+                        <p class="overview-card-subtitle">A receber</p>
+                    </div>
+                </div>
+                <div class="overview-card-content">
+                    <div class="overview-value">R$ 4.650</div>
+                    <div class="overview-subtitle">Valores em atraso</div>
+                    <div class="overview-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                Em atraso
+                            </div>
+                            <div class="stat-value warning">12 alunos</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">
+                                <i class="fas fa-calendar-times"></i>
+                                Média atraso
+                            </div>
+                            <div class="stat-value danger">7 dias</div>
+                        </div>
+                    </div>
+                    <div class="growth-bar">
+                        <div class="growth-fill pending" style="width: 18%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="overview-card payment-card">
+                <div class="overview-card-header">
+                    <div class="overview-card-icon payment">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <div class="overview-card-info">
+                        <h3 class="overview-card-title">Lucro Líquido</h3>
+                        <p class="overview-card-subtitle">Este mês</p>
+                    </div>
+                </div>
+                <div class="overview-card-content">
+                    <div class="overview-value">R$ 11.980</div>
+                    <div class="overview-subtitle">Lucro mensal</div>
+                    <div class="overview-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">
+                                <i class="fas fa-arrow-up"></i>
+                                Crescimento
+                            </div>
+                            <div class="stat-value success">+18.5%</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">
+                                <i class="fas fa-percentage"></i>
+                                Margem
+                            </div>
+                            <div class="stat-value info">52.5%</div>
+                        </div>
+                    </div>
+                    <div class="growth-bar">
+                        <div class="growth-fill profit" style="width: 92%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="finance-charts">
+            <div class="chart-card finance-flow-chart">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fas fa-chart-line"></i>
+                        Fluxo de Caixa - Últimos 6 Meses
+                    </div>
+                    <div class="card-actions">
+                        <select class="chart-filter" id="period-filter">
+                            <option value="6">Últimos 6 meses</option>
+                            <option value="12">Último ano</option>
+                            <option value="24">Últimos 2 anos</option>
+                        </select>
+                        <button aria-label="Exportar gráfico" class="card-action">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button aria-label="Tela cheia" class="card-action">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                        <button aria-label="Tela normal" class="card-action">
+                            <i class="fas fa-compress"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="finance-chart"></canvas>
+                </div>
+                <div class="metrics-detailed finance">
+                    <div class="metrics-header">
+                        <h4>Métricas Detalhadas das Finanças</h4>
+                    </div>
+                    <div class="metrics-row">
+                        <div class="metric-card revenue-metric">
+                            <div class="metric-icon">
+                                <i class="fas fa-arrow-up"></i>
+                            </div>
+                            <div class="metric-info">
+                                <div class="metric-label">Receita Média</div>
+                                <div class="metric-value">R$ 19.567</div>
+                                <div class="metric-change positive">+8.2%</div>
+                            </div>
+                        </div>
+                        <div class="metric-card expense-metric">
+                            <div class="metric-icon">
+                                <i class="fas fa-arrow-down"></i>
+                            </div>
+                            <div class="metric-info">
+                                <div class="metric-label">Despesa Média</div>
+                                <div class="metric-value">R$ 9.750</div>
+                                <div class="metric-change negative">+3.1%</div>
+                            </div>
+                        </div>
+                        <div class="metric-card margin-metric">
+                            <div class="metric-icon">
+                                <i class="fas fa-percentage"></i>
+                            </div>
+                            <div class="metric-info">
+                                <div class="metric-label">Margem Líquida</div>
+                                <div class="metric-value">49.8%</div>
+                                <div class="metric-change positive">+2.1%</div>
+                            </div>
+                        </div>
+                        <div class="metric-card growth-metric">
+                            <div class="metric-icon">
+                                <i class="fas fa-arrow-up"></i>
+                            </div>
+                            <div class="metric-info">
+                                <div class="metric-label">Crescimento MoM</div>
+                                <div class="metric-value">+12.4%</div>
+                                <div class="metric-change positive">+4.2%</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="finance-insights">
+                        <div class="insight-item">
+                            <div class="insight-label">Melhor Mês</div>
+                            <div class="insight-value">Nov 2024 - R$ 24.600</div>
+                        </div>
+                        <div class="insight-item">
+                            <div class="insight-label">Maior Lucro</div>
+                            <div class="insight-value">Out 2024 - R$ 12.500</div>
+                        </div>
+                        <div class="insight-item">
+                            <div class="insight-label">Eficiência</div>
+                            <div class="insight-value">85.2% da meta</div>
+                        </div>
+                        <div class="insight-item">
+                            <div class="insight-label">ROI Mensal</div>
+                            <div class="insight-value">124.8%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-card payment-methods-chart">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fas fa-credit-card"></i>
+                        Métodos de Pagamento
+                    </div>
+                </div>
+                <div class="payment-methods-grid">
+                    <div class="payment-method">
+                        <div class="payment-icon pix">
+                            <i class="fab fa-pix"></i>
+                        </div>
+                        <div class="payment-info">
+                            <div class="payment-name">PIX</div>
+                            <div class="payment-amount">R$ 12.580,00</div>
+                            <div class="payment-percentage">55.1%</div>
+                        </div>
+                    </div>
+                    <div class="payment-method">
+                        <div class="payment-icon card">
+                            <i class="fas fa-credit-card"></i>
+                        </div>
+                        <div class="payment-info">
+                            <div class="payment-name">Cartão</div>
+                            <div class="payment-amount">R$ 7.340,00</div>
+                            <div class="payment-percentage">32.1%</div>
+                        </div>
+                    </div>
+                    <div class="payment-method">
+                        <div class="payment-icon cash">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <div class="payment-info">
+                            <div class="payment-name">Dinheiro</div>
+                            <div class="payment-amount">R$ 2.920,00</div>
+                            <div class="payment-percentage">12.8%</div>
+                        </div>
+                    </div>
+                    <div class="payment-method">
+                        <div class="payment-icon boleto">
+                            <i class="fas fa-barcode"></i>
+                        </div>
+                        <div class="payment-info">
+                            <div class="payment-name">Boleto</div>
+                            <div class="payment-amount">R$ 0,00</div>
+                            <div class="payment-percentage">0.0%</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="payment-actions">
+                    <button class="payment-action-btn" onclick="generatePaymentReport()"
+                        title="Gerar Relatório de Pagamentos">
+                        <i class="fas fa-file-pdf"></i>
+                        Relatório
+                    </button>
+                    <button class="payment-action-btn" title="Exportar Gráfico">
+                        <i class="fas fa-download"></i>
+                        Exportar
+                    </button>
+                    <button class="payment-action-btn" onclick="viewPaymentTrends()" title="Ver Tendências">
+                        <i class="fas fa-chart-line"></i>
+                        Tendências
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Recent Transactions -->
+        <div class="finance-transactions">
+            <div class="transactions-header">
+                <h3 class="transactions-title">
+                    <i class="fas fa-history"></i>
+                    Transações Recentes
+                </h3>
+                <div class="transactions-filters">
+                    <select class="filter-select">
+                        <option value="all">Todas</option>
+                        <option value="received">Recebidas</option>
+                        <option value="pending">Pendentes</option>
+                        <option value="overdue">Em atraso</option>
+                    </select>
+                    <button class="btn btn-secondary" onclick="viewAllTransactions()">
+                        Ver Todas
+                    </button>
+                </div>
+            </div>
+            <div class="transactions-list">
+
+                <div class="transaction-item received">
+                    <div class="transaction-icon">
+                        <i class="fas fa-arrow-down"></i>
+                    </div>
+                    <div class="transaction-details">
+                        <div class="transaction-description">
+                            <strong>João Silva</strong> - Pagamento de Aulas Práticas
+                        </div>
+                        <div class="transaction-meta">
+                            <span class="transaction-date">25/07/2024 14:30</span>
+                            <span class="transaction-method">PIX</span>
+                        </div>
+                    </div>
+                    <div class="transaction-amount positive">
+                        + R$ 400,00
+                    </div>
+                    <div class="transaction-status">
+                        <span class="status-badge status-success">Recebido</span>
+                    </div>
+                    <div class="transaction-actions">
+                        <button aria-label="Ver detalhes" class="btn-icon" onclick="viewTransactionDetails(1)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button aria-label="Baixar" class="btn-icon">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                </div>
+
+
+                <div class="transaction-item pending">
+                    <div class="transaction-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="transaction-details">
+                        <div class="transaction-description">
+                            <strong>Maria Oliveira</strong> - Pagamento de Matrícula
+                        </div>
+                        <div class="transaction-meta">
+                            <span class="transaction-date">23/07/2024</span>
+                            <span class="transaction-due">Vence em: 2 dias</span>
+                        </div>
+                    </div>
+                    <div class="transaction-amount pending">
+                        R$ 300,00
+                    </div>
+                    <div class="transaction-status">
+                        <span class="status-badge status-warning">Pendente</span>
+                    </div>
+                    <div class="transaction-actions">
+                        <button aria-label="Enviar lembrete" class="btn-icon" onclick="sendReminder(2)">
+                            <i class="fas fa-bell"></i>
+                        </button>
+                        <button aria-label="Editar" class="btn-icon" onclick="editPayment(2)">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="transaction-item overdue">
+                    <div class="transaction-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="transaction-details">
+                        <div class="transaction-description">
+                            <strong>Carlos Santos</strong> - Aulas Teóricas
+                        </div>
+                        <div class="transaction-meta">
+                            <span class="transaction-date">18/07/2024</span>
+                            <span class="transaction-overdue">Atrasado: 7 dias</span>
+                        </div>
+                    </div>
+                    <div class="transaction-amount overdue">
+                        R$ 250,00
+                    </div>
+                    <div class="transaction-status">
+                        <span class="status-badge status-danger">Em Atraso</span>
+                    </div>
+                    <div class="transaction-actions">
+                        <button aria-label="Entrar em contato" class="btn-icon urgent" onclick="contactStudent(3)">
+                            <i class="fas fa-phone"></i>
+                        </button>
+                        <button aria-label="Editar" class="btn-icon" onclick="editPayment(3)">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="transaction-item expense">
+                    <div class="transaction-icon">
+                        <i class="fas fa-arrow-up"></i>
+                    </div>
+                    <div class="transaction-details">
+                        <div class="transaction-description">
+                            <strong>Posto Shell</strong> - Combustível veículo ABC-1234
+                        </div>
+                        <div class="transaction-meta">
+                            <span class="transaction-date">24/07/2024 16:20</span>
+                            <span class="transaction-method">Cartão</span>
+                        </div>
+                    </div>
+                    <div class="transaction-amount negative">
+                        - R$ 180,00
+                    </div>
+                    <div class="transaction-status">
+                        <span class="status-badge status-expense">Despesa</span>
+                    </div>
+                    <div class="transaction-actions">
+                        <button aria-label="Ver detalhes" class="btn-icon" onclick="viewExpenseDetails(4)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="transaction-item received">
+                    <div class="transaction-icon">
+                        <i class="fas fa-arrow-down"></i>
+                    </div>
+                    <div class="transaction-details">
+                        <div class="transaction-description">
+                            <strong>Ana Paula Costa</strong> - Aulas de Direção Defensiva
+                        </div>
+                        <div class="transaction-meta">
+                            <span class="transaction-date">24/07/2024 09:15</span>
+                            <span class="transaction-method">PIX</span>
+                        </div>
+                    </div>
+                    <div class="transaction-amount positive">
+                        + R$ 320,00
+                    </div>
+                    <div class="transaction-status">
+                        <span class="status-badge status-success">Recebido</span>
+                    </div>
+                    <div class="transaction-actions">
+                        <button aria-label="Ver detalhes" class="btn-icon" onclick="viewTransactionDetails(5)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button aria-label="Baixar" class="btn-icon">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="transaction-item received">
+                    <div class="transaction-icon">
+                        <i class="fas fa-arrow-down"></i>
+                    </div>
+                    <div class="transaction-details">
+                        <div class="transaction-description">
+                            <strong>Roberto Lima</strong> - Taxa de Exame Prático
+                        </div>
+                        <div class="transaction-meta">
+                            <span class="transaction-date">23/07/2024 17:45</span>
+                            <span class="transaction-method">Cartão de Débito</span>
+                        </div>
+                    </div>
+                    <div class="transaction-amount positive">
+                        + R$ 150,00
+                    </div>
+                    <div class="transaction-status">
+                        <span class="status-badge status-success">Recebido</span>
+                    </div>
+                    <div class="transaction-actions">
+                        <button aria-label="Ver detalhes" class="btn-icon" onclick="viewTransactionDetails(6)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button aria-label="Baixar" class="btn-icon">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="transaction-item expense">
+                    <div class="transaction-icon">
+                        <i class="fas fa-arrow-up"></i>
+                    </div>
+                    <div class="transaction-details">
+                        <div class="transaction-description">
+                            <strong>AutoPeças Central</strong> - Manutenção veículo DEF-5678
+                        </div>
+                        <div class="transaction-meta">
+                            <span class="transaction-date">23/07/2024 14:30</span>
+                            <span class="transaction-method">Transferência</span>
+                        </div>
+                    </div>
+                    <div class="transaction-amount negative">
+                        - R$ 450,00
+                    </div>
+                    <div class="transaction-status">
+                        <span class="status-badge status-expense">Despesa</span>
+                    </div>
+                    <div class="transaction-actions">
+                        <button aria-label="Ver detalhes" class="btn-icon" onclick="viewExpenseDetails(7)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="transaction-item pending">
+                    <div class="transaction-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="transaction-details">
+                        <div class="transaction-description">
+                            <strong>Fernanda Souza</strong> - Renovação CNH
+                        </div>
+                        <div class="transaction-meta">
+                            <span class="transaction-date">22/07/2024</span>
+                            <span class="transaction-due">Vence em: 5 dias</span>
+                        </div>
+                    </div>
+                    <div class="transaction-amount pending">
+                        R$ 280,00
+                    </div>
+                    <div class="transaction-status">
+                        <span class="status-badge status-warning">Pendente</span>
+                    </div>
+                    <div class="transaction-actions">
+                        <button aria-label="Enviar lembrete" class="btn-icon" onclick="sendReminder(8)">
+                            <i class="fas fa-bell"></i>
+                        </button>
+                        <button aria-label="Editar" class="btn-icon" onclick="editPayment(8)">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="transaction-item received">
+                    <div class="transaction-icon">
+                        <i class="fas fa-arrow-down"></i>
+                    </div>
+                    <div class="transaction-details">
+                        <div class="transaction-description">
+                            <strong>Marcos Pereira</strong> - Pacote Completo CNH B
+                        </div>
+                        <div class="transaction-meta">
+                            <span class="transaction-date">22/07/2024 11:20</span>
+                            <span class="transaction-method">PIX</span>
+                        </div>
+                    </div>
+                    <div class="transaction-amount positive">
+                        + R$ 1.200,00
+                    </div>
+                    <div class="transaction-status">
+                        <span class="status-badge status-success">Recebido</span>
+                    </div>
+                    <div class="transaction-actions">
+                        <button aria-label="Ver detalhes" class="btn-icon" onclick="viewTransactionDetails(9)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button aria-label="Baixar" class="btn-icon">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="transaction-item expense">
+                    <div class="transaction-icon">
+                        <i class="fas fa-arrow-up"></i>
+                    </div>
+                    <div class="transaction-details">
+                        <div class="transaction-description">
+                            <strong>EDP Energia</strong> - Conta de luz da autoescola
+                        </div>
+                        <div class="transaction-meta">
+                            <span class="transaction-date">21/07/2024 16:00</span>
+                            <span class="transaction-method">Débito Automático</span>
+                        </div>
+                    </div>
+                    <div class="transaction-amount negative">
+                        - R$ 380,00
+                    </div>
+                    <div class="transaction-status">
+                        <span class="status-badge status-expense">Despesa</span>
+                    </div>
+                    <div class="transaction-actions">
+                        <button aria-label="Ver detalhes" class="btn-icon" onclick="viewExpenseDetails(10)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="transaction-item received">
+                    <div class="transaction-icon">
+                        <i class="fas fa-arrow-down"></i>
+                    </div>
+                    <div class="transaction-details">
+                        <div class="transaction-description">
+                            <strong>Juliana Santos</strong> - Aulas Noturnas
+                        </div>
+                        <div class="transaction-meta">
+                            <span class="transaction-date">21/07/2024 19:30</span>
+                            <span class="transaction-method">Cartão de Crédito</span>
+                        </div>
+                    </div>
+                    <div class="transaction-amount positive">
+                        + R$ 380,00
+                    </div>
+                    <div class="transaction-status">
+                        <span class="status-badge status-success">Recebido</span>
+                    </div>
+                    <div class="transaction-actions">
+                        <button aria-label="Ver detalhes" class="btn-icon" onclick="viewTransactionDetails(11)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button aria-label="Baixar" class="btn-icon">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="transaction-item overdue">
+                    <div class="transaction-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="transaction-details">
+                        <div class="transaction-description">
+                            <strong>Paulo Henrique</strong> - Aulas Práticas
+                        </div>
+                        <div class="transaction-meta">
+                            <span class="transaction-date">15/07/2024</span>
+                            <span class="transaction-overdue">Atrasado: 10 dias</span>
+                        </div>
+                    </div>
+                    <div class="transaction-amount overdue">
+                        R$ 420,00
+                    </div>
+                    <div class="transaction-status">
+                        <span class="status-badge status-danger">Em Atraso</span>
+                    </div>
+                    <div class="transaction-actions">
+                        <button aria-label="Entrar em contato" class="btn-icon urgent" onclick="contactStudent(12)">
+                            <i class="fas fa-phone"></i>
+                        </button>
+                        <button aria-label="Editar" class="btn-icon" onclick="editPayment(12)">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="transaction-item expense">
+                    <div class="transaction-icon">
+                        <i class="fas fa-arrow-up"></i>
+                    </div>
+                    <div class="transaction-details">
+                        <div class="transaction-description">
+                            <strong>Instrutor Carlos</strong> - Pagamento comissões
+                        </div>
+                        <div class="transaction-meta">
+                            <span class="transaction-date">20/07/2024 15:00</span>
+                            <span class="transaction-method">Transferência</span>
+                        </div>
+                    </div>
+                    <div class="transaction-amount negative">
+                        - R$ 2.800,00
+                    </div>
+                    <div class="transaction-status">
+                        <span class="status-badge status-expense">Despesa</span>
+                    </div>
+                    <div class="transaction-actions">
+                        <button aria-label="Ver detalhes" class="btn-icon" onclick="viewExpenseDetails(13)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="transaction-item received">
+                    <div class="transaction-icon">
+                        <i class="fas fa-arrow-down"></i>
+                    </div>
+                    <div class="transaction-details">
+                        <div class="transaction-description">
+                            <strong>Camila Rodrigues</strong> - Simulado Online
+                        </div>
+                        <div class="transaction-meta">
+                            <span class="transaction-date">20/07/2024 10:45</span>
+                            <span class="transaction-method">PIX</span>
+                        </div>
+                    </div>
+                    <div class="transaction-amount positive">
+                        + R$ 80,00
+                    </div>
+                    <div class="transaction-status">
+                        <span class="status-badge status-success">Recebido</span>
+                    </div>
+                    <div class="transaction-actions">
+                        <button aria-label="Ver detalhes" class="btn-icon" onclick="viewTransactionDetails(14)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button aria-label="Baixar" class="btn-icon">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="transaction-item pending">
+                    <div class="transaction-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="transaction-details">
+                        <div class="transaction-description">
+                            <strong>Eduardo Alves</strong> - CNH Categoria A
+                        </div>
+                        <div class="transaction-meta">
+                            <span class="transaction-date">19/07/2024</span>
+                            <span class="transaction-due">Vence hoje</span>
+                        </div>
+                    </div>
+                    <div class="transaction-amount pending">
+                        R$ 950,00
+                    </div>
+                    <div class="transaction-status">
+                        <span class="status-badge status-warning">Pendente</span>
+                    </div>
+                    <div class="transaction-actions">
+                        <button aria-label="Enviar lembrete" class="btn-icon urgent" onclick="sendReminder(15)">
+                            <i class="fas fa-bell"></i>
+                        </button>
+                        <button aria-label="Editar" class="btn-icon" onclick="editPayment(15)">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="transaction-item expense">
+                    <div class="transaction-icon">
+                        <i class="fas fa-arrow-up"></i>
+                    </div>
+                    <div class="transaction-details">
+                        <div class="transaction-description">
+                            <strong>Seguradora Porto</strong> - Seguro da frota
+                        </div>
+                        <div class="transaction-meta">
+                            <span class="transaction-date">19/07/2024 09:00</span>
+                            <span class="transaction-method">Transferência</span>
+                        </div>
+                    </div>
+                    <div class="transaction-amount negative">
+                        - R$ 1.850,00
+                    </div>
+                    <div class="transaction-status">
+                        <span class="status-badge status-expense">Despesa</span>
+                    </div>
+                    <div class="transaction-actions">
+                        <button aria-label="Ver detalhes" class="btn-icon" onclick="viewExpenseDetails(16)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

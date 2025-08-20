@@ -1,0 +1,526 @@
+<section class="content-section" id="exams-content">
+    <div class="section-content">
+
+        <!-- Exams Overview Cards -->
+        <div class="exams-overview">
+            <div class="overview-card success-card">
+                <div class="overview-card-header">
+                    <div class="overview-card-icon theoretical">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <div class="overview-card-info">
+                        <h3 class="overview-card-title">Exames Teóricos</h3>
+                        <p class="overview-card-subtitle">Este mês</p>
+                    </div>
+                </div>
+                <div class="overview-card-content">
+                    <div class="overview-value">45</div>
+                    <div class="overview-subtitle">Exames realizados</div>
+                    <div class="overview-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">
+                                <i class="fas fa-check-circle"></i>
+                                Aprovados
+                            </div>
+                            <div class="stat-value success">35 (78%)</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">
+                                <i class="fas fa-times-circle"></i>
+                                Reprovados
+                            </div>
+                            <div class="stat-value danger">10 (22%)</div>
+                        </div>
+                    </div>
+                    <div class="growth-bar">
+                        <div class="growth-fill theoretical" style="width: 78%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="overview-card payment-card">
+                <div class="overview-card-header">
+                    <div class="overview-card-icon payment">
+                        <i class="fas fa-car"></i>
+                    </div>
+                    <div class="overview-card-info">
+                        <h3 class="overview-card-title">Exames Práticos</h3>
+                        <p class="overview-card-subtitle">Este mês</p>
+                    </div>
+                </div>
+                <div class="overview-card-content">
+                    <div class="overview-value">38</div>
+                    <div class="overview-subtitle">Exames realizados</div>
+                    <div class="overview-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">
+                                <i class="fas fa-check-circle"></i>
+                                Aprovados
+                            </div>
+                            <div class="stat-value success">25 (65%)</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">
+                                <i class="fas fa-times-circle"></i>
+                                Reprovados
+                            </div>
+                            <div class="stat-value danger">13 (35%)</div>
+                        </div>
+                    </div>
+                    <div class="growth-bar">
+                        <div class="growth-fill practical" style="width: 65%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="overview-card finance-status-card">
+                <div class="overview-card-header">
+                    <div class="overview-card-icon scheduled">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="overview-card-info">
+                        <h3 class="overview-card-title">Próximos Exames</h3>
+                        <p class="overview-card-subtitle">Agendados</p>
+                    </div>
+                </div>
+                <div class="overview-card-content">
+                    <div class="overview-value">48</div>
+                    <div class="overview-subtitle">Para o próximo mês</div>
+                    <div class="overview-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">
+                                <i class="fas fa-calendar-day"></i>
+                                Esta semana
+                            </div>
+                            <div class="stat-value info">12 exames</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">
+                                <i class="fas fa-clipboard-list"></i>
+                                Teóricos
+                            </div>
+                            <div class="stat-value success">28 exames</div>
+                        </div>
+                    </div>
+                    <div class="growth-bar">
+                        <div class="growth-fill scheduled" style="width: 85%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="overview-card performance-purple-card">
+                <div class="overview-card-header">
+                    <div class="overview-card-icon performance">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="overview-card-info">
+                        <h3 class="overview-card-title">Performance Geral</h3>
+                        <p class="overview-card-subtitle">Últimos 6 meses</p>
+                    </div>
+                </div>
+                <div class="overview-card-content">
+                    <div class="overview-value">72%</div>
+                    <div class="overview-subtitle">Taxa de aprovação média</div>
+                    <div class="overview-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">
+                                <i class="fas fa-arrow-up"></i>
+                                Tendência
+                            </div>
+                            <div class="stat-value success">+5.3%</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">
+                                <i class="fas fa-trophy"></i>
+                                Melhor mês
+                            </div>
+                            <div class="stat-value info">85% (Jun)</div>
+                        </div>
+                    </div>
+                    <div class="growth-bar">
+                        <div class="growth-fill performance" style="width: 72%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="exams-charts">
+            <div class="chart-card exams-performance-chart">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fas fa-chart-area"></i>
+                        Performance de Aprovação - Últimos 6 Meses
+                    </div>
+                    <div class="card-actions">
+                        <select class="chart-filter" id="period-filter">
+                            <option value="6">Últimos 6 meses</option>
+                            <option value="12">Último ano</option>
+                            <option value="24">Últimos 2 anos</option>
+                        </select>
+                        <button aria-label="Exportar gráfico" class="card-action">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button aria-label="Tela cheia" class="card-action">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                        <button aria-label="Tela normal" class="card-action">
+                            <i class="fas fa-compress"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="exams-chart"></canvas>
+                </div>
+                <div class="metrics-detailed exams">
+                    <div class="metrics-header">
+                        <h4>Métricas Detalhadas dos Exames</h4>
+                    </div>
+                    <div class="metrics-row">
+                        <div class="metric-card theoretical-metric">
+                            <div class="metric-icon">
+                                <i class="fas fa-book-open"></i>
+                            </div>
+                            <div class="metric-info">
+                                <div class="metric-label">Taxa Teórico</div>
+                                <div class="metric-value">78.5%</div>
+                                <div class="metric-change positive">+5.2%</div>
+                            </div>
+                        </div>
+                        <div class="metric-card practical-metric">
+                            <div class="metric-icon">
+                                <i class="fas fa-car"></i>
+                            </div>
+                            <div class="metric-info">
+                                <div class="metric-label">Taxa Prático</div>
+                                <div class="metric-value">65.8%</div>
+                                <div class="metric-change negative">-2.1%</div>
+                            </div>
+                        </div>
+                        <div class="metric-card attempts-metric">
+                            <div class="metric-icon">
+                                <i class="fas fa-redo"></i>
+                            </div>
+                            <div class="metric-info">
+                                <div class="metric-label">Média Tentativas</div>
+                                <div class="metric-value">1.4x</div>
+                                <div class="metric-change positive">-0.2x</div>
+                            </div>
+                        </div>
+                        <div class="metric-card efficiency-metric">
+                            <div class="metric-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="metric-info">
+                                <div class="metric-label">Eficiência Geral</div>
+                                <div class="metric-value">72.1%</div>
+                                <div class="metric-change positive">+1.5%</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="exam-insights">
+                        <div class="insight-item">
+                            <div class="insight-label">Melhor Performance</div>
+                            <div class="insight-value">Outubro 2024 - 85.2%</div>
+                        </div>
+                        <div class="insight-item">
+                            <div class="insight-label">Instrutor Destaque</div>
+                            <div class="insight-value">Carlos Santos - 89.1%</div>
+                        </div>
+                        <div class="insight-item">
+                            <div class="insight-label">Horário Ideal</div>
+                            <div class="insight-value">10h-14h - 76.3%</div>
+                        </div>
+                        <div class="insight-item">
+                            <div class="insight-label">Meta Mensal</div>
+                            <div class="insight-value">75.0% (96.1% atingido)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="chart-card exam-distribution-chart">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fas fa-layer-group"></i>
+                        Distribuição de Exames
+                    </div>
+                    <div class="card-actions">
+                        <select class="chart-filter" id="exam-distribution-filter" onchange="updateExamDistribution()">
+                            <option value="month">Este Mês</option>
+                            <option value="quarter">Último Trimestre</option>
+                            <option value="semester">Último Semestre</option>
+                            <option value="year">Este Ano</option>
+                        </select>
+                        <button aria-label="Atualizar distribuição" class="card-action">
+                            <i class="fas fa-sync"></i>
+                        </button>
+                        <button aria-label="Ver detalhes" class="card-action" onclick="viewExamDistributionDetails()">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- Distribution Overview -->
+                <div class="distribution-overview">
+                    <div class="overview-summary">
+                        <div class="summary-stat">
+                            <div class="stat-value">83</div>
+                            <div class="stat-label">Total de Exames</div>
+                        </div>
+                        <div class="summary-stat">
+                            <div class="stat-value">72.3%</div>
+                            <div class="stat-label">Taxa Geral</div>
+                        </div>
+                        <div class="summary-stat">
+                            <div class="stat-value">30</div>
+                            <div class="stat-label">Agendados</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Distribution Items -->
+                <div class="distribution-grid">
+                    <div class="dashboard-item distribution">
+                        <div class="distribution-header">
+                            <div class="distribution-icon theoretical">
+                                <i class="fas fa-clipboard-list"></i>
+                            </div>
+                            <div class="distribution-info">
+                                <div class="distribution-label">Exames Teóricos</div>
+                                <div class="distribution-count">45 exames</div>
+                                <div class="distribution-percentage">54.2%</div>
+                                <div class="distribution-rating">
+                                    <i class="fas fa-star"></i>
+                                    <span>4.2★</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="distribution-bar">
+                            <div class="distribution-fill theoretical" style="width: 54.2%"></div>
+                        </div>
+                        <div class="distribution-details">
+                            <div class="detail-row">
+                                <div class="detail-item">
+                                    <span class="detail-label">Aprovados:</span>
+                                    <span class="detail-value success">35 (77.8%)</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Reprovados:</span>
+                                    <span class="detail-value danger">10 (22.2%)</span>
+                                </div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-item">
+                                    <span class="detail-label">Agendados:</span>
+                                    <span class="detail-value info">18 exames</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Tendência:</span>
+                                    <span class="detail-value positive">+8.3%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dashboard-item distribution">
+                        <div class="distribution-header">
+                            <div class="distribution-icon practical">
+                                <i class="fas fa-car"></i>
+                            </div>
+                            <div class="distribution-info">
+                                <div class="distribution-label">Exames Práticos</div>
+                                <div class="distribution-count">38 exames</div>
+                                <div class="distribution-percentage">45.8%</div>
+                                <div class="distribution-rating">
+                                    <i class="fas fa-star"></i>
+                                    <span>3.8★</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="distribution-bar">
+                            <div class="distribution-fill practical" style="width: 45.8%"></div>
+                        </div>
+                        <div class="distribution-details">
+                            <div class="detail-row">
+                                <div class="detail-item">
+                                    <span class="detail-label">Aprovados:</span>
+                                    <span class="detail-value success">25 (65.8%)</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Reprovados:</span>
+                                    <span class="detail-value danger">13 (34.2%)</span>
+                                </div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-item">
+                                    <span class="detail-label">Agendados:</span>
+                                    <span class="detail-value info">12 exames</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Tendência:</span>
+                                    <span class="detail-value negative">-2.1%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Exams Management -->
+        <div class="exams-management">
+            <div class="management-header">
+                <h3 class="management-title">
+                    <i class="fas fa-list-alt"></i>
+                    Exames Recentes e Agendados
+                </h3>
+                <div class="management-filters">
+                    <select class="filter-select">
+                        <option value="all">Todos</option>
+                        <option value="scheduled">Agendados</option>
+                        <option value="completed">Realizados</option>
+                        <option value="approved">Aprovados</option>
+                        <option value="failed">Reprovados</option>
+                    </select>
+                    <button class="btn btn-secondary" onclick="viewAllExams()">
+                        Ver Todos
+                    </button>
+                </div>
+            </div>
+            <div class="exams-list">
+                <div class="exam-item scheduled">
+                    <div class="exam-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="exam-details">
+                        <div class="exam-student">
+                            <strong>Maria Oliveira</strong>
+                            <span class="exam-type theoretical">Exame Teórico</span>
+                        </div>
+                        <div class="exam-info">
+                            <span class="exam-date">26/07/2024 - 10:00</span>
+                            <span class="exam-category">Categoria B</span>
+                            <span class="exam-location">Sala 1</span>
+                        </div>
+                    </div>
+                    <div class="exam-status">
+                        <span class="status-badge status-scheduled">Agendado</span>
+                    </div>
+                    <div class="exam-countdown">
+                        <div class="countdown-label">Em:</div>
+                        <div class="countdown-value">1 dia</div>
+                    </div>
+                    <div class="exam-actions">
+                        <button aria-label="Ver detalhes" class="btn-icon" onclick="viewExamDetails(1)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button aria-label="Editar" class="btn-icon" onclick="editExam(1)">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button aria-label="Enviar lembrete" class="btn-icon" onclick="sendExamReminder(1)">
+                            <i class="fas fa-bell"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="exam-item completed approved">
+                    <div class="exam-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="exam-details">
+                        <div class="exam-student">
+                            <strong>Pedro Santos</strong>
+                            <span class="exam-type practical">Exame Prático</span>
+                        </div>
+                        <div class="exam-info">
+                            <span class="exam-date">24/07/2024 - 14:30</span>
+                            <span class="exam-category">Categoria B</span>
+                            <span class="exam-instructor">Instrutor: Carlos Mendes</span>
+                            <span class="exam-vehicle">Veículo: ABC-1234</span>
+                        </div>
+                    </div>
+                    <div class="exam-status">
+                        <span class="status-badge status-approved">Aprovado</span>
+                    </div>
+                    <div class="exam-score">
+                        <div class="score-label">Nota:</div>
+                        <div class="score-value approved">8.5</div>
+                    </div>
+                    <div class="exam-actions">
+                        <button aria-label="Ver resultado" class="btn-icon" onclick="viewExamResults(2)">
+                            <i class="fas fa-file-alt"></i>
+                        </button>
+                        <button aria-label="Gerar certificado" class="btn-icon" onclick="generateCertificate(2)">
+                            <i class="fas fa-certificate"></i>
+                        </button>
+                        <button aria-label="Baixar relatório" class="btn-icon">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="exam-item completed failed">
+                    <div class="exam-icon">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <div class="exam-details">
+                        <div class="exam-student">
+                            <strong>Ana Costa</strong>
+                            <span class="exam-type theoretical">Exame Teórico</span>
+                        </div>
+                        <div class="exam-info">
+                            <span class="exam-date">23/07/2024 - 16:00</span>
+                            <span class="exam-category">Categoria B</span>
+                            <span class="exam-location">Sala 2</span>
+                        </div>
+                    </div>
+                    <div class="exam-status">
+                        <span class="status-badge status-failed">Reprovado</span>
+                    </div>
+                    <div class="exam-score">
+                        <div class="score-label">Nota:</div>
+                        <div class="score-value failed">4.2</div>
+                    </div>
+                    <div class="exam-actions">
+                        <button aria-label="Ver resultado" class="btn-icon" onclick="viewExamResults(3)">
+                            <i class="fas fa-file-alt"></i>
+                        </button>
+                        <button aria-label="Agendar nova tentativa" class="btn-icon" onclick="scheduleRetake(3)">
+                            <i class="fas fa-redo"></i>
+                        </button>
+                        <button aria-label="Entrar em contato" class="btn-icon" onclick="contactStudent(3)">
+                            <i class="fas fa-phone"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="exam-item scheduled">
+                    <div class="exam-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="exam-details">
+                        <div class="exam-student">
+                            <strong>João Silva</strong>
+                            <span class="exam-type practical">Exame Prático</span>
+                        </div>
+                        <div class="exam-info">
+                            <span class="exam-date">27/07/2024 - 15:30</span>
+                            <span class="exam-category">Categoria B</span>
+                            <span class="exam-instructor">Instrutor: Ana Costa</span>
+                            <span class="exam-vehicle">Veículo: DEF-5678</span>
+                        </div>
+                    </div>
+                    <div class="exam-status">
+                        <span class="status-badge status-scheduled">Agendado</span>
+                    </div>
+                    <div class="exam-countdown">
+                        <div class="countdown-label">Em:</div>
+                        <div class="countdown-value">2 dias</div>
+                    </div>
+                    <div class="exam-actions">
+                        <button aria-label="Ver detalhes" class="btn-icon" onclick="viewExamDetails(4)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button aria-label="Editar" class="btn-icon" onclick="editExam(4)">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button aria-label="Verificar veículo" class="btn-icon" onclick="checkVehicleAvailability(4)">
+                            <i class="fas fa-car"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

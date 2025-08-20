@@ -1,0 +1,584 @@
+<section class="content-section" id="schedule-content">
+    <div class="section-content">
+
+        <!-- Schedule Overview Cards -->
+        <div class="schedule-overview">
+            <div class="overview-card success-card today-card">
+                <div class="overview-card-header">
+                    <div class="overview-card-icon today">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="overview-card-info">
+                        <h3 class="overview-card-title">Aulas Ministradas</h3>
+                        <p class="overview-card-subtitle">Este mês</p>
+                    </div>
+                </div>
+                <div class="overview-card-content">
+                    <div class="overview-value">124</div>
+                    <div class="overview-subtitle">Total de aulas</div>
+                    <div class="overview-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">
+                                <i class="fas fa-book"></i>
+                                Aulas Teóricas
+                            </div>
+                            <div class="stat-value info">68 aulas</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">
+                                <i class="fas fa-car"></i>
+                                Aulas Práticas
+                            </div>
+                            <div class="stat-value success">56 aulas</div>
+                        </div>
+                    </div>
+                    <div class="growth-bar">
+                        <div class="growth-fill performance" style="width: 85%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="overview-card finance-status-card">
+                <div class="overview-card-header">
+                    <div class="overview-card-icon rating">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="overview-card-info">
+                        <h3 class="overview-card-title">Avaliações</h3>
+                        <p class="overview-card-subtitle">Média geral</p>
+                    </div>
+                </div>
+                <div class="overview-card-content">
+                    <div class="overview-value">4.7</div>
+                    <div class="overview-subtitle">de 5.0 estrelas</div>
+                    <div class="overview-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">
+                                <i class="fas fa-star"></i>
+                                5 Estrelas
+                            </div>
+                            <div class="stat-value success">70%</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">
+                                <i class="fas fa-star"></i>
+                                4 Estrelas
+                            </div>
+                            <div class="stat-value info">25%</div>
+                        </div>
+                    </div>
+                    <div class="growth-bar">
+                        <div class="growth-fill rating" style="width: 94%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="overview-card payment-card">
+                <div class="overview-card-header">
+                    <div class="overview-card-icon payment">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="overview-card-info">
+                        <h3 class="overview-card-title">Agenda Hoje</h3>
+                        <p class="overview-card-subtitle">Distribuição de aulas</p>
+                    </div>
+                </div>
+                <div class="overview-card-content">
+                    <div class="overview-value">18</div>
+                    <div class="overview-subtitle">Aulas agendadas</div>
+                    <div class="overview-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">
+                                <i class="fas fa-user"></i>
+                                Carlos
+                            </div>
+                            <div class="stat-value info">6 aulas</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">
+                                <i class="fas fa-user"></i>
+                                Ana
+                            </div>
+                            <div class="stat-value success">5 aulas</div>
+                        </div>
+                    </div>
+                    <div class="growth-bar">
+                        <div class="growth-fill schedule" style="width: 90%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="instructors-charts">
+            <div class="chart-card instructors-performance-chart">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fas fa-chart-line"></i>
+                        Performance dos Instrutores - Últimos 6 Meses
+                    </div>
+                    <div class="card-actions">
+                        <select class="chart-filter" id="period-filter">
+                            <option value="6">Últimos 6 meses</option>
+                            <option value="12">Último ano</option>
+                            <option value="24">Últimos 2 anos</option>
+                        </select>
+                        <button aria-label="Exportar gráfico" class="card-action">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button aria-label="Tela cheia" class="card-action">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                        <button aria-label="Tela normal" class="card-action">
+                            <i class="fas fa-compress"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="instructors-chart"></canvas>
+                </div>
+                <!-- Performance Metrics Section -->
+                <div class="metrics-detailed instructors">
+                    <div class="metrics-header">
+                        <h4>Métricas Detalhadas dos Instrutores</h4>
+                    </div>
+                    <div class="metrics-row">
+                        <div class="metric-card lessons-metric">
+                            <div class="metric-icon">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                            </div>
+                            <div class="metric-info">
+                                <div class="metric-label">Aulas/Mês</div>
+                                <div class="metric-value">128</div>
+                                <div class="metric-change positive">+8.4%</div>
+                            </div>
+                        </div>
+                        <div class="metric-card rating-metric">
+                            <div class="metric-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="metric-info">
+                                <div class="metric-label">Avaliação Média</div>
+                                <div class="metric-value">4.7★</div>
+                                <div class="metric-change positive">+0.2</div>
+                            </div>
+                        </div>
+                        <div class="metric-card approval-metric">
+                            <div class="metric-icon">
+                                <i class="fas fa-user-graduate"></i>
+                            </div>
+                            <div class="metric-info">
+                                <div class="metric-label">Taxa Aprovação</div>
+                                <div class="metric-value">82.5%</div>
+                                <div class="metric-change positive">+3.1%</div>
+                            </div>
+                        </div>
+                        <div class="metric-card retention-metric">
+                            <div class="metric-icon">
+                                <i class="fas fa-user-check"></i>
+                            </div>
+                            <div class="metric-info">
+                                <div class="metric-label">Retenção Alunos</div>
+                                <div class="metric-value">95.2%</div>
+                                <div class="metric-change positive">+1.8%</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="instructor-insights">
+                        <div class="insight-item">
+                            <div class="insight-label">Top Instrutor</div>
+                            <div class="insight-value">Carlos Santos - 4.9★</div>
+                        </div>
+                        <div class="insight-item">
+                            <div class="insight-label">Maior Crescimento</div>
+                            <div class="insight-value">Ana Costa - +15% aulas</div>
+                        </div>
+                        <div class="insight-item">
+                            <div class="insight-label">Melhor Aprovação</div>
+                            <div class="insight-value">João Silva - 89.1%</div>
+                        </div>
+                        <div class="insight-item">
+                            <div class="insight-label">Especialidade Destaque</div>
+                            <div class="insight-value">Baliza - 92.3% sucesso</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="chart-card specialties-distribution">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fas fa-users-cog"></i>
+                        Especialidades dos Instrutores
+                    </div>
+                    <div class="card-actions">
+                        <button aria-label="Atualizar especialidades" class="card-action">
+                            <i class="fas fa-sync"></i>
+                        </button>
+                        <button aria-label="Ver detalhes das especialidades" class="card-action"
+                            onclick="viewSpecialtyDetails()">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="specialties-grid">
+                    <div class="dashboard-item">
+                        <div class="specialty-icon theoretical">
+                            <i class="fas fa-chalkboard"></i>
+                        </div>
+                        <div class="specialty-info">
+                            <div class="specialty-label">Aulas Teóricas</div>
+                            <div class="specialty-count">3 instrutores</div>
+                            <div class="specialty-percentage">37.5%</div>
+                            <div class="specialty-rating">
+                                <i class="fas fa-star"></i>
+                                <span>4.8★</span>
+                            </div>
+                        </div>
+                        <div class="specialty-bar">
+                            <div class="specialty-fill theoretical" style="width: 37.5%"></div>
+                        </div>
+                        <div class="specialty-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Aprovação:</span>
+                                <span class="detail-value success">84.2%</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Aulas/Mês:</span>
+                                <span class="detail-value">142</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dashboard-item">
+                        <div class="specialty-icon practical">
+                            <i class="fas fa-car-side"></i>
+                        </div>
+                        <div class="specialty-info">
+                            <div class="specialty-label">Aulas Práticas</div>
+                            <div class="specialty-count">4 instrutores</div>
+                            <div class="specialty-percentage">50%</div>
+                            <div class="specialty-rating">
+                                <i class="fas fa-star"></i>
+                                <span>4.6★</span>
+                            </div>
+                        </div>
+                        <div class="specialty-bar">
+                            <div class="specialty-fill practical" style="width: 50%"></div>
+                        </div>
+                        <div class="specialty-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Aprovação:</span>
+                                <span class="detail-value success">78.9%</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Aulas/Mês:</span>
+                                <span class="detail-value">165</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dashboard-item">
+                        <div class="specialty-icon mixed">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div class="specialty-info">
+                            <div class="specialty-label">Misto (Teoria + Prática)</div>
+                            <div class="specialty-count">1 instrutor</div>
+                            <div class="specialty-percentage">12.5%</div>
+                            <div class="specialty-rating">
+                                <i class="fas fa-star"></i>
+                                <span>4.9★</span>
+                            </div>
+                        </div>
+                        <div class="specialty-bar">
+                            <div class="specialty-fill mixed" style="width: 12.5%"></div>
+                        </div>
+                        <div class="specialty-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Aprovação:</span>
+                                <span class="detail-value success">91.3%</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Aulas/Mês:</span>
+                                <span class="detail-value">87</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- New specialty categories -->
+                    <div class="dashboard-item">
+                        <div class="specialty-icon exam">
+                            <i class="fas fa-clipboard-check"></i>
+                        </div>
+                        <div class="specialty-info">
+                            <div class="specialty-label">Preparação para Exames</div>
+                            <div class="specialty-count">2 instrutores</div>
+                            <div class="specialty-percentage">25%</div>
+                            <div class="specialty-rating">
+                                <i class="fas fa-star"></i>
+                                <span>4.7★</span>
+                            </div>
+                        </div>
+                        <div class="specialty-bar">
+                            <div class="specialty-fill exam" style="width: 25%"></div>
+                        </div>
+                        <div class="specialty-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Taxa Sucesso:</span>
+                                <span class="detail-value success">89.1%</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Alunos/Mês:</span>
+                                <span class="detail-value">34</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Nova especialidade -->
+                    <div class="dashboard-item">
+                        <div class="specialty-icon education">
+                            <i class="fas fa-road"></i>
+                        </div>
+                        <div class="specialty-info">
+                            <div class="specialty-label">Educação no Trânsito</div>
+                            <div class="specialty-count">2 instrutores</div>
+                            <div class="specialty-percentage">25%</div>
+                            <div class="specialty-rating">
+                                <i class="fas fa-star"></i>
+                                <span>4.5★</span>
+                            </div>
+                        </div>
+                        <div class="specialty-bar">
+                            <div class="specialty-fill education" style="width: 25%"></div>
+                        </div>
+                        <div class="specialty-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Satisfação:</span>
+                                <span class="detail-value success">95.2%</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Palestras/Mês:</span>
+                                <span class="detail-value">18</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Instructors Management -->
+        <div class="instructors-management">
+            <div class="management-header">
+                <h3 class="management-title">
+                    <i class="fas fa-list-alt"></i>
+                    Lista de Instrutores
+                </h3>
+                <div class="management-filters">
+                    <input class="search-input" placeholder="Buscar instrutor..." type="text" />
+                    <select class="filter-select">
+                        <option value="all">Todos</option>
+                        <option value="available">Disponíveis</option>
+                        <option value="busy">Ocupados</option>
+                        <option value="theoretical">Teoria</option>
+                        <option value="practical">Prática</option>
+                    </select>
+                    <button class="btn btn-secondary" onclick="viewAllInstructors()">
+                        Ver Todos
+                    </button>
+                </div>
+            </div>
+            <div class="instructors-list">
+                <div class="instructor-item available practical">
+                    <div class="instructor-avatar-main">
+                        <div class="avatar-large">CM</div>
+                        <div class="instructor-status available"></div>
+                    </div>
+                    <div class="instructor-details">
+                        <div class="instructor-name">
+                            <strong>Carlos Mendes</strong>
+                            <span class="instructor-specialty practical">Aulas Práticas</span>
+                        </div>
+                        <div class="instructor-info">
+                            <span class="instructor-cpf">111.222.333-44</span>
+                            <span class="instructor-id">ID: INST001</span>
+                            <span class="instructor-experience">8 anos de experiência</span>
+                        </div>
+                    </div>
+                    <div class="instructor-rating">
+                        <div class="rating-label">Avaliação</div>
+                        <div class="rating-stars-display">
+                            <span class="stars">⭐⭐⭐⭐⭐</span>
+                            <span class="rating-number">4.8</span>
+                        </div>
+                        <div class="rating-count">124 avaliações</div>
+                    </div>
+                    <div class="instructor-schedule">
+                        <div class="schedule-label">Agenda Hoje</div>
+                        <div class="schedule-info">
+                            <div class="lessons-today">6 aulas</div>
+                            <div class="next-lesson">Próxima: 14:30</div>
+                        </div>
+                    </div>
+                    <div class="instructor-status-badge">
+                        <span class="status-badge status-available">Disponível</span>
+                    </div>
+                    <div class="instructor-actions">
+                        <button aria-label="Ver perfil" class="btn-icon" onclick="viewInstructorProfile(1)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button aria-label="Editar" class="btn-icon" onclick="editInstructor(1)">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button aria-label="Ver agenda" class="btn-icon" onclick="viewInstructorSchedule(1)">
+                            <i class="fas fa-calendar"></i>
+                        </button>
+                        <button aria-label="Ver estatísticas" class="btn-icon" onclick="viewInstructorStats(1)">
+                            <i class="fas fa-chart-bar"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="instructor-item available theoretical">
+                    <div class="instructor-avatar-main">
+                        <div class="avatar-large">AC</div>
+                        <div class="instructor-status available"></div>
+                    </div>
+                    <div class="instructor-details">
+                        <div class="instructor-name">
+                            <strong>Ana Costa</strong>
+                            <span class="instructor-specialty theoretical">Aulas Teóricas</span>
+                        </div>
+                        <div class="instructor-info">
+                            <span class="instructor-cpf">555.666.777-88</span>
+                            <span class="instructor-id">ID: INST002</span>
+                            <span class="instructor-experience">5 anos de experiência</span>
+                        </div>
+                    </div>
+                    <div class="instructor-rating">
+                        <div class="rating-label">Avaliação</div>
+                        <div class="rating-stars-display">
+                            <span class="stars">⭐⭐⭐⭐⭐</span>
+                            <span class="rating-number">4.6</span>
+                        </div>
+                        <div class="rating-count">89 avaliações</div>
+                    </div>
+                    <div class="instructor-schedule">
+                        <div class="schedule-label">Agenda Hoje</div>
+                        <div class="schedule-info">
+                            <div class="lessons-today">5 aulas</div>
+                            <div class="next-lesson">Próxima: 15:00</div>
+                        </div>
+                    </div>
+                    <div class="instructor-status-badge">
+                        <span class="status-badge status-available">Disponível</span>
+                    </div>
+                    <div class="instructor-actions">
+                        <button aria-label="Ver perfil" class="btn-icon" onclick="viewInstructorProfile(2)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button aria-label="Editar" class="btn-icon" onclick="editInstructor(2)">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button aria-label="Ver agenda" class="btn-icon" onclick="viewInstructorSchedule(2)">
+                            <i class="fas fa-calendar"></i>
+                        </button>
+                        <button aria-label="Ver estatísticas" class="btn-icon" onclick="viewInstructorStats(2)">
+                            <i class="fas fa-chart-bar"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="instructor-item busy practical">
+                    <div class="instructor-avatar-main">
+                        <div class="avatar-large">PS</div>
+                        <div class="instructor-status busy"></div>
+                    </div>
+                    <div class="instructor-details">
+                        <div class="instructor-name">
+                            <strong>Pedro Silva</strong>
+                            <span class="instructor-specialty practical">Aulas Práticas</span>
+                        </div>
+                        <div class="instructor-info">
+                            <span class="instructor-cpf">222.333.444-55</span>
+                            <span class="instructor-id">ID: INST003</span>
+                            <span class="instructor-experience">10 anos de experiência</span>
+                        </div>
+                    </div>
+                    <div class="instructor-rating">
+                        <div class="rating-label">Avaliação</div>
+                        <div class="rating-stars-display">
+                            <span class="stars">⭐⭐⭐⭐⭐</span>
+                            <span class="rating-number">4.9</span>
+                        </div>
+                        <div class="rating-count">156 avaliações</div>
+                    </div>
+                    <div class="instructor-schedule">
+                        <div class="schedule-label">Em Aula</div>
+                        <div class="schedule-info">
+                            <div class="lessons-today">4 aulas</div>
+                            <div class="current-lesson">Aula até: 16:00</div>
+                        </div>
+                    </div>
+                    <div class="instructor-status-badge">
+                        <span class="status-badge status-busy">Em Aula</span>
+                    </div>
+                    <div class="instructor-actions">
+                        <button aria-label="Ver perfil" class="btn-icon" onclick="viewInstructorProfile(3)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button aria-label="Editar" class="btn-icon" onclick="editInstructor(3)">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button aria-label="Ver agenda" class="btn-icon" onclick="viewInstructorSchedule(3)">
+                            <i class="fas fa-calendar"></i>
+                        </button>
+                        <button aria-label="Entrar em contato" class="btn-icon" onclick="contactInstructor(3)">
+                            <i class="fas fa-phone"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="instructor-item available mixed">
+                    <div class="instructor-avatar-main">
+                        <div class="avatar-large">MF</div>
+                        <div class="instructor-status available"></div>
+                    </div>
+                    <div class="instructor-details">
+                        <div class="instructor-name">
+                            <strong>Maria Fernandes</strong>
+                            <span class="instructor-specialty mixed">Teoria + Prática</span>
+                        </div>
+                        <div class="instructor-info">
+                            <span class="instructor-cpf">333.444.555-66</span>
+                            <span class="instructor-id">ID: INST004</span>
+                            <span class="instructor-experience">12 anos de experiência</span>
+                        </div>
+                    </div>
+                    <div class="instructor-rating">
+                        <div class="rating-label">Avaliação</div>
+                        <div class="rating-stars-display">
+                            <span class="stars">⭐⭐⭐⭐⭐</span>
+                            <span class="rating-number">4.7</span>
+                        </div>
+                        <div class="rating-count">203 avaliações</div>
+                    </div>
+                    <div class="instructor-schedule">
+                        <div class="schedule-label">Agenda Hoje</div>
+                        <div class="schedule-info">
+                            <div class="lessons-today">3 aulas</div>
+                            <div class="next-lesson">Próxima: 16:30</div>
+                        </div>
+                    </div>
+                    <div class="instructor-status-badge">
+                        <span class="status-badge status-available">Disponível</span>
+                    </div>
+                    <div class="instructor-actions">
+                        <button aria-label="Ver perfil" class="btn-icon" onclick="viewInstructorProfile(4)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button aria-label="Editar" class="btn-icon" onclick="editInstructor(4)">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button aria-label="Ver agenda" class="btn-icon" onclick="viewInstructorSchedule(4)">
+                            <i class="fas fa-calendar"></i>
+                        </button>
+                        <button aria-label="Agendar aula" class="btn-icon" onclick="assignLesson(4)">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

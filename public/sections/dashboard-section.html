@@ -1,0 +1,577 @@
+<section class="content-section active" id="dashboard-content">
+    <div class="section-content">
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card fade-in">
+                <div class="stat-icon revenue">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-title">Receita Mensal</div>
+                    <div class="stat-value">R$ 0</div>
+                    <div class="stat-trend">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Aguardando dados</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card fade-in delay-1">
+                <div class="stat-icon orders">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-title">Aulas Agendadas</div>
+                    <div class="stat-value">0</div>
+                    <div class="stat-trend">
+                        <i class="fas fa-clock"></i>
+                        <span>Nenhuma aula</span>
+                    </div>
+                </div>
+            </div>
+            <div class="stat-card fade-in delay-2">
+                <div class="stat-icon sales">
+                    <i class="fas fa-car"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-title">Frota Ativa</div>
+                    <div class="stat-value">0</div>
+                    <div class="stat-trend">
+                        <i class="fas fa-tools"></i>
+                        <span>Nenhum veículo</span>
+                    </div>
+                </div>
+            </div>
+            <div class="stat-card fade-in delay-3">
+                <div class="stat-icon users">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-title">Alunos Matriculados</div>
+                    <div class="stat-value" data-stat="total-students">0</div>
+                    <div class="stat-trend">
+                        <i class="fas fa-user-plus"></i>
+                        <span>Nenhum aluno</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Grid -->
+        <div class="charts-grid">
+            <div class="chart-card fade-in primary-chart">
+                <div class="card-header">
+                    <div class="card-title-group">
+                        <div class="card-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="card-title-content">
+                            <div class="card-title">Progresso de Aulas por Mês</div>
+                            <div class="card-subtitle">Análise temporal do desempenho</div>
+                            <div class="chart-period-info">
+                                <span class="period-label">Período:</span>
+                                <span class="period-text" id="current-period">Últimos 6 meses</span>
+                                <span class="period-total" id="period-total">• 1.240 aulas no total</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <div class="chart-period-selector">
+                            <button class="period-btn active" data-label="Últimos 6 meses" data-period="6m">6M</button>
+                            <button class="period-btn" data-label="Último ano" data-period="1y">1A</button>
+                            <button class="period-btn" data-label="Últimos 2 anos" data-period="2y">2A</button>
+                            <button class="period-btn" data-label="Últimos 3 anos" data-period="3y">3A</button>
+                            <button class="period-btn" data-label="Histórico completo" data-period="all">Tudo</button>
+                        </div>
+                        <button aria-label="Exportar gráfico" class="card-action">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button aria-label="Tela cheia" class="card-action">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                        <button aria-label="Tela normal" class="card-action">
+                            <i class="fas fa-compress"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- Seção de Métricas Expandida -->
+                <div class="chart-metrics-section">
+                    <div class="metrics-header">
+                        <h3 class="metrics-title">
+                            <i class="fas fa-analytics"></i>
+                            Análise Detalhada do Período
+                        </h3>
+                        <div class="metrics-period-badge" id="metrics-period-badge">6 Meses</div>
+                    </div>
+                    <div class="chart-metrics">
+                        <div class="metric-item">
+                            <div class="metric-icon theoretical">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div class="metric-content">
+                                <div class="metric-value">0</div>
+                                <div class="metric-label">Aulas Teóricas</div>
+                                <div class="metric-change neutral">
+                                    <i class="fas fa-equals"></i>
+                                    <span>--</span>
+                                </div>
+                                <div class="metric-details">
+                                    <span class="metric-avg">0/mês</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-icon practical">
+                                <i class="fas fa-car"></i>
+                            </div>
+                            <div class="metric-content">
+                                <div class="metric-value">0</div>
+                                <div class="metric-label">Aulas Práticas</div>
+                                <div class="metric-change neutral">
+                                    <i class="fas fa-equals"></i>
+                                    <span>--</span>
+                                </div>
+                                <div class="metric-details">
+                                    <span class="metric-avg">0/mês</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-icon average">
+                                <i class="fas fa-chart-bar"></i>
+                            </div>
+                            <div class="metric-content">
+                                <div class="metric-value">0</div>
+                                <div class="metric-label">Média Mensal</div>
+                                <div class="metric-change neutral">
+                                    <i class="fas fa-equals"></i>
+                                    <span>--</span>
+                                </div>
+                                <div class="metric-details">
+                                    <span class="metric-avg">Meta: 0</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-icon efficiency">
+                                <i class="fas fa-target"></i>
+                            </div>
+                            <div class="metric-content">
+                                <div class="metric-value">0%</div>
+                                <div class="metric-label">Taxa de Conclusão</div>
+                                <div class="metric-change neutral">
+                                    <i class="fas fa-equals"></i>
+                                    <span>--</span>
+                                </div>
+                                <div class="metric-details">
+                                    <span class="metric-avg">--</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="metric-item">
+                            <div class="metric-icon revenue">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                            <div class="metric-content">
+                                <div class="metric-value">R$ 0</div>
+                                <div class="metric-label">Receita Estimada</div>
+                                <div class="metric-change neutral">
+                                    <i class="fas fa-equals"></i>
+                                    <span>--</span>
+                                </div>
+                                <div class="metric-details">
+                                    <span class="metric-avg">R$ 0/mês</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="metric-item">
+                            <div class="metric-icon instructors">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="metric-content">
+                                <div class="metric-value">0</div>
+                                <div class="metric-label">Instrutores Ativos</div>
+                                <div class="metric-change neutral">
+                                    <i class="fas fa-equals"></i>
+                                    <span>--</span>
+                                </div>
+                                <div class="metric-details">
+                                    <span class="metric-avg">0 aulas/instrutor</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="lessons-chart"></canvas>
+                </div>
+            </div>
+            <div class="chart-section-right">
+                <div class="chart-card fade-in delay-1 secondary-chart">
+                    <div class="card-header">
+                        <div class="card-title-group">
+                            <div class="card-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="card-title-content">
+                                <div class="card-title">Status de Alunos</div>
+                                <div class="card-subtitle">Distribuição atual</div>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <button aria-label="Atualizar gráfico" class="card-action">
+                                <i class="fas fa-sync"></i>
+                            </button>
+                            <button aria-label="Configurações" class="card-action" id="chart-type-btn" type="button">
+                                <i class="fas fa-cog"></i>
+                            </button>
+                            <!-- Popup de seleção de tipo de gráfico -->
+                            <div id="chart-type-popup" class="chart-type-popup">
+                                <div class="chart-type-popup-title">Escolha o tipo de gráfico</div>
+                                <hr class="chart-type-popup-separator" />
+                                <ul class="chart-type-popup-list">
+                                    <li><button class="chart-type-option" data-type="bar"><i
+                                                class="fas fa-chart-bar"></i>Barra</button></li>
+                                    <li><button class="chart-type-option" data-type="line"><i
+                                                class="fas fa-chart-line"></i>Linha</button></li>
+                                    <li><button class="chart-type-option" data-type="pie"><i
+                                                class="fas fa-chart-pie"></i>Pizza</button></li>
+                                    <li><button class="chart-type-option" data-type="doughnut"><i
+                                                class="fas fa-circle-notch"></i>Rosca</button></li>
+                                    <li><button class="chart-type-option" data-type="radar"><i
+                                                class="fas fa-bullseye"></i>Radar</button></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="students-chart"></canvas>
+                    </div>
+                    <div class="chart-stats" id="students-chart-stats">
+                        <div class="stat-mini">
+                            <div class="stat-mini-value" id="completion-rate">--%</div>
+                            <div class="stat-mini-label">Taxa de Conclusão</div>
+                        </div>
+                        <div class="stat-mini">
+                            <div class="stat-mini-value" id="new-students">--</div>
+                            <div class="stat-mini-label">Novos este mês</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="chart-card fade-in delay-2 tertiary-chart">
+                    <div class="card-header">
+                        <div class="card-title-group">
+                            <div class="card-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="card-title-content">
+                                <div class="card-title">Atividades Recentes</div>
+                                <div class="card-subtitle">Últimas ações</div>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <button aria-label="Atualizar atividades" class="card-action">
+                                <i class="fas fa-sync"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="activities-list" id="activities-list"
+                        style="max-height: 300px; overflow-y: auto; overflow-x: hidden;">
+                        <!-- Atividades serão carregadas dinamicamente -->
+                        <div class="loading-state compact">
+                            <div class="loading-spinner small">
+                                <div class="spinner-circle"></div>
+                            </div>
+                            <p class="loading-text small">Carregando atividades...</p>
+                        </div>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-title">Pagamento recebido</div>
+                        <div class="activity-desc">Pedro Santos realizou pagamento de R$ 300,00</div>
+                        <div class="activity-time">Há 3 horas</div>
+                    </div>
+                </div>
+
+                <div class="dashboard-item activity">
+                    <div class="activity-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-title">Exame aprovado</div>
+                        <div class="activity-desc">Ana Costa foi aprovada no exame teórico</div>
+                        <div class="activity-time">Há 4 horas</div>
+                    </div>
+                </div>
+                <div class="dashboard-item activity">
+                    <div class="activity-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-title">Aula agendada</div>
+                        <div class="activity-desc">Carlos Mendes agendou aula prática para amanhã</div>
+                        <div class="activity-time">Há 6 horas</div>
+                    </div>
+                </div>
+                <div class="dashboard-item activity">
+                    <div class="activity-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-title">Veículo em manutenção</div>
+                        <div class="activity-desc">Veículo ABC-5678 foi enviado para manutenção preventiva
+                        </div>
+                        <div class="activity-time">Há 8 horas</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Weekly Schedule -->
+        <div class="chart-card fade-in">
+            <div class="card-header">
+                <div class="card-title-group">
+                    <div class="card-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="card-title-content">
+                        <div class="card-title">Agenda da Semana</div>
+                        <div class="card-subtitle">Programação detalhada das próximas aulas</div>
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <button aria-label="Alternar visualização" class="card-action" onclick="toggleWeekView()">
+                        <i class="fas fa-th-list"></i>
+                    </button>
+                    <button aria-label="Ver agenda completa" class="card-action" onclick="viewAllLessons()">
+                        <i class="fas fa-external-link-alt"></i>
+                    </button>
+                    <button aria-label="Adicionar aula" class="card-action"
+                        onclick="openScheduleLessonModal(); closeModal('viewAllLessonsModal')">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Week Navigation -->
+            <div class="schedule-navigation">
+                <button aria-label="Semana anterior" class="nav-btn" onclick="changeWeek(-1)">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <div class="week-info">
+                    <span class="week-title" id="current-week">5 - 11 de Agosto, 2025</span>
+                    <span class="week-total" id="week-total">46 aulas programadas</span>
+                </div>
+                <button aria-label="Próxima semana" class="nav-btn" onclick="changeWeek(1)">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+
+            <!-- Schedule Grid -->
+            <div class="schedule-grid" id="schedule-grid">
+                <!-- Monday -->
+                <div class="schedule-day-column">
+                    <div class="day-header-enhanced">
+                        <div class="day-info">
+                            <div class="day-name">Segunda</div>
+                            <div class="day-date">05/08</div>
+                        </div>
+                        <div class="day-stats">
+                            <span class="lesson-count">8 aulas</span>
+                            <div class="progress-mini">
+                                <div class="progress-fill" style="width: 60%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lessons-timeline">
+                        <div class="lesson-item theoretical" onclick="viewLessonDetails(1)">
+                            <div class="lesson-time">08:00</div>
+                            <div class="lesson-info">
+                                <div class="lesson-title">Aula Teórica</div>
+                                <div class="lesson-details">
+                                    <span class="student-name">João Silva</span>
+                                    <span class="lesson-type">Legislação</span>
+                                </div>
+                            </div>
+                            <div class="instructor-badge">CM</div>
+                        </div>
+                        <div class="lesson-item practical" onclick="viewLessonDetails(2)">
+                            <div class="lesson-time">10:30</div>
+                            <div class="lesson-info">
+                                <div class="lesson-title">Aula Prática</div>
+                                <div class="lesson-details">
+                                    <span class="student-name">Maria Santos</span>
+                                    <span class="lesson-type">Baliza</span>
+                                </div>
+                            </div>
+                            <div class="instructor-badge">RP</div>
+                        </div>
+                        <div class="lesson-item exam" onclick="viewLessonDetails(3)">
+                            <div class="lesson-time">14:00</div>
+                            <div class="lesson-info">
+                                <div class="lesson-title">Exame Prático</div>
+                                <div class="lesson-details">
+                                    <span class="student-name">Pedro Costa</span>
+                                    <span class="lesson-type">Categoria B</span>
+                                </div>
+                            </div>
+                            <div class="instructor-badge">AM</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Tuesday -->
+                <div class="schedule-day-column">
+                    <div class="day-header-enhanced">
+                        <div class="day-info">
+                            <div class="day-name">Terça</div>
+                            <div class="day-date">06/08</div>
+                        </div>
+                        <div class="day-stats">
+                            <span class="lesson-count">12 aulas</span>
+                            <div class="progress-mini">
+                                <div class="progress-fill pending" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lessons-timeline">
+                        <div class="lesson-item theoretical" onclick="viewLessonDetails(4)">
+                            <div class="lesson-time">09:00</div>
+                            <div class="lesson-info">
+                                <div class="lesson-title">Aula Teórica</div>
+                                <div class="lesson-details">
+                                    <span class="student-name">Ana Oliveira</span>
+                                    <span class="lesson-type">Primeiros Socorros</span>
+                                </div>
+                            </div>
+                            <div class="instructor-badge">LS</div>
+                        </div>
+                        <div class="lesson-item practical" onclick="viewLessonDetails(5)">
+                            <div class="lesson-time">11:00</div>
+                            <div class="lesson-info">
+                                <div class="lesson-title">Aula Prática</div>
+                                <div class="lesson-details">
+                                    <span class="student-name">Carlos Mendes</span>
+                                    <span class="lesson-type">Trânsito Urbano</span>
+                                </div>
+                            </div>
+                            <div class="instructor-badge">CM</div>
+                        </div>
+                        <div class="lesson-item practical" onclick="viewLessonDetails(6)">
+                            <div class="lesson-time">15:30</div>
+                            <div class="lesson-info">
+                                <div class="lesson-title">Aula Prática</div>
+                                <div class="lesson-details">
+                                    <span class="student-name">Luciana Freitas</span>
+                                    <span class="lesson-type">Estacionamento</span>
+                                </div>
+                            </div>
+                            <div class="instructor-badge">RP</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Wednesday -->
+                <div class="schedule-day-column">
+                    <div class="day-header-enhanced">
+                        <div class="day-info">
+                            <div class="day-name">Quarta</div>
+                            <div class="day-date">07/08</div>
+                        </div>
+                        <div class="day-stats">
+                            <span class="lesson-count">10 aulas</span>
+                            <div class="progress-mini">
+                                <div class="progress-fill pending" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lessons-timeline">
+                        <div class="lesson-item theoretical" onclick="viewLessonDetails(7)">
+                            <div class="lesson-time">08:30</div>
+                            <div class="lesson-info">
+                                <div class="lesson-title">Aula Teórica</div>
+                                <div class="lesson-details">
+                                    <span class="student-name">Roberto Silva</span>
+                                    <span class="lesson-type">Mecânica Básica</span>
+                                </div>
+                            </div>
+                            <div class="instructor-badge">TN</div>
+                        </div>
+                        <div class="lesson-item practical" onclick="viewLessonDetails(8)">
+                            <div class="lesson-time">13:00</div>
+                            <div class="lesson-info">
+                                <div class="lesson-title">Aula Prática</div>
+                                <div class="lesson-details">
+                                    <span class="student-name">Fernanda Lima</span>
+                                    <span class="lesson-type">Rodovia</span>
+                                </div>
+                            </div>
+                            <div class="instructor-badge">AM</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Thursday -->
+                <div class="schedule-day-column">
+                    <div class="day-info">
+                        <div class="day-name">Quinta</div>
+                        <div class="day-date">08/08</div>
+                    </div>
+                    <div class="day-stats">
+                        <span class="lesson-count">15 aulas</span>
+                        <div class="progress-mini">
+                            <div class="progress-fill pending" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Friday -->
+                <div class="schedule-day-column">
+                    <div class="day-header-enhanced">
+                        <div class="day-info">
+                            <div class="day-name">Sexta</div>
+                            <div class="day-date">09/08</div>
+                        </div>
+                        <div class="day-stats">
+                            <span class="lesson-count">6 aulas</span>
+                            <div class="progress-mini">
+                                <div class="progress-fill pending" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lessons-timeline">
+                        <div class="lesson-item exam" onclick="viewLessonDetails(9)">
+                            <div class="lesson-time">09:00</div>
+                            <div class="lesson-info">
+                                <div class="lesson-title">Exame Teórico</div>
+                                <div class="lesson-details">
+                                    <span class="student-name">Gabriel Santos</span>
+                                    <span class="lesson-type">1ª Tentativa</span>
+                                </div>
+                            </div>
+                            <div class="instructor-badge">LS</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Legend -->
+            <div class="schedule-legend">
+                <div class="legend-item">
+                    <div class="legend-color theoretical"></div>
+                    <span>Aulas Teóricas</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color practical"></div>
+                    <span>Aulas Práticas</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color exam"></div>
+                    <span>Exames</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color completed"></div>
+                    <span>Concluídas</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
