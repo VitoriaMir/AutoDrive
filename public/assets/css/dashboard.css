@@ -3527,12 +3527,10 @@ body {
   opacity: 1;
 }
 
-/* SeÃ§Ãµes especÃ­ficas */
+/* Seções específicas */
 .section-content {
   padding: 20px;
-  background: var(--glass);
   border-radius: 15px;
-  border: 1px solid var(--glass-border);
   margin-top: 20px;
 }
 
