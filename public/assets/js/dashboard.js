@@ -278,6 +278,40 @@ let vehiclesChart = null;
 let scheduleChart = null;
 let examsChart = null;
 
+// Section registration system - Para aguardar o carregamento completo das seções
+window.sectionRegistry = {
+  sections: new Map(),
+  register: function (sectionName, initFunction) {
+    console.log(`📋 Registering section: ${sectionName}`);
+    this.sections.set(sectionName, initFunction);
+  },
+  initialize: function (sectionName) {
+    console.log(`🚀 Attempting to initialize section: ${sectionName}`);
+    const initFunction = this.sections.get(sectionName);
+    if (initFunction && typeof initFunction === 'function') {
+      console.log(`✅ Initializing ${sectionName} section`);
+      try {
+        initFunction();
+        return true;
+      } catch (error) {
+        console.error(`❌ Error initializing ${sectionName}:`, error);
+        return false;
+      }
+    } else {
+      console.warn(`⚠️ No initialization function found for section: ${sectionName}`);
+      return false;
+    }
+  },
+  isRegistered: function (sectionName) {
+    return this.sections.has(sectionName);
+  }
+};
+
+// Wait for all scripts to load
+window.addEventListener('load', function () {
+  console.log("🎯 All scripts loaded, sectionRegistry ready");
+});
+
 // Function to safely destroy a chart
 function destroyChart(chart) {
   if (chart && typeof chart.destroy === "function") {
@@ -286,8 +320,308 @@ function destroyChart(chart) {
   return null;
 }
 
+// Track loaded sections to avoid reloading
+const loadedSections = new Set();
+const sectionCache = new Map(); // Cache for section content
+
+// Function to preload commonly used sections
+async function preloadSections() {
+  const commonSections = ['dashboard', 'students'];
+
+  for (const sectionId of commonSections) {
+    try {
+      await loadSectionContent(sectionId);
+    } catch (error) {
+      console.warn(`Failed to preload section '${sectionId}':`, error);
+    }
+  }
+}
+
+// Function to load section content dynamically
+async function loadSectionContent(sectionId) {
+  if (loadedSections.has(sectionId)) {
+    return; // Already loaded
+  }
+
+  const sectionElement = document.getElementById(`${sectionId}-content`);
+  if (!sectionElement) {
+    console.error(`Section element not found: ${sectionId}-content`);
+    return;
+  }
+
+  try {
+    // Show loading state only if section is currently visible
+    if (sectionElement.classList.contains('active')) {
+      sectionElement.innerHTML = `
+        <div class="loading-content">
+          <i class="fas fa-spinner fa-spin"></i>
+          <p>Carregando ${sectionTitles[sectionId]?.title || sectionId}...</p>
+        </div>
+      `;
+    }
+
+    // Map section IDs to their corresponding HTML files
+    const sectionFiles = {
+      dashboard: '/sections/dashboard-section.html',
+      students: '/sections/students-section.html',
+      instructors: '/sections/instructors-section.html',
+      vehicles: '/sections/vehicles-section.html',
+      schedule: '/sections/schedule-section.html',
+      exams: '/sections/exams-section.html',
+      finance: '/sections/finance-section.html',
+      reports: '/sections/reports-section.html',
+      settings: '/sections/settings-section.html'
+    };
+
+    const sectionFile = sectionFiles[sectionId];
+    if (!sectionFile) {
+      throw new Error(`No file mapping found for section: ${sectionId}`);
+    }
+
+    // Check cache first
+    let content = sectionCache.get(sectionFile);
+
+    if (!content) {
+      // Fetch the section content
+      const response = await fetch(sectionFile);
+      if (!response.ok) {
+        throw new Error(`Failed to load section: ${response.status} ${response.statusText}`);
+      }
+      content = await response.text();
+
+      // Cache the content
+      sectionCache.set(sectionFile, content);
+    }
+
+    // Create a temporary div to parse the HTML
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = content;
+
+    // Extract the content from the section tag (remove the outer section wrapper)
+    const sectionTag = tempDiv.querySelector('section');
+    if (sectionTag) {
+      sectionElement.innerHTML = sectionTag.innerHTML;
+    } else {
+      sectionElement.innerHTML = content;
+    }
+
+    console.log(`✅ HTML content inserted for ${sectionId}`);
+
+    // Mark as loaded
+    loadedSections.add(sectionId);
+
+    // Force immediate initialization after DOM is updated
+    requestAnimationFrame(() => {
+      console.log(`🚀 Force initializing ${sectionId} immediately after DOM update`);
+
+      // Try direct function calls first
+      if (sectionId === "students") {
+        console.log("🎯 Direct call to students functions");
+
+        if (typeof window.initStudentsSection === 'function') {
+          console.log("📞 Calling window.initStudentsSection directly");
+          try {
+            window.initStudentsSection();
+          } catch (error) {
+            console.error("❌ Error calling window.initStudentsSection:", error);
+          }
+        }
+
+        if (typeof window.initStudentsChart === 'function') {
+          console.log("📞 Calling window.initStudentsChart directly");
+          try {
+            window.initStudentsChart();
+          } catch (error) {
+            console.error("❌ Error calling window.initStudentsChart:", error);
+          }
+        }
+
+        if (typeof window.initStudentsPerformanceChart === 'function') {
+          console.log("📞 Calling window.initStudentsPerformanceChart directly");
+          try {
+            window.initStudentsPerformanceChart();
+          } catch (error) {
+            console.error("❌ Error calling window.initStudentsPerformanceChart:", error);
+          }
+        }
+      }
+    });
+
+    console.log(`✅ Section '${sectionId}' loaded successfully`);
+
+    // Dispatch custom event for section loaded
+    const event = new CustomEvent('sectionLoaded', {
+      detail: {
+        sectionId: `${sectionId}-section`,
+        originalSectionId: sectionId
+      }
+    });
+    document.dispatchEvent(event);
+
+    // Trigger any section-specific initialization
+    setTimeout(() => {
+      initializeSectionScripts(sectionId);
+    }, 100); // Give time for DOM to update
+
+  } catch (error) {
+    console.error(`❌ Error loading section '${sectionId}':`, error);
+
+    // Show error state only if section is currently visible
+    if (sectionElement.classList.contains('active')) {
+      sectionElement.innerHTML = `
+        <div class="loading-content" style="color: var(--error);">
+          <i class="fas fa-exclamation-triangle"></i>
+          <p>Erro ao carregar ${sectionTitles[sectionId]?.title || sectionId}</p>
+          <button class="btn btn-primary" onclick="reloadSection('${sectionId}')">
+            Tentar Novamente
+          </button>
+        </div>
+      `;
+    }
+  }
+}
+
+// Function to reload a specific section
+async function reloadSection(sectionId) {
+  loadedSections.delete(sectionId);
+  await loadSectionContent(sectionId);
+}
+
+// Make reloadSection available globally
+window.reloadSection = reloadSection;
+
+// Function to initialize section-specific scripts after loading
+function initializeSectionScripts(sectionId) {
+  console.log(`🔧 Initializing scripts for section: ${sectionId}`);
+
+  // First try the new registry system
+  if (window.sectionRegistry && window.sectionRegistry.isRegistered(sectionId)) {
+    console.log(`📋 Using registry system for ${sectionId}`);
+    const success = window.sectionRegistry.initialize(sectionId);
+    if (success) {
+      return;
+    }
+  }
+
+  // Fallback to the old system with retries
+  const attemptInitialization = (attempts = 0) => {
+    const maxAttempts = 10;
+
+    if (attempts >= maxAttempts) {
+      console.warn(`⚠️ Failed to initialize ${sectionId} after ${maxAttempts} attempts`);
+      return;
+    }
+
+    console.log(`🔄 Attempt ${attempts + 1} to initialize ${sectionId}`);
+
+    if (sectionId === "dashboard") {
+      console.log("📊 Initializing dashboard charts");
+      if (!lessonsChart && typeof initLessonsChart === 'function') {
+        initLessonsChart();
+        console.log("✅ Dashboard charts initialized");
+      }
+    } else if (sectionId === "students") {
+      console.log("👥 Initializing students section");
+
+      // Debug: listar todas as funções disponíveis
+      console.log("Available functions:", {
+        'window.initStudentsSection': typeof window.initStudentsSection,
+        'initStudentsSection': typeof initStudentsSection,
+        'initStudentsChart': typeof initStudentsChart,
+        'initStudentsPerformanceChart': typeof initStudentsPerformanceChart,
+        'window.initStudentsChart': typeof window.initStudentsChart
+      });
+
+      console.log("DOM elements:", {
+        'students-performance-chart': !!document.getElementById("students-performance-chart")
+      });
+
+      if (typeof window.initStudentsSection === 'function') {
+        console.log("✅ Calling window.initStudentsSection");
+        window.initStudentsSection();
+      } else if (typeof initStudentsSection === 'function') {
+        console.log("✅ Calling initStudentsSection");
+        initStudentsSection();
+      } else if (typeof initStudentsChart === 'function' || typeof initStudentsPerformanceChart === 'function') {
+        console.log("✅ Calling individual chart functions");
+        if (typeof initStudentsChart === 'function') {
+          initStudentsChart();
+        }
+        if (typeof initStudentsPerformanceChart === 'function') {
+          initStudentsPerformanceChart();
+        }
+      } else {
+        // Retry after a delay
+        setTimeout(() => attemptInitialization(attempts + 1), 200);
+        return;
+      }
+    } else if (sectionId === "instructors") {
+      console.log("👨‍🏫 Initializing instructors section");
+      if (typeof window.initInstructorsSection === 'function') {
+        window.initInstructorsSection();
+      } else if (typeof initInstructorsSection === 'function') {
+        initInstructorsSection();
+      } else {
+        console.warn("⚠️ initInstructorsSection function not found");
+        setTimeout(() => attemptInitialization(attempts + 1), 200);
+        return;
+      }
+    } else if (sectionId === "vehicles") {
+      console.log("🚗 Initializing vehicles section");
+      if (typeof window.initVehiclesSection === 'function') {
+        window.initVehiclesSection();
+      } else if (typeof initVehiclesSection === 'function') {
+        initVehiclesSection();
+      } else {
+        console.warn("⚠️ initVehiclesSection function not found");
+        setTimeout(() => attemptInitialization(attempts + 1), 200);
+        return;
+      }
+    } else if (sectionId === "schedule") {
+      console.log("📅 Initializing schedule section");
+      if (typeof window.initScheduleSection === 'function') {
+        window.initScheduleSection();
+      } else if (typeof initScheduleSection === 'function') {
+        initScheduleSection();
+      } else {
+        console.warn("⚠️ initScheduleSection function not found");
+        setTimeout(() => attemptInitialization(attempts + 1), 200);
+        return;
+      }
+    } else if (sectionId === "exams") {
+      console.log("� Initializing exams section");
+      if (typeof window.initExamsSection === 'function') {
+        window.initExamsSection();
+      } else if (typeof initExamsSection === 'function') {
+        initExamsSection();
+      } else {
+        console.warn("⚠️ initExamsSection function not found");
+        setTimeout(() => attemptInitialization(attempts + 1), 200);
+        return;
+      }
+    } else if (sectionId === "finance") {
+      console.log("💰 Initializing finance section");
+      if (typeof window.initFinanceSection === 'function') {
+        window.initFinanceSection();
+      } else if (typeof initFinanceSection === 'function') {
+        initFinanceSection();
+      } else {
+        console.warn("⚠️ initFinanceSection function not found");
+        setTimeout(() => attemptInitialization(attempts + 1), 200);
+        return;
+      }
+    }
+  };
+
+  // Start the initialization attempts
+  setTimeout(() => attemptInitialization(), 100);
+}
+
 // Function to show a specific section
-function showSection(sectionId) {
+async function showSection(sectionId, updateHistory = false) {
+  // Load section content if not already loaded
+  await loadSectionContent(sectionId);
+
   // Hide all sections
   contentSections.forEach((section) => {
     section.classList.remove("active");
@@ -316,29 +650,16 @@ function showSection(sectionId) {
         `;
   }
 
-  // Initialize section-specific charts
-  setTimeout(() => {
-    if (sectionId === "dashboard") {
-      // Initialize dashboard charts if not already initialized
-      if (!lessonsChart) initLessonsChart();
-      // Students chart initialization moved to students-section.js
-    } else if (sectionId === "students") {
-      // Students performance chart initialization moved to students-section.js
-    } else if (sectionId === "instructors") {
-      // Instructors chart initialization moved to instructors-section.js
-    } else if (sectionId === "vehicles") {
-      // Vehicles chart initialization moved to vehicles-section.js
-    } else if (sectionId === "schedule") {
-      // Chart initialization handled by schedule-section.js
-      // if (!scheduleChart) initScheduleChart();
-    } else if (sectionId === "exams") {
-      // Chart initialization handled by exams-section.js
-      // if (!examsChart) initExamsChart();
-    } else if (sectionId === "finance") {
-      // Chart initialization handled by finance-section.js
-      // if (!financeChart) initFinanceChart();
-    }
-  }, 100);
+  // Update URL to reflect current section
+  if (updateHistory) {
+    const currentUrl = new URL(window.location);
+    currentUrl.searchParams.set('section', sectionId);
+    window.history.pushState({}, '', currentUrl.toString());
+  } else {
+    const currentUrl = new URL(window.location);
+    currentUrl.searchParams.set('section', sectionId);
+    window.history.replaceState({}, '', currentUrl.toString());
+  }
 }
 
 // Set up menu item click handlers
@@ -347,7 +668,7 @@ menuItems.forEach((item) => {
     item.addEventListener("click", () => {
       const sectionId = item.dataset.section;
       if (sectionId) {
-        showSection(sectionId);
+        showSection(sectionId, true); // true para atualizar histórico
 
         // Close mobile menu if open
         if (isMobile()) {
@@ -867,6 +1188,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Initialize theme toggle
   initThemeToggle();
+
+  // Initialize default section (show dashboard by default)
+  // Check URL for section parameter
+  const urlParams = new URLSearchParams(window.location.search);
+  const urlSection = urlParams.get('section') || window.location.hash.replace('#', '');
+
+  if (urlSection && sectionTitles[urlSection]) {
+    showSection(urlSection);
+  } else {
+    showSection('dashboard');
+  }
+
+  // Preload common sections in background
+  setTimeout(() => {
+    preloadSections();
+  }, 1000);
+
+  // Handle browser back/forward buttons
+  window.addEventListener('popstate', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlSection = urlParams.get('section') || 'dashboard';
+    if (sectionTitles[urlSection]) {
+      showSection(urlSection);
+    }
+  });
 
   // === POPUP DE TIPO DE GRÁFICO (ALUNOS) ===
   const chartTypeBtn = document.getElementById("chart-type-btn");
@@ -1479,7 +1825,7 @@ document.addEventListener("keydown", (e) => {
 
     if (sectionMap[e.key]) {
       e.preventDefault();
-      showSection(sectionMap[e.key]);
+      showSection(sectionMap[e.key], true); // true para atualizar histórico
     }
   }
 });
